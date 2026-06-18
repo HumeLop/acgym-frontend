@@ -1,0 +1,74 @@
+<div
+  class="fixed inset-y-0 left-0 z-30 w-64 h-full flex flex-col bg-gray-900 text-white transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0"
+  [class.translate-x-0]="isOpen()"
+  [class.-translate-x-full]="!isOpen()">
+  <div class="flex items-center shrink-0 h-16 px-6 border-b border-gray-700">
+    <a routerLink="/" class="flex items-center">
+      <img
+        src="/assets/images/ACGYM_LOGO.webp"
+        alt="Ac Gym Logo"
+        class="w-auto h-16 filter invert"
+      />
+    </a>
+  </div>
+
+  <div class="flex flex-col justify-between flex-1 min-h-0 overflow-y-auto">
+    <nav class="px-4 py-6 space-y-2">
+      <span class="px-4 text-xs font-semibold tracking-wider text-gray-500 uppercase">Menú</span>
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white"
+      >
+        <span class="text-base material-symbols-outlined">dashboard</span>
+        Inicio
+      </a>
+      <a
+        routerLink="/members"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: false }"
+        class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white"
+      >
+        <span class="text-base material-symbols-outlined">group</span>
+        Miembros
+      </a>
+      <a
+        routerLink="/payments"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: false }"
+        class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white"
+      >
+        <span class="text-base material-symbols-outlined">payment</span>
+        Pagos
+      </a>
+    </nav>
+
+    <div class="shrink-0 px-4 py-6 mt-auto border-t border-gray-700">
+      <span class="px-4 mb-2 text-xs font-semibold tracking-wider text-gray-500 uppercase"
+        >Ajustes</span
+      >
+      <a
+        routerLink="/admin"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: false }"
+        class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white mb-2"
+      >
+        <span class="text-base material-symbols-outlined">admin_panel_settings</span>
+        Panel Administrativo
+      </a>
+      <button
+        class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white w-full text-left mb-2"
+      >
+        <span class="text-base material-symbols-outlined">dark_mode</span>
+        Modo Oscuro
+      </button>
+      <button
+        class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-400 hover:bg-red-900/50 hover:text-red-400 w-full text-left"
+      >
+        <span class="text-base material-symbols-outlined">logout</span>
+        Cerrar Sesión
+      </button>
+    </div>
+  </div>
+</div>
