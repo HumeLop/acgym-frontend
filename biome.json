@@ -7,7 +7,10 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["src/**/*.ts"]
+    "includes": [
+      "src/**/*.ts",
+      "src/**/*.css"
+    ]
   },
   "formatter": {
     "enabled": true,

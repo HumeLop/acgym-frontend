@@ -3,8 +3,8 @@ export interface DashboardStatsEntity {
   active_members: number
   inactive_members: number
   expiring_members: number
-  monthly_income: number
-  payments_this_month: number
+  monthly_income?: number
+  payments_this_month?: number
 }
 
 export interface MonthlyIncomeEntity {
@@ -18,7 +18,5 @@ export interface PaymentMethodsStatsEntity {
   labels: string[]
   totals: number[]
   counts: number[]
-  message: string
+  message?: string
 }
-
-

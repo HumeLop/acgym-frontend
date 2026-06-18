@@ -1,0 +1,29 @@
+<div
+  (click)="onCardClick()"
+  class="p-4 transition-all duration-300 bg-white border border-gray-100 shadow-sm rounded-2xl dark:bg-gray-800 dark:border-gray-700 hover:shadow-lg hover:-translate-y-1"
+  [class.cursor-pointer]="isClickable()"
+  [class.group]="isClickable()"
+  [class.hover:border-amber-300]="isClickable()"
+  [class.dark:hover:border-amber-600]="isClickable()"
+>
+  <div class="flex flex-col items-center gap-3 text-center">
+    <div
+      class="flex items-center justify-center w-14 h-14 rounded-xl transition-all {{
+        bgColorClass()
+      }}"
+      [class.group-hover:scale-110]="isClickable()"
+    >
+      <mat-icon class="text-2xl {{ iconColorClass() }}">{{ icon() }}</mat-icon>
+    </div>
+    <div>
+      <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ title() }}</p>
+      <p
+        class="mt-1 font-bold text-gray-900 dark:text-white"
+        [class.text-3xl]="value().toString().length <= 8"
+        [class.text-xl]="value().toString().length > 8"
+      >
+        {{ value() }}
+      </p>
+    </div>
+  </div>
+</div>
