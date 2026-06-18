@@ -1,0 +1,300 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+:root {
+  --datepicker-radius: 0.75rem;
+  --datepicker-primary: #ea580c;
+  /* Colores del calendario */
+  --mat-datepicker-calendar-text-color: #111827;
+  /* gray-900 */
+  --mat-datepicker-calendar-body-label-text-color: #111827;
+  /* gray-900 */
+  --mat-datepicker-calendar-period-button-text-color: #ea580c;
+  /* orange-600 */
+  --mat-datepicker-calendar-navigation-button-icon-color: #4b5563;
+  /* gray-600 */
+
+  /* Tamaños de texto */
+  --mat-datepicker-calendar-body-label-text-size: 1rem;
+  --mat-datepicker-calendar-body-label-text-weight: 500;
+  --mat-datepicker-calendar-text-size: 1rem;
+  --mat-datepicker-calendar-text-weight: 500;
+
+  /* Colores de fondo */
+  --mat-datepicker-calendar-date-selected-state-background-color: #ea580c;
+  /* orange-600 */
+  --mat-datepicker-calendar-date-today-selected-state-background-color: #ea580c;
+  --mat-datepicker-calendar-date-focus-state-background-color: #ffedd5;
+  /* orange-100 */
+  --mat-datepicker-calendar-date-hover-state-background-color: #ffedd5;
+
+  /* Colores de texto para estados */
+  --mat-datepicker-calendar-date-selected-state-text-color: #ffffff;
+  --mat-datepicker-calendar-date-today-selected-state-text-color: #ffffff;
+  --mat-datepicker-calendar-date-today-state-text-color: #ea580c;
+  --mat-datepicker-calendar-date-today-disabled-state-text-color: #d1d5db;
+
+  /* Header del calendario */
+  --mat-datepicker-calendar-header-text-color: #ea580c;
+  --mat-datepicker-calendar-header-background-color: #fff7ed;
+  /* orange-50 */
+
+  /* Días de la semana */
+  --mat-datepicker-calendar-header-text-size: 0.875rem;
+  --mat-datepicker-calendar-header-text-weight: 700;
+
+  /* Sistema de colores base de Material */
+  --mat-sys-on-surface: #111827;
+  /* gray-900 */
+  --mat-sys-on-surface-variant: #6b7280;
+  /* gray-500 */
+  --mat-sys-primary: #ea580c;
+  /* orange-600 */
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #ffedd5; /* orange-100 */
+
+  /* Tamaños del sistema */
+  --mat-sys-title-small-size: 1rem;
+  --mat-sys-title-small-weight: 500;
+  --mat-sys-body-large-size: 1rem;
+  --mat-sys-body-large-weight: 400;
+}
+.dark {
+  /* Colores del calendario en modo oscuro */
+  --mat-datepicker-calendar-text-color: #f3f4f6;
+  /* gray-100 */
+  --mat-datepicker-calendar-body-label-text-color: #f3f4f6;
+  /* gray-100 */
+  --mat-datepicker-calendar-period-button-text-color: #fb923c;
+  /* orange-400 */
+  --mat-datepicker-calendar-navigation-button-icon-color: #9ca3af;
+  /* gray-400 */
+
+  /* Colores de fondo en modo oscuro */
+  --mat-datepicker-calendar-date-selected-state-background-color: #ea580c;
+  /* orange-600 */
+  --mat-datepicker-calendar-date-today-selected-state-background-color: #ea580c;
+  --mat-datepicker-calendar-date-focus-state-background-color: #4b5563;
+  /* gray-600 */
+  --mat-datepicker-calendar-date-hover-state-background-color: #4b5563;
+
+  /* Colores de texto para estados en modo oscuro */
+  --mat-datepicker-calendar-date-selected-state-text-color: #ffffff;
+  --mat-datepicker-calendar-date-today-selected-state-text-color: #ffffff;
+  --mat-datepicker-calendar-date-today-state-text-color: #fb923c;
+  --mat-datepicker-calendar-date-text-color: #d1d5db;
+  /* orange-400 */
+  --mat-datepicker-calendar-date-today-disabled-state-text-color: #374151;
+  /* gray-700 */
+
+  /* Header en modo oscuro */
+  --mat-datepicker-calendar-header-text-color: #fb923c;
+  /* orange-400 */
+  --mat-datepicker-calendar-header-background-color: #374151;
+  /* gray-700 */
+
+  /* Sistema de colores base en modo oscuro */
+  --mat-sys-on-surface: #f3f4f6;
+  /* gray-100 */
+  --mat-sys-on-surface-variant: #9ca3af;
+  /* gray-400 */
+  --mat-sys-primary: #fb923c;
+  /* orange-400 */
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #f08d31; /* Dark orange for chart background */
+}
+
+// Fix para iOS Safari - prevenir zoom en inputs al enfocarlos
+// iOS no hace zoom si el font-size es de al menos 16px.
+// Esta regla unificada asegura que todos los campos de formulario cumplan el requisito.
+.form-input,
+.form-textarea,
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='search'],
+input[type='tel'],
+input[type='url'],
+input[type='number'],
+textarea,
+select {
+  font-size: 16px; // O puedes usar max(16px, 1rem)
+}
+
+/* ==========================================================================
+   Mejoras UX para sensación nativa
+   ========================================================================== */
+
+/* Desactiva el "flash" gris que aparece al tocar elementos en móviles */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Evita que el usuario pueda seleccionar el texto de botones o iconos */
+button,
+[role='button'],
+mat-icon {
+  user-select: none;
+  -webkit-user-select: none; /* Para Safari */
+}
+.modal-container {
+  /* Asegurar que el modal se comporte correctamente en móviles */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+}
+
+.close-button {
+  /* Mantener el botón de cerrar siempre accesible */
+  position: relative;
+  z-index: 30;
+}
+
+.search-input {
+  /* Mejorar la experiencia de entrada en móviles */
+  font-size: 16px; /* Evitar zoom en iOS */
+  transform: translate3d(0, 0, 0);
+}
+
+.content-area {
+  /* Área de contenido scrollable */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Asegurar que los elementos fijos se mantengan en su lugar */
+.sticky {
+  position: -webkit-sticky; /* Para Safari */
+  position: sticky;
+}
+
+/* Prevenir saltos cuando el teclado aparece/desaparece */
+@media (max-width: 768px) {
+  .modal-container {
+    transition: height 0.3s ease;
+  }
+}
+
+/* Safe areas para dispositivos con muescas */
+.safe-area-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+.modal-container {
+  /* Asegurar que el modal se comporte correctamente en móviles */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.close-button {
+  /* Mantener el botón de cerrar siempre accesible */
+  position: relative;
+  z-index: 30;
+}
+
+.search-input {
+  /* Mejorar la experiencia de entrada en móviles */
+  font-size: 16px; /* Evitar zoom en iOS */
+  transform: translate3d(0, 0, 0);
+}
+
+.content-area {
+  /* Área de contenido scrollable */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overflow-anchor: none; /* Prevenir auto-scroll no deseado */
+}
+
+/* Asegurar que los elementos sticky se mantengan en su lugar */
+.sticky {
+  position: -webkit-sticky; /* Para Safari */
+  position: sticky;
+  background: inherit; /* Heredar fondo para evitar transparencias */
+  z-index: 10;
+}
+
+/* Header específico para modales */
+.modal-header {
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Search bar específica para modales */
+.modal-search {
+  top: 80px; /* Ajustar según la altura del header */
+  z-index: 15;
+}
+
+/* Footer específico para modales */
+.modal-footer {
+  bottom: 0;
+  z-index: 20;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Prevenir saltos cuando el teclado aparece/desaparece */
+@media (max-width: 768px) {
+  .modal-container {
+    transition: height 0.3s ease;
+  }
+
+  /* Asegurar que los elementos sticky mantengan su posición durante transiciones */
+  .sticky {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Safe areas para dispositivos con muescas */
+.safe-area-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Clase helper para cuando el teclado está visible */
+.keyboard-visible {
+  .modal-header,
+  .modal-search,
+  .modal-footer {
+    position: relative; /* Cambiar a relative cuando el teclado está visible */
+  }
+
+  .content-area {
+    height: auto !important;
+    flex: 1;
+  }
+}
+
+/* Mejoras específicas para iOS */
+@supports (-webkit-touch-callout: none) {
+  .modal-container {
+    /* iOS specific fixes */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .content-area {
+    /* Mejor scroll en iOS */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}

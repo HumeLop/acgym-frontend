@@ -1,0 +1,22 @@
+@use '@angular/material' as mat;
+
+// ==========================================================
+// TEMA MÍNIMO FUNCIONAL
+// ==========================================================
+
+$theme: mat.define-theme((color: (primary: mat.$orange-palette,
+        tertiary: mat.$cyan-palette,
+      )));
+
+@include mat.core();
+
+html {
+  @include mat.form-field-theme($theme);
+  @include mat.input-theme($theme);
+  @include mat.select-theme($theme);
+  @include mat.autocomplete-theme($theme);
+  @include mat.datepicker-theme($theme);
+  @include mat.slide-toggle-theme($theme);
+  @include mat.button-theme($theme);
+  @include mat.icon-theme($theme);
+}
