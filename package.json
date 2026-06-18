@@ -21,6 +21,7 @@
     "@angular/material": "^22.0.2",
     "@angular/platform-browser": "^22.0.1",
     "@angular/router": "^22.0.1",
+    "luxon": "^3.7.2",
     "material-symbols": "^0.45.1",
     "rxjs": "~7.8.2",
     "tslib": "^2.8.1"
@@ -31,6 +32,7 @@
     "@angular/compiler-cli": "^22.0.1",
     "@biomejs/biome": "2.5.0",
     "@tailwindcss/postcss": "^4.3.1",
+    "@types/luxon": "^3.7.1",
     "jsdom": "^28.1.0",
     "postcss": "^8.5.15",
     "prettier": "^3.8.4",
