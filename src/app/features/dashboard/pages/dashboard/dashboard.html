@@ -7,7 +7,7 @@
       <div
         class="flex items-center justify-center shrink-0 w-16 h-16 rounded-xl bg-orange-50 dark:bg-orange-900/30"
       >
-        <mat-icon class="text-3xl text-orange-600 dark:text-orange-400">dashboard</mat-icon>
+        <tui-icon icon="@tui.layout-dashboard" class="text-3xl text-orange-600 dark:text-orange-400" />
       </div>
       <div class="flex-1">
         <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -23,28 +23,28 @@
   <!-- GRID DE ESTADÍSTICAS -->
   <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
     <app-stat-card
-      icon="group"
+      icon="users"
       title="Activos"
       [value]="activeMembers()"
       bgColorClass="bg-orange-50 dark:bg-orange-900/30"
       iconColorClass="text-orange-600 dark:text-orange-400"
     />
     <app-stat-card
-      icon="groups"
+      icon="user-plus"
       title="Totales"
       [value]="totalMembers()"
       bgColorClass="bg-cyan-50 dark:bg-cyan-900/30"
       iconColorClass="text-cyan-600 dark:text-cyan-400"
     />
     <app-stat-card
-      icon="no_accounts"
+      icon="user-x"
       title="Inactivos"
       [value]="inactiveMembersCount()"
       bgColorClass="bg-gray-100 dark:bg-gray-700"
       iconColorClass="text-gray-500 dark:text-gray-400"
     />
     <app-stat-card
-      icon="hourglass_top"
+      icon="hourglass"
       title="Por expirar"
       [value]="expiringMembers()"
       bgColorClass="bg-amber-50 dark:bg-amber-900/30"
@@ -53,14 +53,14 @@
 
     <!-- isAdmin -->
     <app-stat-card
-      icon="credit_card"
+      icon="credit-card"
       title="Pagos mes"
       [value]="paymentsThisMonth()"
       bgColorClass="bg-sky-50 dark:bg-sky-900/30"
       iconColorClass="text-sky-600 dark:text-sky-400"
     />
     <app-stat-card
-      icon="attach_money"
+      icon="circle-dollar-sign"
       title="Ingresos"
       [value]="(monthlyIncome() | currency: 'MXN' : 'symbol-narrow' : '1.0-0') ?? ''"
       bgColorClass="bg-emerald-50 dark:bg-emerald-900/30"
@@ -85,7 +85,7 @@
           <div
             class="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30"
           >
-            <mat-icon class="text-emerald-600 dark:text-emerald-400">trending_up</mat-icon>
+            <tui-icon icon="@tui.trending-up" class="text-emerald-600 dark:text-emerald-400" />
           </div>
           <div class="flex-1">
             <h3 class="text-lg font-bold text-gray-900 dark:text-white">Ingresos Mensuales</h3>
@@ -123,7 +123,7 @@
           <div
             class="flex items-center justify-center w-10 h-10 rounded-lg bg-sky-100 dark:bg-sky-900/30"
           >
-            <mat-icon class="text-sky-600 dark:text-sky-400">credit_card</mat-icon>
+            <tui-icon icon="@tui.credit-card" class="text-sky-600 dark:text-sky-400" />
           </div>
           <div class="flex-1">
             <h3 class="text-lg font-bold text-gray-900 dark:text-white">Métodos de Pago</h3>

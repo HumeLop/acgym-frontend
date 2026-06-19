@@ -1,8 +1,8 @@
 import { CurrencyPipe } from '@angular/common'
 import { Component, computed, inject } from '@angular/core'
-import { MatIcon } from '@angular/material/icon'
 import { StatsCard } from '@features/dashboard/pages/stats-card/stats-card'
 import { DashboardService } from '@features/dashboard/services/dashboard-service'
+import { TuiIcon } from '@taiga-ui/core'
 import type { EChartsOption } from 'echarts'
 import { BarChart, PieChart } from 'echarts/charts'
 import { GridComponent, TooltipComponent } from 'echarts/components'
@@ -14,7 +14,7 @@ echarts.use([BarChart, PieChart, GridComponent, TooltipComponent, CanvasRenderer
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MatIcon, CurrencyPipe, StatsCard, NgxEchartsDirective],
+  imports: [TuiIcon, CurrencyPipe, StatsCard, NgxEchartsDirective],
   providers: [provideEchartsCore({ echarts })],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',

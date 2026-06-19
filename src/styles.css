@@ -1,4 +1,120 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
-@import 'material-symbols';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color-scheme: light;
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+[role='button'] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.modal-container {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.close-button {
+  position: relative;
+  z-index: 30;
+}
+
+.search-input {
+  font-size: 16px;
+  transform: translate3d(0, 0, 0);
+}
+
+.content-area {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overflow-anchor: none;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  background: inherit;
+  z-index: 10;
+}
+
+.modal-header {
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-search {
+  top: 80px;
+  z-index: 15;
+}
+
+.modal-footer {
+  bottom: 0;
+  z-index: 20;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+@media (max-width: 768px) {
+  .modal-container {
+    transition: height 0.3s ease;
+  }
+
+  .sticky {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.safe-area-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.keyboard-visible {
+  .modal-header,
+  .modal-search,
+  .modal-footer {
+    position: relative;
+  }
+
+  .content-area {
+    height: auto;
+    flex: 1;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .modal-container {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .content-area {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}

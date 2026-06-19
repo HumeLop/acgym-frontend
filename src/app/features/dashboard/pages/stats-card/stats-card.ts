@@ -1,8 +1,8 @@
 import { Component, input, output } from '@angular/core'
-import { MatIcon} from '@angular/material/icon'
+import { TuiIcon } from '@taiga-ui/core'
 @Component({
   selector: 'app-stat-card',
-  imports: [MatIcon],
+  imports: [TuiIcon],
   templateUrl: './stats-card.html',
   styleUrl: './stats-card.css',
 })
