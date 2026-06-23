@@ -1,3 +1,4 @@
+import { TuiDay } from '@taiga-ui/cdk'
 import { DateTime } from 'luxon'
 
 class DateUtilsImpl {
@@ -92,6 +93,17 @@ class DateUtilsImpl {
       .plus({ months: durationMonths })
       .endOf('day')
       .toJSDate()
+  }
+
+  toTuiDay(dateString: string | null | undefined): TuiDay {
+    const date = this.parseDateString(dateString ?? '')
+    if (!date) return TuiDay.currentLocal()
+    return new TuiDay(date.getFullYear(), date.getMonth(), date.getDate())
+  }
+
+  fromTuiDay(day: TuiDay): string | null {
+    const date = new Date(day.year, day.month, day.day)
+    return this.formatDateForAPI(date)
   }
 }
 

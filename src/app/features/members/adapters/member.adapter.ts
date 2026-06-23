@@ -1,5 +1,5 @@
-import type { MemberDetailEntity, MemberEntity, MemberStatsEntity } from '../models/member.entity'
-import type { Member, MemberDetail, MemberStats } from '../models/member.model'
+import type { MemberDetailEntity, MemberEntity } from '../models/member.entity'
+import type { Member, MemberDetail } from '../models/member.model'
 
 export function toMember(entity: MemberEntity): Member {
   return {
@@ -15,20 +15,6 @@ export function toMember(entity: MemberEntity): Member {
     activePaymentsCount: entity.active_payments_count,
     daysUntilExpiration: entity.days_until_expiration,
     isExpiringSoon: entity.is_expiring_soon,
-  }
-}
-
-export function toMemberStats(entity: MemberStatsEntity): MemberStats {
-  return {
-    totalMembers: entity.total_members,
-    activeMembers: entity.active_members,
-    inactiveMembers: entity.inactive_members,
-    expiringSoon: entity.expiring_soon,
-    withPhone: entity.with_phone,
-    withEmail: entity.with_email,
-    notificationsEnabled: entity.notifications_enabled,
-    totalRevenue: entity.total_revenue,
-    averageSpentPerMember: entity.average_spent_per_member,
   }
 }
 

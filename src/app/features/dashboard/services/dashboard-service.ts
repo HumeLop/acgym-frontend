@@ -1,6 +1,5 @@
 import { httpResource } from '@angular/common/http'
-import { computed, Service, signal } from '@angular/core'
-import type { ApiValidationError } from '@app/shared/models'
+import { computed, Service } from '@angular/core'
 import { environment } from '@environments/environment'
 import { toDashboardStats, toMonthlyIncome, toPaymentMethodsStats } from '../adapters/dashboard.adapter'
 import type { DashboardStatsEntity, MonthlyIncomeEntity, PaymentMethodsStatsEntity } from '../models/dashboard.entity'
@@ -8,11 +7,6 @@ import type { DashboardStatsEntity, MonthlyIncomeEntity, PaymentMethodsStatsEnti
 @Service()
 export class DashboardService {
   private apiURL = `${environment.apiURL}/dashboard`
-
-  private mutationError = signal<ApiValidationError | null>(null)
-
-  readonly apiErrors = computed(() => this.mutationError()?.fieldErrors ?? {})
-  readonly generalError = computed(() => this.mutationError()?.summary ?? null)
 
   private statsEntityResource = httpResource<DashboardStatsEntity>(() => ({
     url: `${this.apiURL}/stats/`,

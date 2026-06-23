@@ -1,0 +1,380 @@
+<div
+  class="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto bg-black/60 backdrop-blur-sm"
+>
+  <div class="w-full max-w-4xl p-4 pb-24 my-8 sm:pb-4 sm:my-auto">
+    <!-- HEADER -->
+    <div
+      class="p-5 mb-4 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700"
+    >
+      <div class="flex items-center gap-4">
+        <div
+          class="flex items-center justify-center shrink-0 w-16 h-16 rounded-xl bg-orange-50 dark:bg-orange-900/30"
+        >
+          <tui-icon icon="@tui.user-plus" class="text-3xl! text-orange-600 dark:text-orange-400" />
+        </div>
+        <div class="flex-1">
+          <!-- <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            {{ pageTitle() }}
+          </h1> -->
+          <p class="mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
+            @if (isEditing()) {
+              Actualiza la información del miembro
+            } @else {
+              Completa la información del nuevo miembro
+            }
+          </p>
+        </div>
+        <button
+          type="button"
+          (click)="onCancel()"
+          class="flex items-center justify-center w-10 h-10 text-gray-400 transition-colors rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-500"
+        >
+          <tui-icon icon="@tui.x" class="text-xl!" />
+        </button>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <form class="space-y-4">
+      <div
+        class="p-5 mb-4 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700"
+      >
+        <!-- DATOS PERSONALES -->
+        <div class="mb-8">
+          <div class="flex items-center gap-3 mb-4">
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-900/30"
+            >
+              <tui-icon icon="@tui.user" class="text-xl! text-orange-600 dark:text-orange-400" />
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Datos Personales</h3>
+          </div>
+
+          <div class="grid gap-4 lg:grid-cols-2">
+            <div class="relative lg:col-span-2">
+              <label
+                for="name"
+                class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white"
+              >
+                Nombre Completo <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <tui-icon icon="@tui.user" class="text-gray-400" />
+                </span>
+                <input
+                  [formField]="memberForm.name"
+                  type="text"
+                  placeholder="Nombre completo del miembro"
+                  class="w-full py-3 pl-10 pr-4 text-gray-900 placeholder-gray-400 transition-all duration-200 border border-gray-300 rounded-xl dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent"
+                  [class.border-red-500!]="
+                    memberForm.name().touched() && memberForm.name().invalid()
+                  "
+                />
+              </div>
+              @if (memberForm.name().touched() && memberForm.name().invalid()) {
+                <p
+                  class="flex items-center gap-1 mt-2 text-xs font-medium text-red-600 dark:text-red-400"
+                >
+                  <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
+                  {{ memberForm.name().errors()[0].message }}
+                </p>
+              }
+            </div>
+
+            <div>
+              <label class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                Teléfono
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <tui-icon icon="@tui.phone" class="text-gray-400" />
+                </span>
+                <input
+                  [formField]="memberForm.phone"
+                  type="tel"
+                  placeholder="10 dígitos (ej. 2595084892)"
+                  class="w-full py-3 pl-10 pr-4 text-gray-900 placeholder-gray-400 transition-all duration-200 border border-gray-300 rounded-xl dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent"
+                  [class.border-red-500!]="
+                    memberForm.phone().touched() && memberForm.phone().invalid()
+                  "
+                />
+              </div>
+              @if (memberForm.phone().touched() && memberForm.phone().invalid()) {
+                <div class="mt-2 space-y-1 text-xs font-medium text-red-600 dark:text-red-400">
+                  @for (error of memberForm.phone().errors(); track error) {
+                    <p class="flex items-center gap-1.5">
+                      <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
+                      <span>{{ error.message }}</span>
+                    </p>
+                  }
+                </div>
+              }
+            </div>
+
+            <div>
+              <label class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                Correo Electrónico
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <tui-icon icon="@tui.mail" class="text-gray-400" />
+                </span>
+                <input
+                  [formField]="memberForm.email"
+                  type="email"
+                  placeholder="correo@ejemplo.com"
+                  class="w-full py-3 pl-10 pr-4 text-gray-900 placeholder-gray-400 transition-all duration-200 border border-gray-300 rounded-xl dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent"
+                  [class.border-red-500!]="
+                    memberForm.email().touched() && memberForm.email().invalid()
+                  "
+                />
+              </div>
+              @if (memberForm.email().touched() && memberForm.email().invalid()) {
+                <p
+                  class="flex items-center gap-1 mt-2 text-xs font-medium text-red-600 dark:text-red-400"
+                >
+                  <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
+                  {{ memberForm.email().errors()[0].message }}
+                </p>
+              }
+            </div>
+            <div class="lg:col-span-2">
+              <label class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                Fecha de Nacimiento <span class="text-red-500">*</span>
+              </label>
+
+              <!-- Input que dispara el dropdown -->
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
+                  <tui-icon icon="@tui.calendar" class="text-gray-400" />
+                </span>
+                <input
+                  type="text"
+                  readonly
+                  [value]="formatDate(memberData().dateOfBirth)"
+                  (click)="calendarOpen.set(true)"
+                  placeholder="Selecciona una fecha"
+                  class="w-full py-3 pl-10 pr-4 text-gray-900 placeholder-gray-400 cursor-pointer border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700/50 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  [class.border-red-500!]="
+                    memberForm.dateOfBirth().touched() && memberForm.dateOfBirth().invalid()
+                  "
+                />
+
+                <!-- Dropdown con el calendario -->
+                @if (calendarOpen()) {
+                  <div
+                    class="absolute left-0 top-full z-50 mt-2 w-full max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:w-[22rem] sm:max-w-[22rem]"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <tui-calendar
+                      [value]="[memberData().dateOfBirth]"
+                      [month]="calendarMonth()"
+                      (dayClick)="onDateChange($event)"
+                    />
+                  </div>
+
+                  <!-- Overlay para cerrar al hacer clic afuera -->
+                  <div class="fixed inset-0 z-40" (click)="calendarOpen.set(false)"></div>
+                }
+              </div>
+
+              @if (memberForm.dateOfBirth().touched() && memberForm.dateOfBirth().invalid()) {
+                <p
+                  class="flex items-center gap-1 mt-2 text-xs font-medium text-red-600 dark:text-red-400"
+                >
+                  <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
+                  {{ memberForm.dateOfBirth().errors()[0].message }}
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACTO DE EMERGENCIA -->
+        <div class="mb-8">
+        <div class="flex items-center gap-3 mb-4">
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-red-50 dark:bg-red-900/30"
+            >
+              <tui-icon
+                icon="@tui.phone-forwarded"
+                class="text-xl! text-red-600 dark:text-red-400"
+              />
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Contacto de Emergencia</h3>
+          </div>
+
+          <div class="grid gap-4 lg:grid-cols-2">
+            <div class="lg:col-span-1">
+              <label class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                Nombre del Contacto
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <tui-icon icon="@tui.user" class="text-gray-400" />
+                </span>
+                <input
+                  [formField]="memberForm.emergencyContact"
+                  type="text"
+                  placeholder="Nombre del contacto de emergencia"
+                  class="w-full py-3 pl-10 pr-4 text-gray-900 placeholder-gray-400 transition-all duration-200 border border-gray-300 rounded-xl dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            <div class="lg:col-span-1">
+              <label class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                Teléfono de Emergencia
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <tui-icon icon="@tui.phone" class="text-gray-400" />
+                </span>
+                <input
+                  [formField]="memberForm.emergencyPhone"
+                  type="tel"
+                  placeholder="10 dígitos"
+                  class="w-full py-3 pl-10 pr-4 text-gray-900 placeholder-gray-400 transition-all duration-200 border border-gray-300 rounded-xl dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTAS -->
+        <div class="mb-8">
+          <div class="flex items-center gap-3 mb-4">
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700"
+            >
+              <tui-icon icon="@tui.file-text" class="text-xl! text-gray-600 dark:text-gray-400" />
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Notas</h3>
+          </div>
+
+          <textarea
+            [formField]="memberForm.notes"
+            placeholder="Notas adicionales sobre el miembro..."
+            rows="3"
+            class="w-full py-3 pl-4 pr-4 text-gray-900 placeholder-gray-400 transition-all duration-200 border border-gray-300 rounded-xl dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent resize-none"
+          ></textarea>
+        </div>
+
+        <!-- NOTIFICACIONES TOGGLE -->
+        <div
+          class="flex items-center justify-between gap-4 p-4 transition-all duration-200 border-2 border-gray-200 bg-gray-50 dark:bg-gray-700/50 dark:border-gray-600 rounded-xl"
+        >
+          <div class="flex items-center flex-1 gap-3">
+            <div
+              class="flex items-center justify-center shrink-0 w-10 h-10 bg-orange-100 rounded-lg dark:bg-orange-900/30"
+            >
+              <tui-icon icon="@tui.bell" class="text-orange-600 dark:text-orange-400" />
+            </div>
+            <div class="flex-1">
+              <p class="font-semibold text-gray-900 dark:text-white">Notificaciones</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                Recibir alertas de renovación y vencimiento
+              </p>
+            </div>
+          </div>
+          <input
+            type="checkbox"
+            [formField]="memberForm.notificationsEnabled"
+            class="w-6 h-6 rounded accent-orange-600"
+          />
+        </div>
+
+        <!-- INFO -->
+        <div
+          class="p-4 mt-6 border border-blue-200 bg-blue-50 rounded-xl dark:bg-blue-900/20 dark:border-blue-800"
+        >
+          <div class="flex items-start gap-3">
+            <tui-icon icon="@tui.info" class="shrink-0! mt-0.5! text-blue-600 dark:text-blue-400" />
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-blue-900 dark:text-blue-200">
+                Los campos marcados con * son obligatorios
+              </p>
+              <p class="mt-1 text-xs text-blue-700 dark:text-blue-300">
+                El email y teléfono de emergencia son opcionales pero recomendados
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ERRORES DEL SERVIDOR -->
+      @if (generalError()) {
+        <div
+          class="p-4 mb-4 border border-red-200 bg-red-50 rounded-xl dark:bg-red-900/20 dark:border-red-800"
+        >
+          <div class="flex items-start gap-3">
+            <tui-icon icon="@tui.error" class="shrink-0! mt-0.5! text-red-600 dark:text-red-400" />
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-red-800 dark:text-red-200">
+                {{ generalError() }}
+              </p>
+              @if (apiErrors() | keyvalue; as errors) {
+                <ul class="mt-2 space-y-1">
+                  @for (err of errors; track err.key) {
+                    <li class="text-xs text-red-700 dark:text-red-300">
+                      {{ err.key }}: {{ err.value }}
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- BOTONES -->
+      <div
+        class="p-5 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700"
+      >
+        <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button
+            (click)="onSave()"
+            [disabled]="memberForm().invalid() || isCreating() || isEditing()"
+            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-48"
+          >
+            @if (isCreating() || isEditing()) {
+              <span
+                class="w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin"
+              ></span>
+              <span>Guardando...</span>
+            } @else {
+              <tui-icon [icon]="editMode() ? '@tui.save' : '@tui.user-plus'" />
+              <span>{{ editMode() ? 'Guardar Cambios' : 'Crear Miembro' }}</span>
+            }
+          </button>
+
+          <button
+            type="button"
+            (click)="onCancel()"
+            class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-40"
+          >
+            <tui-icon icon="@tui.x" />
+            <span>Cancelar</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: CONFIRMAR CANCELAR -->
+@if (showCancelModal()) {
+  <app-confirmation-modal
+    [title]="isEditing() ? 'Descartar Cambios' : 'Cancelar Creación'"
+    [message]="
+      isEditing() ? 'Los cambios no guardados se perderán' : 'La información ingresada se perderá'
+    "
+    confirmText="Sí, Descartar"
+    cancelText="No, Quedarme"
+    icon="@tui.alert-circle"
+    type="destructive"
+    (confirm)="onConfirmCancel()"
+    (cancel)="onDismissCancel()"
+  />
+}

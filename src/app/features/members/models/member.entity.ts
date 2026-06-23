@@ -15,18 +15,6 @@ export interface MemberEntity {
   is_expiring_soon: boolean
 }
 
-export interface MemberStatsEntity {
-  total_members: number
-  active_members: number
-  inactive_members: number
-  expiring_soon: number
-  with_phone: number
-  with_email: number
-  notifications_enabled: number
-  total_revenue: string
-  average_spent_per_member: string
-}
-
 export interface MemberDetailEntity extends MemberEntity {
   date_of_birth: string | null
   age: number

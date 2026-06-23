@@ -1,5 +1,8 @@
 import { CurrencyPipe } from '@angular/common'
-import { Component, computed, inject } from '@angular/core'
+import { Component, computed, inject, signal } from '@angular/core'
+import { FormField, form } from '@angular/forms/signals'
+import { Router, RouterLink } from '@angular/router'
+import { MemberService } from '@app/features/members/services/member-service'
 import { StatsCard } from '@features/dashboard/pages/stats-card/stats-card'
 import { DashboardService } from '@features/dashboard/services/dashboard-service'
 import { TuiIcon } from '@taiga-ui/core'
@@ -14,13 +17,16 @@ echarts.use([BarChart, PieChart, GridComponent, TooltipComponent, CanvasRenderer
 
 @Component({
   selector: 'app-dashboard',
-  imports: [TuiIcon, CurrencyPipe, StatsCard, NgxEchartsDirective],
+  imports: [RouterLink, TuiIcon, CurrencyPipe, StatsCard, NgxEchartsDirective, FormField],
   providers: [provideEchartsCore({ echarts })],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
   private dashboardService = inject(DashboardService)
+  private memberService = inject(MemberService)
+  private router = inject(Router)
+
   protected dashboardStats = this.dashboardService.dashboardStats
   protected paymentMethodsData = this.dashboardService.paymentMethodsList
 
@@ -30,6 +36,13 @@ export class Dashboard {
   protected expiringMembers = computed(() => this.dashboardStats()?.expiringMembers ?? 0)
   protected paymentsThisMonth = this.dashboardService.paymentsCountTotal
   protected monthlyIncome = this.dashboardService.monthlyIncomeTotal
+
+  protected searchModel = signal({ days: 30 })
+  protected searchForm = form(this.searchModel)
+  protected inactiveMembers = this.memberService.inactiveMembers
+  protected inactiveSearchLoading = this.memberService.inactiveSearchLoading
+  protected inactiveSearchError = this.memberService.inactiveSearchError
+  protected showInactiveResults = this.memberService.showInactiveResults
 
   protected monthlyIncomeChartOptions = computed(() => {
     const data = this.dashboardService.monthlyIncome()
@@ -89,4 +102,16 @@ export class Dashboard {
       month: 'long',
     })
   })
+
+  protected searchInactive() {
+    this.memberService.searchInactive(this.searchModel().days)
+  }
+
+  protected clearInactiveMembers() {
+    this.memberService.clearInactiveMembers()
+  }
+
+  protected goToExpiring() {
+    this.router.navigate(['/members', 'expiring-memberships'])
+  }
 }

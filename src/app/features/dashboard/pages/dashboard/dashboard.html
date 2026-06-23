@@ -7,7 +7,10 @@
       <div
         class="flex items-center justify-center shrink-0 w-16 h-16 rounded-xl bg-orange-50 dark:bg-orange-900/30"
       >
-        <tui-icon icon="@tui.layout-dashboard" class="text-3xl text-orange-600 dark:text-orange-400" />
+        <tui-icon
+          icon="@tui.layout-dashboard"
+          class="text-3xl text-orange-600 dark:text-orange-400"
+        />
       </div>
       <div class="flex-1">
         <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -49,6 +52,8 @@
       [value]="expiringMembers()"
       bgColorClass="bg-amber-50 dark:bg-amber-900/30"
       iconColorClass="text-amber-500 dark:text-amber-400"
+      [isClickable]="true"
+      (cardClick)="goToExpiring()"
     />
 
     <!-- isAdmin -->
@@ -73,11 +78,135 @@
   <div class="grid gap-6 lg:grid-cols-2">
     <!-- COLUMNA IZQUIERDA -->
     <div class="space-y-6">
-      <!-- search-section TODO: implement when MemberService exists -->
+      <div
+        class="p-5 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 hover:shadow-lg hover:-translate-y-1.5"
+      >
+        <div class="flex items-center gap-3 mb-4">
+          <div
+            class="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-lg dark:bg-orange-900/30"
+          >
+            <tui-icon icon="@tui.search" class="text-orange-600 dark:text-orange-400" />
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Búsqueda de Inactivos</h3>
+            <p class="text-xs">Miembros con membresía expirada hace x días</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <tui-icon icon="@tui.calendar" class="text-gray-400" />
+            </span>
+            <input
+              type="number"
+              [formField]="searchForm.days"
+              class="w-full py-3 pl-10 pr-4 text-gray-900 placeholder-gray-400 transition-all duration-200 border border-gray-300 rounded-xl dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent"
+              placeholder="Días de inactividad"
+            />
+          </div>
+          <button
+            (click)="searchInactive()"
+            [disabled]="inactiveSearchLoading()"
+            class="px-6 btn btn--primary"
+          >
+            @if (inactiveSearchLoading()) {
+              <span
+                class="w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin"
+              ></span>
+            } @else {
+              <tui-icon icon="@tui.search" />
+              <span class="hidden sm:inline">Buscar</span>
+            }
+          </button>
+        </div>
+        @if (inactiveSearchError(); as error) {
+          <div
+            class="p-3 mt-4 border border-red-200 rounded-xl bg-red-50 dark:bg-red-900/20 dark:border-red-800"
+          >
+            <div class="flex items-center gap-2">
+              <tui-icon icon="@tui.error" class="text-red-600 dark:text-red-400" />
+              <p class="text-sm font-medium text-red-800 dark:text-red-200">
+                {{ error?.message || 'Error al buscar miembros inactivos' }}
+              </p>
+            </div>
+          </div>
+        } @else if (showInactiveResults()) {
+          @if (inactiveSearchLoading()) {
+            <div class="flex items-center justify-center gap-2 p-4 mt-4">
+              <div
+                class="w-5 h-5 border-t-2 border-b-2 border-orange-600 rounded-full dark:border-orange-400 animate-spin"
+              ></div>
+              <span class="text-sm text-gray-500 dark:text-gray-400">Buscando...</span>
+            </div>
+          } @else if (inactiveMembers(); as members) {
+            @if (members.length > 0) {
+              <div class="mt-6">
+                <div class="flex items-center justify-between mb-3">
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    {{ members.length }}
+                    {{ members.length === 1 ? 'miembro encontrado' : 'miembros encontrados' }}
+                  </p>
+                  <button
+                    (click)="clearInactiveMembers()"
+                    class="p-1 text-gray-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    <tui-icon icon="@tui.circle-x" />
+                  </button>
+                </div>
+
+                <div class="space-y-2 overflow-y-auto max-h-96">
+                  @for (member of members; track member.id) {
+                    <div
+                      [routerLink]="['/members', member.id]"
+                      class="flex items-center gap-3 p-3 transition-all duration-200 border border-gray-200 cursor-pointer rounded-xl bg-gray-50 dark:bg-gray-700/50 dark:border-gray-600 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md group"
+                    >
+                      <div
+                        class="flex items-center justify-center shrink-0 w-10 h-10 text-sm font-bold text-white rounded-full shadow-sm bg-linear-to-br from-orange-500 to-orange-600"
+                      >
+                        {{ member.name.charAt(0).toUpperCase() }}
+                      </div>
+
+                      <div class="flex-1 min-w-0">
+                        <p
+                          class="text-sm font-bold text-gray-900 truncate dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400"
+                        >
+                          {{ member.name }}
+                        </p>
+                        @if (member.phone) {
+                          <p class="text-xs text-gray-500 truncate dark:text-gray-400">
+                            {{ member.phone }}
+                          </p>
+                        }
+                      </div>
+
+                      <span class="shrink-0 text-xs font-medium text-red-600 dark:text-red-400">
+                        {{ member.daysUntilExpiration }} días
+                      </span>
+                    </div>
+                  }
+                </div>
+              </div>
+            } @else {
+              <div
+                class="p-3 mt-4 border border-emerald-200 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 dark:border-emerald-800"
+              >
+                <div class="flex items-center gap-2">
+                  <tui-icon
+                    icon="@tui.check-circle"
+                    class="text-emerald-600 dark:text-emerald-400"
+                  />
+                  <p class="text-sm font-medium text-emerald-800 dark:text-emerald-200">
+                    No hay miembros inactivos en este rango de días
+                  </p>
+                </div>
+              </div>
+            }
+          }
+        }
+      </div>
     </div>
 
     <div class="space-y-6">
-      <!-- @if (isAdmin()) { -->
       <div
         class="p-5 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 hover:shadow-lg hover:-translate-y-1"
       >
@@ -113,7 +242,6 @@
           </div>
         }
       </div>
-      <!-- } -->
 
       <!-- MÉTODOS DE PAGO -->
       <div

@@ -4,7 +4,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core'
-import { provideRouter } from '@angular/router'
+import { provideRouter, withComponentInputBinding } from '@angular/router'
 import { provideTaiga } from '@taiga-ui/core'
 import { routes } from './app.routes'
 
@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideHttpClient(),
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideTaiga(),
   ],
 }

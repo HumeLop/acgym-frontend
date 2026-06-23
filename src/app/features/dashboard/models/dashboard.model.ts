@@ -3,8 +3,8 @@ export interface DashboardStats {
   activeMembers: number
   inactiveMembers: number
   expiringMembers: number
-  monthlyIncome?: number
-  paymentsThisMonth?: number
+  totalRevenue: string
+  averageSpentPerMember: string
 }
 
 export interface MonthlyIncome {

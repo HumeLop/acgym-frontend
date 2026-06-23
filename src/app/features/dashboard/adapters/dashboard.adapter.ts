@@ -1,23 +1,15 @@
-import type {
-  DashboardStatsEntity,
-  MonthlyIncomeEntity,
-  PaymentMethodsStatsEntity,
-} from '../models/dashboard.entity'
+import type { DashboardStatsEntity, MonthlyIncomeEntity, PaymentMethodsStatsEntity } from '../models/dashboard.entity'
 
-import type {
-  DashboardStats,
-  MonthlyIncome,
-  PaymentMethodsStats,
-} from '../models/dashboard.model'
+import type { DashboardStats, MonthlyIncome, PaymentMethodsStats } from '../models/dashboard.model'
 
 export function toDashboardStats(entity: DashboardStatsEntity): DashboardStats {
   return {
     totalMembers: entity.total_members,
     activeMembers: entity.active_members,
     inactiveMembers: entity.inactive_members,
-    expiringMembers: entity.expiring_members,
-    monthlyIncome: entity.monthly_income,
-    paymentsThisMonth: entity.payments_this_month,
+    expiringMembers: entity.expiring_soon,
+    totalRevenue: entity.total_revenue,
+    averageSpentPerMember: entity.average_spent_per_member,
   }
 }
 

@@ -15,18 +15,6 @@ export interface Member {
   isExpiringSoon: boolean
 }
 
-export interface MemberStats {
-  totalMembers: number
-  activeMembers: number
-  inactiveMembers: number
-  expiringSoon: number
-  withPhone: number
-  withEmail: number
-  notificationsEnabled: number
-  totalRevenue: string
-  averageSpentPerMember: string
-}
-
 export interface MemberDetail extends Member {
   dateOfBirth: string | null
   age: number
