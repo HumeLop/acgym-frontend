@@ -2,7 +2,7 @@ export interface DashboardStatsEntity {
   total_members: number
   active_members: number
   inactive_members: number
-  expiring_soon: number
+  expiring_members: number
   total_revenue: string
   average_spent_per_member: string
 }

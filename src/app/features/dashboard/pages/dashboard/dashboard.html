@@ -1,319 +1,177 @@
-<div class="pb-24 space-y-6">
-  <!-- HEADER -->
-  <div
-    class="p-5 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 hover:shadow-lg hover:-translate-y-1"
-  >
-    <div class="flex items-center gap-4">
-      <div
-        class="flex items-center justify-center shrink-0 w-16 h-16 rounded-xl bg-orange-50 dark:bg-orange-900/30"
-      >
-        <tui-icon
-          icon="@tui.layout-dashboard"
-          class="text-3xl text-orange-600 dark:text-orange-400"
-        />
-      </div>
-      <div class="flex-1">
-        <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Panel de Control
-        </h1>
-        <p class="mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
-          Gestiona tu gimnasio • {{ currentDate() }}
-        </p>
+<tui-pull-to-refresh (pulled)="onPull()">
+  <div class="min-h-screen p-3 pb-24 space-y-5 sm:p-5 sm:pb-4 bg-[#f3f4f6] dark:bg-[#0f172a]">
+    <!-- HEADER -->
+    <div appearance="floating" tuiCardLarge="compact">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center justify-center shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-orange-50 dark:bg-orange-900/30">
+          <tui-icon icon="@tui.layout-dashboard" class="text-2xl sm:text-3xl text-orange-600 dark:text-orange-400" />
+        </div>
+        <div class="flex-1">
+          <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Panel de Control</h1>
+          <p class="mt-0.5 text-sm font-medium text-slate-500 dark:text-slate-400">Gestiona tu gimnasio &bull; {{ currentDate() }}</p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- GRID DE ESTADÍSTICAS -->
-  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-    <app-stat-card
-      icon="users"
-      title="Activos"
-      [value]="activeMembers()"
-      bgColorClass="bg-orange-50 dark:bg-orange-900/30"
-      iconColorClass="text-orange-600 dark:text-orange-400"
-    />
-    <app-stat-card
-      icon="user-plus"
-      title="Totales"
-      [value]="totalMembers()"
-      bgColorClass="bg-cyan-50 dark:bg-cyan-900/30"
-      iconColorClass="text-cyan-600 dark:text-cyan-400"
-    />
-    <app-stat-card
-      icon="user-x"
-      title="Inactivos"
-      [value]="inactiveMembersCount()"
-      bgColorClass="bg-gray-100 dark:bg-gray-700"
-      iconColorClass="text-gray-500 dark:text-gray-400"
-    />
-    <app-stat-card
-      icon="hourglass"
-      title="Por expirar"
-      [value]="expiringMembers()"
-      bgColorClass="bg-amber-50 dark:bg-amber-900/30"
-      iconColorClass="text-amber-500 dark:text-amber-400"
-      [isClickable]="true"
-      (cardClick)="goToExpiring()"
-    />
+    <!-- ESTADÍSTICAS -->
+    <div class="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      <app-stat-card icon="users" title="Activos" [value]="activeMembers()" bgColorClass="bg-orange-50 dark:bg-orange-900/30" iconColorClass="text-orange-600 dark:text-orange-400" />
+      <app-stat-card icon="user-plus" title="Totales" [value]="totalMembers()" bgColorClass="bg-cyan-50 dark:bg-cyan-900/30" iconColorClass="text-cyan-600 dark:text-cyan-400" />
+      <app-stat-card icon="user-x" title="Inactivos" [value]="inactiveMembersCount()" bgColorClass="bg-gray-100 dark:bg-gray-700" iconColorClass="text-gray-500 dark:text-gray-400" />
+      <app-stat-card icon="hourglass" title="Por expirar" [value]="expiringMembers()" bgColorClass="bg-amber-50 dark:bg-amber-900/30" iconColorClass="text-amber-500 dark:text-amber-400" [isClickable]="true" (cardClick)="goToExpiring()" />
+      <app-stat-card icon="credit-card" title="Pagos mes" [value]="paymentsThisMonth()" bgColorClass="bg-sky-50 dark:bg-sky-900/30" iconColorClass="text-sky-600 dark:text-sky-400" />
+      <app-stat-card icon="circle-dollar-sign" title="Ingresos" [value]="(monthlyIncome() | currency: 'MXN' : 'symbol-narrow' : '1.0-0') ?? ''" bgColorClass="bg-emerald-50 dark:bg-emerald-900/30" iconColorClass="text-emerald-600 dark:text-emerald-400" />
+    </div>
 
-    <!-- isAdmin -->
-    <app-stat-card
-      icon="credit-card"
-      title="Pagos mes"
-      [value]="paymentsThisMonth()"
-      bgColorClass="bg-sky-50 dark:bg-sky-900/30"
-      iconColorClass="text-sky-600 dark:text-sky-400"
-    />
-    <app-stat-card
-      icon="circle-dollar-sign"
-      title="Ingresos"
-      [value]="(monthlyIncome() | currency: 'MXN' : 'symbol-narrow' : '1.0-0') ?? ''"
-      bgColorClass="bg-emerald-50 dark:bg-emerald-900/30"
-      iconColorClass="text-emerald-600 dark:text-emerald-400"
-    />
-    <!-- end isAdmin -->
-  </div>
+    <!-- CONTENIDO 2 COLUMNAS -->
+    <div class="grid gap-5 lg:grid-cols-2">
+      <!-- IZQUIERDA: Búsqueda de Inactivos -->
+      <div class="space-y-5">
+        <div appearance="floating" tuiCardLarge="compact">
+          <div class="flex items-center gap-3 p-5 pt-0">
+            <div class="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-lg dark:bg-orange-900/30 shrink-0">
+              <tui-icon icon="@tui.search" class="text-orange-600 dark:text-orange-400" />
+            </div>
+            <div class="flex-1">
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">Búsqueda de Inactivos</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Miembros sin actividad reciente</p>
+            </div>
+          </div>
+          <div class="flex gap-3 px-5 pb-5">
+            <div class="relative flex-1">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <tui-icon icon="@tui.calendar" class="text-slate-400 dark:text-slate-500" />
+              </span>
+              <input tuiAutoFocus type="number" [formField]="searchForm.days" placeholder="Días de inactividad" class="w-full py-3 pl-10 pr-4 text-sm text-slate-900 placeholder-slate-400 transition-all duration-200 border border-slate-300 rounded-xl dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 dark:text-slate-100 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
+            </div>
+            <button appearance="primary" size="m" tuiButton (click)="searchInactive()" [disabled]="inactiveSearchLoading()">
+              @if (inactiveSearchLoading()) {
+                <span class="w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin"></span>
+              } @else {
+                <tui-icon icon="@tui.search" />
+                <span class="hidden sm:inline">Buscar</span>
+              }
+            </button>
+          </div>
 
-  <!-- CONTENIDO EN 2 COLUMNAS -->
-  <div class="grid gap-6 lg:grid-cols-2">
-    <!-- COLUMNA IZQUIERDA -->
-    <div class="space-y-6">
-      <div
-        class="p-5 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 hover:shadow-lg hover:-translate-y-1.5"
-      >
-        <div class="flex items-center gap-3 mb-4">
-          <div
-            class="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-lg dark:bg-orange-900/30"
-          >
-            <tui-icon icon="@tui.search" class="text-orange-600 dark:text-orange-400" />
-          </div>
-          <div class="flex-1">
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Búsqueda de Inactivos</h3>
-            <p class="text-xs">Miembros con membresía expirada hace x días</p>
-          </div>
-        </div>
-        <div class="flex gap-3">
-          <div class="relative flex-1">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <tui-icon icon="@tui.calendar" class="text-gray-400" />
-            </span>
-            <input
-              type="number"
-              [formField]="searchForm.days"
-              class="w-full py-3 pl-10 pr-4 text-gray-900 placeholder-gray-400 transition-all duration-200 border border-gray-300 rounded-xl dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent"
-              placeholder="Días de inactividad"
-            />
-          </div>
-          <button
-            (click)="searchInactive()"
-            [disabled]="inactiveSearchLoading()"
-            class="px-6 btn btn--primary"
-          >
+          @if (inactiveSearchError(); as error) {
+            <div class="px-5 pb-5">
+              <div tuiNotification appearance="error" size="m">
+                <p class="text-sm font-semibold">{{ error?.message || 'Error al buscar' }}</p>
+              </div>
+            </div>
+          } @else if (showInactiveResults()) {
             @if (inactiveSearchLoading()) {
-              <span
-                class="w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin"
-              ></span>
-            } @else {
-              <tui-icon icon="@tui.search" />
-              <span class="hidden sm:inline">Buscar</span>
-            }
-          </button>
-        </div>
-        @if (inactiveSearchError(); as error) {
-          <div
-            class="p-3 mt-4 border border-red-200 rounded-xl bg-red-50 dark:bg-red-900/20 dark:border-red-800"
-          >
-            <div class="flex items-center gap-2">
-              <tui-icon icon="@tui.error" class="text-red-600 dark:text-red-400" />
-              <p class="text-sm font-medium text-red-800 dark:text-red-200">
-                {{ error?.message || 'Error al buscar miembros inactivos' }}
-              </p>
-            </div>
-          </div>
-        } @else if (showInactiveResults()) {
-          @if (inactiveSearchLoading()) {
-            <div class="flex items-center justify-center gap-2 p-4 mt-4">
-              <div
-                class="w-5 h-5 border-t-2 border-b-2 border-orange-600 rounded-full dark:border-orange-400 animate-spin"
-              ></div>
-              <span class="text-sm text-gray-500 dark:text-gray-400">Buscando...</span>
-            </div>
-          } @else if (inactiveMembers(); as members) {
-            @if (members.length > 0) {
-              <div class="mt-6">
-                <div class="flex items-center justify-between mb-3">
-                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                    {{ members.length }}
-                    {{ members.length === 1 ? 'miembro encontrado' : 'miembros encontrados' }}
-                  </p>
-                  <button
-                    (click)="clearInactiveMembers()"
-                    class="p-1 text-gray-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-300"
-                  >
-                    <tui-icon icon="@tui.circle-x" />
-                  </button>
-                </div>
-
-                <div class="space-y-2 overflow-y-auto max-h-96">
-                  @for (member of members; track member.id) {
-                    <div
-                      [routerLink]="['/members', member.id]"
-                      class="flex items-center gap-3 p-3 transition-all duration-200 border border-gray-200 cursor-pointer rounded-xl bg-gray-50 dark:bg-gray-700/50 dark:border-gray-600 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md group"
-                    >
-                      <div
-                        class="flex items-center justify-center shrink-0 w-10 h-10 text-sm font-bold text-white rounded-full shadow-sm bg-linear-to-br from-orange-500 to-orange-600"
-                      >
-                        {{ member.name.charAt(0).toUpperCase() }}
-                      </div>
-
-                      <div class="flex-1 min-w-0">
-                        <p
-                          class="text-sm font-bold text-gray-900 truncate dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400"
-                        >
-                          {{ member.name }}
-                        </p>
-                        @if (member.phone) {
-                          <p class="text-xs text-gray-500 truncate dark:text-gray-400">
-                            {{ member.phone }}
-                          </p>
-                        }
-                      </div>
-
-                      <span class="shrink-0 text-xs font-medium text-red-600 dark:text-red-400">
-                        {{ member.daysUntilExpiration }} días
-                      </span>
-                    </div>
-                  }
-                </div>
+              <div class="flex items-center justify-center gap-2 p-4">
+                <div class="w-5 h-5 border-t-2 border-b-2 border-orange-600 rounded-full animate-spin dark:border-orange-400"></div>
+                <span class="text-sm text-slate-500 dark:text-slate-400">Buscando...</span>
               </div>
-            } @else {
-              <div
-                class="p-3 mt-4 border border-emerald-200 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 dark:border-emerald-800"
-              >
-                <div class="flex items-center gap-2">
-                  <tui-icon
-                    icon="@tui.check-circle"
-                    class="text-emerald-600 dark:text-emerald-400"
-                  />
-                  <p class="text-sm font-medium text-emerald-800 dark:text-emerald-200">
-                    No hay miembros inactivos en este rango de días
-                  </p>
+            } @else if (inactiveMembers(); as members) {
+              @if (members.length > 0) {
+                <div class="px-5 pb-5">
+                  <div class="flex items-center justify-between mb-3">
+                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ members.length }} {{ members.length === 1 ? 'miembro encontrado' : 'miembros encontrados' }}</p>
+                    <button (click)="clearInactiveMembers()" class="p-1 text-slate-400 transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300">
+                      <tui-icon icon="@tui.circle-x" />
+                    </button>
+                  </div>
+                  <div class="space-y-2 overflow-y-auto max-h-96">
+                    @for (member of members; track member.id) {
+                      <div [routerLink]="['/members', member.id]" class="flex items-center gap-3 p-3 transition-all duration-200 border rounded-xl cursor-pointer border-slate-200 bg-slate-50 dark:bg-slate-700/50 dark:border-slate-600 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md group">
+                        <div class="flex items-center justify-center shrink-0 w-10 h-10 text-sm font-bold text-white rounded-full shadow-sm bg-linear-to-br from-orange-500 to-orange-600">
+                          {{ member.name.charAt(0).toUpperCase() }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <p class="text-sm font-bold truncate text-slate-900 dark:text-slate-100 group-hover:text-orange-600 dark:group-hover:text-orange-400">{{ member.name }}</p>
+                          @if (member.phone) {
+                            <p class="text-xs truncate text-slate-500 dark:text-slate-400">{{ member.phone }}</p>
+                          }
+                        </div>
+                        <span class="shrink-0 text-xs font-medium text-red-600 dark:text-red-400">{{ member.daysUntilExpiration }} días</span>
+                      </div>
+                    }
+                  </div>
                 </div>
-              </div>
-            }
-          }
-        }
-      </div>
-    </div>
-
-    <div class="space-y-6">
-      <div
-        class="p-5 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 hover:shadow-lg hover:-translate-y-1"
-      >
-        <div class="flex items-center gap-3 mb-4">
-          <div
-            class="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30"
-          >
-            <tui-icon icon="@tui.trending-up" class="text-emerald-600 dark:text-emerald-400" />
-          </div>
-          <div class="flex-1">
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Ingresos Mensuales</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400">Últimos 6 meses</p>
-          </div>
-        </div>
-
-        @defer {
-          <div class="h-56">
-            <div
-              echarts
-              [options]="monthlyIncomeChartOptions() || {}"
-              [autoResize]="true"
-              class="w-full h-full"
-            ></div>
-          </div>
-        } @placeholder {
-          <div class="flex items-center justify-center h-56">
-            <div class="text-center">
-              <div
-                class="w-8 h-8 mx-auto border-4 border-orange-600 rounded-full border-t-transparent animate-spin dark:border-orange-400"
-              ></div>
-              <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Cargando gráfico...</p>
-            </div>
-          </div>
-        }
-      </div>
-
-      <!-- MÉTODOS DE PAGO -->
-      <div
-        class="p-5 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 hover:shadow-lg hover:-translate-y-1"
-      >
-        <div class="flex items-center gap-3 mb-4">
-          <div
-            class="flex items-center justify-center w-10 h-10 rounded-lg bg-sky-100 dark:bg-sky-900/30"
-          >
-            <tui-icon icon="@tui.credit-card" class="text-sky-600 dark:text-sky-400" />
-          </div>
-          <div class="flex-1">
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Métodos de Pago</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400">Distribución de pagos</p>
-          </div>
-        </div>
-
-        @defer {
-          <div class="h-56 mb-4">
-            <div
-              echarts
-              [options]="paymentMethodsChartOptions() || {}"
-              [autoResize]="true"
-              class="w-full h-full"
-            ></div>
-          </div>
-
-          @if (paymentMethodsData().length > 0) {
-            <div class="pt-4 mt-4 space-y-3 border-t border-gray-200 dark:border-gray-700">
-              @for (method of paymentMethodsData(); track method.label) {
-                <div class="space-y-2">
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                      <div
-                        class="w-3 h-3 rounded-full"
-                        [style.background-color]="method.color"
-                      ></div>
-                      <span class="text-sm font-semibold text-gray-900 dark:text-white">{{
-                        method.label
-                      }}</span>
-                    </div>
-                    <div class="text-right">
-                      <p class="text-sm font-bold text-orange-600 dark:text-orange-400">
-                        {{ method.percentage }}%
-                      </p>
-                      <p class="text-xs text-gray-500 dark:text-gray-400">
-                        {{ method.total }} {{ method.total === 1 ? 'peso' : 'pesos' }}
-                      </p>
-                    </div>
-                  </div>
-                  <div class="h-2 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-700">
-                    <div
-                      class="h-full transition-all duration-500 rounded-full"
-                      [style.width.%]="method.percentage"
-                      [style.background-color]="method.color"
-                    ></div>
-                  </div>
+              } @else {
+                <div class="px-5 pb-5">
+                  <div tuiNotification appearance="success" size="m">No hay miembros inactivos en este rango de días</div>
                 </div>
               }
-            </div>
+            }
           }
-        } @placeholder {
-          <div class="flex items-center justify-center h-56">
-            <div class="text-center">
-              <div
-                class="w-8 h-8 mx-auto border-4 border-orange-600 rounded-full border-t-transparent animate-spin dark:border-orange-400"
-              ></div>
-              <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Cargando gráfico...</p>
+        </div>
+      </div>
+
+      <!-- DERECHA: Gráficos -->
+      <div class="space-y-5">
+        <div appearance="floating" tuiCardLarge="compact">
+          <div class="flex items-center gap-3 p-5 pt-0">
+            <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 shrink-0">
+              <tui-icon icon="@tui.trending-up" class="text-emerald-600 dark:text-emerald-400" />
+            </div>
+            <div class="flex-1">
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">Ingresos Mensuales</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Últimos 6 meses</p>
             </div>
           </div>
-        }
+          @defer {
+            <div class="h-56 px-5 pb-5">
+              <div echarts [options]="monthlyIncomeChartOptions() || {}" [autoResize]="true" class="w-full h-full"></div>
+            </div>
+          } @placeholder {
+            <div class="flex items-center justify-center h-56 px-5 pb-5">
+              <div class="text-center">
+                <div class="w-8 h-8 mx-auto border-4 border-orange-600 rounded-full border-t-transparent animate-spin dark:border-orange-400"></div>
+                <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Cargando gráfico...</p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- MÉTODOS DE PAGO -->
+        <div appearance="floating" tuiCardLarge="compact">
+          <div class="flex items-center gap-3 p-5 pt-0">
+            <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-sky-100 dark:bg-sky-900/30 shrink-0">
+              <tui-icon icon="@tui.credit-card" class="text-sky-600 dark:text-sky-400" />
+            </div>
+            <div class="flex-1">
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">Métodos de Pago</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Distribución de pagos</p>
+            </div>
+          </div>
+          @defer {
+            <div class="h-56 mb-4 px-5">
+              <div echarts [options]="paymentMethodsChartOptions() || {}" [autoResize]="true" class="w-full h-full"></div>
+            </div>
+            @if (paymentMethodsData().length > 0) {
+              <div class="pt-4 mt-4 space-y-3 border-t border-slate-200 dark:border-slate-700 px-5 pb-5">
+                @for (method of paymentMethodsData(); track method.label) {
+                  <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full" [style.background-color]="method.color"></div>
+                        <span class="text-sm font-semibold text-slate-900 dark:text-slate-100">{{ method.label }}</span>
+                      </div>
+                      <div class="text-right">
+                        <p class="text-sm font-bold text-orange-600 dark:text-orange-400">{{ method.percentage }}%</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">{{ method.total }} {{ method.total === 1 ? 'peso' : 'pesos' }}</p>
+                      </div>
+                    </div>
+                    <progress max="100" tuiProgressBar [value]="method.percentage" size="xs" [color]="method.color" class="w-full"></progress>
+                  </div>
+                }
+              </div>
+            }
+          } @placeholder {
+            <div class="flex items-center justify-center h-56 px-5 pb-5">
+              <div class="text-center">
+                <div class="w-8 h-8 mx-auto border-4 border-orange-600 rounded-full border-t-transparent animate-spin dark:border-orange-400"></div>
+                <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Cargando gráfico...</p>
+              </div>
+            </div>
+          }
+        </div>
       </div>
     </div>
   </div>
-</div>
+</tui-pull-to-refresh>

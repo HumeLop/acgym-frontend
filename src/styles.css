@@ -1,6 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+  --font-sans: Montserrat, Roboto, 'Helvetica Neue', sans-serif;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-Italic-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
 
 html,
 body {
@@ -8,9 +29,20 @@ body {
 }
 
 body {
-  color-scheme: light;
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: Montserrat, Roboto, 'Helvetica Neue', sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+:root:has([tuiTheme='dark']) {
+  color-scheme: dark;
+}
+
+:root:has([tuiTheme='light']) {
+  color-scheme: light;
 }
 
 input,
@@ -117,4 +149,16 @@ button,
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
+}
+
+/* Page enter animation */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.page-enter {
+  animation: page-enter 200ms ease-out;
 }

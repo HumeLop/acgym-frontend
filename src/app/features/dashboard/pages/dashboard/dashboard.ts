@@ -1,24 +1,66 @@
 import { CurrencyPipe } from '@angular/common'
-import { Component, computed, inject, signal } from '@angular/core'
+import { Component, computed, effect, inject, signal } from '@angular/core'
 import { FormField, form } from '@angular/forms/signals'
 import { Router, RouterLink } from '@angular/router'
 import { MemberService } from '@app/features/members/services/member-service'
 import { StatsCard } from '@features/dashboard/pages/stats-card/stats-card'
 import { DashboardService } from '@features/dashboard/services/dashboard-service'
-import { TuiIcon } from '@taiga-ui/core'
+import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
+import { TuiAutoFocus } from '@taiga-ui/cdk'
+import {
+  TUI_ANDROID_LOADER,
+  TUI_PULL_TO_REFRESH_COMPONENT,
+  TUI_PULL_TO_REFRESH_LOADED,
+  TuiPullToRefresh,
+} from '@taiga-ui/addon-mobile'
+import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
+import { TuiProgress } from '@taiga-ui/kit'
+import { TuiCardLarge } from '@taiga-ui/layout'
 import type { EChartsOption } from 'echarts'
 import { BarChart, PieChart } from 'echarts/charts'
 import { GridComponent, TooltipComponent } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts'
+import { Subject } from 'rxjs'
 
 echarts.use([BarChart, PieChart, GridComponent, TooltipComponent, CanvasRenderer])
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, TuiIcon, CurrencyPipe, StatsCard, NgxEchartsDirective, FormField],
-  providers: [provideEchartsCore({ echarts })],
+  imports: [
+    RouterLink,
+    TuiIcon,
+    TuiButton,
+    TuiNotification,
+    TuiProgress,
+    CurrencyPipe,
+    StatsCard,
+    NgxEchartsDirective,
+    FormField,
+    TuiPullToRefresh,
+    TuiCardLarge,
+    TuiAutoFocus,
+  ],
+  providers: [
+    provideEchartsCore({ echarts }),
+    {
+      provide: TUI_PULL_TO_REFRESH_LOADED,
+      useClass: Subject,
+    },
+    {
+      provide: TUI_PULL_TO_REFRESH_COMPONENT,
+      useValue: TUI_ANDROID_LOADER,
+    },
+    {
+      provide: WA_IS_ANDROID,
+      useValue: true,
+    },
+    {
+      provide: WA_IS_IOS,
+      useValue: false,
+    },
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -113,5 +155,20 @@ export class Dashboard {
 
   protected goToExpiring() {
     this.router.navigate(['/members', 'expiring-memberships'])
+  }
+
+  private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
+  private readonly isPulling = signal(false)
+
+  private readonly pullEffect = effect(() => {
+    if (this.isPulling() && !this.dashboardService.isLoading()) {
+      this.loaded$.next()
+      this.isPulling.set(false)
+    }
+  })
+
+  protected onPull() {
+    this.dashboardService.reload()
+    this.isPulling.set(true)
   }
 }

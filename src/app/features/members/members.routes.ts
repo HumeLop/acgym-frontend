@@ -8,7 +8,7 @@ export const MEMBERS_ROUTES: Routes = [
   {
     path: 'expiring-memberships',
     loadComponent: () =>
-      import('@features/members/pages/inactive-members/inactive-members').then((m) => m.InactiveMembers),
+      import('@features/members/pages/expiring-members/expiring-members').then((m) => m.ExpiringMembers),
   },
   {
     path: ':id',

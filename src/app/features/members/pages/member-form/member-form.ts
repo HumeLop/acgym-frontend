@@ -5,12 +5,13 @@ import type { MemberWriteDto } from '@app/features/members/models'
 import { DateUtils } from '@app/shared/utils'
 import { MemberService } from '@features/members/services/member-service'
 import { ConfirmationModal } from '@shared/components/confirmation-modal/confirmation-modal'
-import { TuiDay, TuiMonth } from '@taiga-ui/cdk'
-import { TuiCalendar, TuiIcon } from '@taiga-ui/core'
+import { TuiAutoFocus, TuiDay, TuiMonth } from '@taiga-ui/cdk'
+import { TuiButton, TuiCalendar, TuiIcon, TuiNotification } from '@taiga-ui/core'
+import { TuiSwitch } from '@taiga-ui/kit'
 
 @Component({
   selector: 'app-member-form',
-  imports: [KeyValuePipe, TuiIcon, ConfirmationModal, FormField, TuiCalendar],
+  imports: [KeyValuePipe, TuiIcon, ConfirmationModal, FormField, TuiCalendar, TuiSwitch, TuiButton, TuiAutoFocus],
   templateUrl: './member-form.html',
   styleUrl: './member-form.css',
 })

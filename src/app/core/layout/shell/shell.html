@@ -1,14 +1,125 @@
-<div class="flex h-screen overflow-hidden">
-  <app-navigation-sidebar [isOpen]="isSidebarOpen()" />
+<div class="flex flex-col h-screen">
+  <!-- HEADER DESKTOP -->
+  <header tuiNavigationHeader class="header-desktop">
+    <span tuiNavigationLogo>
+      <img
+        src="/assets/images/ACGYM_LOGO.webp"
+        alt="Ac Gym Logo"
+        class="h-16 brightness-0 invert"
+      />
+    </span>
 
-  @if (isSidebarOpen()) {
-    <div class="fixed inset-0 z-20 bg-black/50 lg:hidden" (click)="toggleSidebar()"></div>
-  }
+    <span class="ml-auto flex items-center gap-2 px-4">
+      <button
+        tuiHeaderCell
+        type="button"
+        class="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-slate-300 hover:bg-white/10"
+        (click)="nextMode()"
+      >
+        <tui-icon [icon]="modeIcons[mode()]" class="text-lg" tuiTooltip="Cambiar tema (Claro / Oscuro / Sistema)" />
+        {{ modeLabels[mode()] }}
+      </button>
 
-  <div class="flex flex-col flex-1 overflow-hidden">
-    <app-mobile-header (toggle)="toggleSidebar()" />
-    <main class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-950 p-4 lg:p-8">
+      <button
+        type="button"
+        class="flex items-center justify-center rounded-xl p-2 text-slate-400 transition-colors hover:bg-white/10"
+        [attr.aria-label]="'Cerrar sesión'"
+      >
+        <tui-icon icon="@tui.log-out" class="text-xl" tuiTooltip="Cerrar sesión" />
+      </button>
+    </span>
+  </header>
+
+  <!-- HEADER MOBILE -->
+  <header
+    class="header-mobile items-center gap-3 px-4 py-3 border-b border-[#1f2937] bg-[#111827]"
+  >
+    <img
+      routerLink="/dashboard"
+      src="/assets/images/ACGYM_LOGO.webp"
+      alt="Ac Gym Logo"
+      class="h-12 brightness-0 invert"
+    />
+
+    <span class="ml-auto flex items-center gap-1">
+      <button
+        type="button"
+        class="flex items-center justify-center rounded-xl p-2 text-slate-400 transition-colors hover:bg-white/10"
+        (click)="nextMode()"
+        [attr.aria-label]="modeAriaLabels[mode()]"
+      >
+        <tui-icon [icon]="modeIcons[mode()]" class="text-xl" tuiTooltip="Cambiar tema" />
+      </button>
+
+      <button
+        type="button"
+        class="flex items-center justify-center rounded-xl p-2 text-slate-400 transition-colors hover:bg-white/10"
+        [attr.aria-label]="'Cerrar sesión'"
+      >
+        <tui-icon icon="@tui.log-out" class="text-xl" tuiTooltip="Cerrar sesión" />
+      </button>
+    </span>
+  </header>
+
+  <div class="flex flex-1 min-h-0">
+    <aside [tuiNavigationAside]="true" class="aside-desktop">
+      <header>
+        <a
+          iconStart="@tui.layout-dashboard"
+          tuiAsideItem
+          routerLink="/dashboard"
+          routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Inicio
+        </a>
+      </header>
+
+      <span class="aside-label">MENÚ</span>
+
+      <a iconStart="@tui.users" tuiAsideItem routerLink="/members" routerLinkActive="active-link">
+        Miembros
+      </a>
+
+      <a
+        iconStart="@tui.credit-card"
+        tuiAsideItem
+        routerLink="/payments"
+        routerLinkActive="active-link"
+      >
+        Pagos
+      </a>
+
+      <hr />
+
+      <span class="aside-label">ADMINISTRACIÓN</span>
+
+      <a iconStart="@tui.settings" tuiAsideItem routerLink="/admin" routerLinkActive="active-link">
+        Panel Administrativo
+      </a>
+
+      <hr class="aside-footer-sep" />
+
+      <footer></footer>
+    </aside>
+
+    <main class="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-8">
       <router-outlet />
     </main>
   </div>
+
+  <nav tuiTabBar class="tab-bar-mobile">
+    <a
+      icon="@tui.layout-dashboard"
+      routerLinkActive
+      tuiTabBarItem
+      routerLink="/dashboard"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Inicio
+    </a>
+    <a icon="@tui.users" routerLinkActive tuiTabBarItem routerLink="/members"> Miembros </a>
+    <a icon="@tui.credit-card" routerLinkActive tuiTabBarItem routerLink="/payments"> Pagos </a>
+    <a icon="@tui.settings" routerLinkActive tuiTabBarItem routerLink="/admin"> Ajustes </a>
+  </nav>
 </div>

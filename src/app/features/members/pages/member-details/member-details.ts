@@ -1,11 +1,13 @@
 import { Component, computed, effect, inject, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { MemberService } from '@features/members/services/member-service'
-import { TuiIcon } from '@taiga-ui/core'
+import { TuiIcon, TuiLink } from '@taiga-ui/core'
+import { TuiItem } from '@taiga-ui/cdk'
+import { TuiBreadcrumbs } from '@taiga-ui/kit'
 
 @Component({
   selector: 'app-member-details',
-  imports: [RouterLink, TuiIcon],
+  imports: [RouterLink, TuiIcon, TuiBreadcrumbs, TuiLink, TuiItem],
   templateUrl: './member-details.html',
   styleUrl: './member-details.css',
 })

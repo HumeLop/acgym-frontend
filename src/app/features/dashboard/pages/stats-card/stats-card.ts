@@ -1,10 +1,11 @@
 import { Component, input, output } from '@angular/core'
 import { TuiIcon } from '@taiga-ui/core'
+import { TuiCardLarge } from '@taiga-ui/layout'
+
 @Component({
   selector: 'app-stat-card',
-  imports: [TuiIcon],
+  imports: [TuiIcon, TuiCardLarge],
   templateUrl: './stats-card.html',
-  styleUrl: './stats-card.css',
 })
 export class StatsCard {
   icon = input.required<string>()

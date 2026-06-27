@@ -9,7 +9,8 @@
     "ignoreUnknown": false,
     "includes": [
       "src/**/*.ts",
-      "src/**/*.css"
+      "src/**/*.css",
+      "!!**/dist"
     ]
   },
   "formatter": {
@@ -25,6 +26,11 @@
       "style": {
         "useImportType": "on"
       }
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   },
   "javascript": {

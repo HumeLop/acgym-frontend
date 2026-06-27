@@ -1,0 +1,181 @@
+/* ─── ACGYM TAIGA UI THEME — Blue + Orange ─── */
+
+[tuiTheme='light'] {
+  /* Backgrounds */
+  --tui-theme-color: #111827;
+  --tui-background-base: #f3f4f6;
+  --tui-background-elevation-1: #ffffff;
+  --tui-background-elevation-2: #ffffff;
+  --tui-background-elevation-3: #e5e7eb;
+  --tui-background-base-alt: #e5e7eb;
+  --tui-background-elevated-1: #ffffff;
+
+  /* Borders */
+  --tui-border-normal: #e2e8f0;
+  --tui-border-hover: #f97316;
+  --tui-border-focus: #2563eb;
+
+  /* Text */
+  --tui-text-primary: #111827;
+  --tui-text-secondary: #4b5563;
+  --tui-text-tertiary: #9ca3af;
+
+  /* Primary — Naranja */
+  --tui-primary: #f97316;
+  --tui-primary-hover: #ea580c;
+  --tui-primary-active: #c2410c;
+  --tui-primary-text: #ffffff;
+
+  /* Secondary — Azul */
+  --tui-secondary: #dbeafe;
+  --tui-secondary-hover: #bfdbfe;
+  --tui-secondary-active: #93c5fd;
+  --tui-secondary-text: #2563eb;
+
+  /* Status */
+  --tui-status-positive: #16a34a;
+  --tui-status-positive-pale: #dcfce7;
+  --tui-status-negative: #dc2626;
+  --tui-status-negative-pale: #fee2e2;
+  --tui-status-warning: #f97316;
+  --tui-status-warning-pale: #ffedd5;
+  --tui-status-info: #2563eb;
+  --tui-status-info-pale: #dbeafe;
+  --tui-status-neutral: #64748b;
+  --tui-status-neutral-pale: #f8fafc;
+
+  /* Link */
+  --tui-link: #2563eb;
+  --tui-link-hover: #1d4ed8;
+
+  /* Autofill */
+  --tui-autofill: #fff7ed;
+
+  --tui-background-neutral-1: #f3f4f6;
+  --tui-background-neutral-1-hover: #e5e7eb;
+  --tui-background-neutral-1-pressed: #d1d5db;
+  --tui-background-neutral-2: #e5e7eb;
+  --tui-background-neutral-2-hover: #d1d5db;
+  --tui-background-neutral-2-pressed: #9ca3af;
+
+  --tui-skeleton-color: #e5e7eb;
+  --tui-skeleton-color-dark: #d1d5db;
+
+  /* Clear/ghost buttons y chips */
+  --tui-clear: rgba(17, 24, 39, 0.06);
+  --tui-clear-hover: rgba(17, 24, 39, 0.1);
+  --tui-clear-active: rgba(17, 24, 39, 0.15);
+  --tui-clear-inverse: rgba(255, 255, 255, 0.15);
+  --tui-clear-inverse-hover: rgba(255, 255, 255, 0.25);
+
+  /* Overlays / modals */
+  --tui-backdrop: rgba(15, 23, 42, 0.48);
+
+  /* Shell navigation active link */
+  --acgym-active-bg: rgba(249, 115, 22, 0.15);
+  --acgym-active-text: #fb923c;
+  --acgym-active-accent: #f97316;
+
+  /* Shell navigation divider */
+  --acgym-divider: #374151;
+
+  /* Shell header */
+  --acgym-header-bg: #111827;
+  --acgym-header-border: #1f2937;
+
+  /* Shell sidebar items hover */
+  --acgym-aside-hover: rgba(255, 255, 255, 0.06);
+
+  /* Shell aside text colors (tuiNavigationAside siempre tiene tuiTheme=dark) */
+  --acgym-aside-text: #f9fafb;
+  --acgym-aside-text-secondary: #9ca3af;
+}
+
+[tuiTheme='dark'] {
+  /* Backgrounds — gris oscuro deportivo */
+  --tui-theme-color: #111827;
+  --tui-background-base: #0f172a;
+  --tui-background-elevation-1: #1f2937;
+  --tui-background-elevation-2: #27354f;
+  --tui-background-elevation-3: #374151;
+  --tui-background-base-alt: #1f2937;
+  --tui-background-elevated-1: #1f2937;
+
+  /* Borders */
+  --tui-border-normal: #374151;
+  --tui-border-hover: #fb923c;
+  --tui-border-focus: #60a5fa;
+
+  /* Text */
+  --tui-text-primary: #f9fafb;
+  --tui-text-secondary: #9ca3af;
+  --tui-text-tertiary: #6b7280;
+
+  /* Primary — Naranja vibrante en dark */
+  --tui-primary: #fb923c;
+  --tui-primary-hover: #f97316;
+  --tui-primary-active: #ea6c0a;
+  --tui-primary-text: #080c14;
+
+  /* Secondary — Azul eléctrico en dark */
+  --tui-secondary: #1f2937;
+  --tui-secondary-hover: #374151;
+  --tui-secondary-active: #4b5563;
+  --tui-secondary-text: #93c5fd;
+
+  /* Status */
+  --tui-status-positive: #22c55e;
+  --tui-status-positive-pale: #14532d;
+  --tui-status-negative: #f87171;
+  --tui-status-negative-pale: #7f1d1d;
+  --tui-status-warning: #fb923c;
+  --tui-status-warning-pale: #431407;
+  --tui-status-info: #60a5fa;
+  --tui-status-info-pale: #1e3a5f;
+  --tui-status-neutral: #9ca3af;
+  --tui-status-neutral-pale: #1f2937;
+
+  /* Link */
+  --tui-link: #60a5fa;
+  --tui-link-hover: #93c5fd;
+
+  /* Autofill */
+  --tui-autofill: #1a1a00;
+
+  --tui-background-neutral-1: #1f2937;
+  --tui-background-neutral-1-hover: #27354f;
+  --tui-background-neutral-1-pressed: #374151;
+  --tui-background-neutral-2: #27354f;
+  --tui-background-neutral-2-hover: #374151;
+  --tui-background-neutral-2-pressed: #4b5563;
+
+  --tui-skeleton-color: #1f2937;
+  --tui-skeleton-color-dark: #27354f;
+
+  --tui-clear: rgba(249, 250, 251, 0.06);
+  --tui-clear-hover: rgba(249, 250, 251, 0.1);
+  --tui-clear-active: rgba(249, 250, 251, 0.15);
+  --tui-clear-inverse: rgba(15, 23, 42, 0.2);
+  --tui-clear-inverse-hover: rgba(15, 23, 42, 0.3);
+
+  --tui-backdrop: rgba(0, 0, 0, 0.72);
+
+  /* Shell navigation active link */
+  --acgym-active-bg: rgba(249, 115, 22, 0.15);
+  --acgym-active-text: #fb923c;
+  --acgym-active-accent: #f97316;
+
+  /* Shell navigation divider */
+  --acgym-divider: #374151;
+
+  /* Shell header */
+  --acgym-header-bg: #111827;
+  --acgym-header-border: #1f2937;
+
+  /* Shell sidebar items hover */
+  --acgym-aside-hover: rgba(255, 255, 255, 0.06);
+
+  /* Shell aside text colors (tuiNavigationAside siempre tiene tuiTheme=dark) */
+  --acgym-aside-text: #f9fafb;
+  --acgym-aside-text-secondary: #9ca3af;
+}

@@ -80,4 +80,10 @@ export class DashboardService {
 
     return this.paymentMethodsEntityResource.error()
   })
+
+  reload() {
+    this.statsEntityResource.reload()
+    this.monthlyIncomeEntityResource.reload()
+    this.paymentMethodsEntityResource.reload()
+  }
 }

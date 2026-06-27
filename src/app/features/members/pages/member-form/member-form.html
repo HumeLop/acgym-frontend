@@ -1,21 +1,18 @@
-<div
-  class="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto bg-black/60 backdrop-blur-sm"
->
-  <div class="w-full max-w-4xl p-4 pb-24 my-8 sm:pb-4 sm:my-auto">
+<div class="w-full max-w-4xl px-3 py-4 pb-28 sm:px-6 sm:pb-4">
     <!-- HEADER -->
     <div
-      class="p-5 mb-4 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700"
+      class="p-4 mb-3 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 sm:p-5 sm:mb-4"
     >
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-3 sm:gap-4">
         <div
-          class="flex items-center justify-center shrink-0 w-16 h-16 rounded-xl bg-orange-50 dark:bg-orange-900/30"
+          class="flex items-center justify-center shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-orange-50 dark:bg-orange-900/30"
         >
-          <tui-icon icon="@tui.user-plus" class="text-3xl! text-orange-600 dark:text-orange-400" />
+          <tui-icon icon="@tui.user-plus" class="text-2xl! sm:text-3xl! text-orange-600 dark:text-orange-400" />
         </div>
         <div class="flex-1">
-          <!-- <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {{ pageTitle() }}
-          </h1> -->
+          <h1 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
+            {{ editMode() ? 'Editar Miembro' : 'Nuevo Miembro' }}
+          </h1>
           <p class="mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
             @if (isEditing()) {
               Actualiza la información del miembro
@@ -35,19 +32,19 @@
     </div>
 
     <!-- FORM -->
-    <form class="space-y-4">
+    <form class="space-y-3 sm:space-y-4">
       <div
-        class="p-5 mb-4 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700"
+        class="p-4 mb-3 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 sm:p-5 sm:mb-4"
       >
         <!-- DATOS PERSONALES -->
-        <div class="mb-8">
-          <div class="flex items-center gap-3 mb-4">
+        <div class="mb-5 sm:mb-8">
+          <div class="flex items-center gap-2.5 mb-3 sm:mb-4">
             <div
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-900/30"
+              class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-50 dark:bg-orange-900/30"
             >
-              <tui-icon icon="@tui.user" class="text-xl! text-orange-600 dark:text-orange-400" />
+              <tui-icon icon="@tui.user" class="text-lg! sm:text-xl! text-orange-600 dark:text-orange-400" />
             </div>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Datos Personales</h3>
+            <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white">Datos Personales</h3>
           </div>
 
           <div class="grid gap-4 lg:grid-cols-2">
@@ -63,6 +60,7 @@
                   <tui-icon icon="@tui.user" class="text-gray-400" />
                 </span>
                 <input
+                  tuiAutoFocus
                   [formField]="memberForm.name"
                   type="text"
                   placeholder="Nombre completo del miembro"
@@ -143,8 +141,6 @@
               <label class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
                 Fecha de Nacimiento <span class="text-red-500">*</span>
               </label>
-
-              <!-- Input que dispara el dropdown -->
               <div class="relative">
                 <span class="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none">
                   <tui-icon icon="@tui.calendar" class="text-gray-400" />
@@ -160,11 +156,9 @@
                     memberForm.dateOfBirth().touched() && memberForm.dateOfBirth().invalid()
                   "
                 />
-
-                <!-- Dropdown con el calendario -->
                 @if (calendarOpen()) {
                   <div
-                    class="absolute left-0 top-full z-50 mt-2 w-full max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:w-[22rem] sm:max-w-[22rem]"
+                    class="absolute left-0 top-full z-50 mt-2 w-full max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:w-88 sm:max-w-88"
                     (click)="$event.stopPropagation()"
                   >
                     <tui-calendar
@@ -173,16 +167,11 @@
                       (dayClick)="onDateChange($event)"
                     />
                   </div>
-
-                  <!-- Overlay para cerrar al hacer clic afuera -->
                   <div class="fixed inset-0 z-40" (click)="calendarOpen.set(false)"></div>
                 }
               </div>
-
               @if (memberForm.dateOfBirth().touched() && memberForm.dateOfBirth().invalid()) {
-                <p
-                  class="flex items-center gap-1 mt-2 text-xs font-medium text-red-600 dark:text-red-400"
-                >
+                <p class="flex items-center gap-1 mt-2 text-xs font-medium text-red-600 dark:text-red-400">
                   <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
                   {{ memberForm.dateOfBirth().errors()[0].message }}
                 </p>
@@ -192,17 +181,17 @@
         </div>
 
         <!-- CONTACTO DE EMERGENCIA -->
-        <div class="mb-8">
-        <div class="flex items-center gap-3 mb-4">
+        <div class="mb-5 sm:mb-8">
+          <div class="flex items-center gap-2.5 mb-3 sm:mb-4">
             <div
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-red-50 dark:bg-red-900/30"
+              class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-red-50 dark:bg-red-900/30"
             >
               <tui-icon
                 icon="@tui.phone-forwarded"
-                class="text-xl! text-red-600 dark:text-red-400"
+                class="text-lg! sm:text-xl! text-red-600 dark:text-red-400"
               />
             </div>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Contacto de Emergencia</h3>
+            <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white">Contacto de Emergencia</h3>
           </div>
 
           <div class="grid gap-4 lg:grid-cols-2">
@@ -243,14 +232,14 @@
         </div>
 
         <!-- NOTAS -->
-        <div class="mb-8">
-          <div class="flex items-center gap-3 mb-4">
+        <div class="mb-5 sm:mb-8">
+          <div class="flex items-center gap-2.5 mb-3 sm:mb-4">
             <div
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700"
+              class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gray-100 dark:bg-gray-700"
             >
-              <tui-icon icon="@tui.file-text" class="text-xl! text-gray-600 dark:text-gray-400" />
+              <tui-icon icon="@tui.file-text" class="text-lg! sm:text-xl! text-gray-600 dark:text-gray-400" />
             </div>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Notas</h3>
+            <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white">Notas</h3>
           </div>
 
           <textarea
@@ -280,63 +269,44 @@
           </div>
           <input
             type="checkbox"
+            tuiSwitch
             [formField]="memberForm.notificationsEnabled"
-            class="w-6 h-6 rounded accent-orange-600"
           />
         </div>
 
         <!-- INFO -->
-        <div
-          class="p-4 mt-6 border border-blue-200 bg-blue-50 rounded-xl dark:bg-blue-900/20 dark:border-blue-800"
-        >
-          <div class="flex items-start gap-3">
-            <tui-icon icon="@tui.info" class="shrink-0! mt-0.5! text-blue-600 dark:text-blue-400" />
-            <div class="flex-1">
-              <p class="text-sm font-semibold text-blue-900 dark:text-blue-200">
-                Los campos marcados con * son obligatorios
-              </p>
-              <p class="mt-1 text-xs text-blue-700 dark:text-blue-300">
-                El email y teléfono de emergencia son opcionales pero recomendados
-              </p>
-            </div>
+        <div class="mt-5 sm:mt-6">
+          <div tuiNotification appearance="info" size="m">
+            Los campos marcados con * son obligatorios. El email y teléfono de emergencia son opcionales pero recomendados.
           </div>
         </div>
       </div>
 
       <!-- ERRORES DEL SERVIDOR -->
       @if (generalError()) {
-        <div
-          class="p-4 mb-4 border border-red-200 bg-red-50 rounded-xl dark:bg-red-900/20 dark:border-red-800"
-        >
-          <div class="flex items-start gap-3">
-            <tui-icon icon="@tui.error" class="shrink-0! mt-0.5! text-red-600 dark:text-red-400" />
-            <div class="flex-1">
-              <p class="text-sm font-semibold text-red-800 dark:text-red-200">
-                {{ generalError() }}
-              </p>
-              @if (apiErrors() | keyvalue; as errors) {
-                <ul class="mt-2 space-y-1">
-                  @for (err of errors; track err.key) {
-                    <li class="text-xs text-red-700 dark:text-red-300">
-                      {{ err.key }}: {{ err.value }}
-                    </li>
-                  }
-                </ul>
-              }
-            </div>
+        <div class="mb-3 sm:mb-4">
+          <div tuiNotification appearance="error" size="m">
+            <p class="text-sm font-semibold">{{ generalError() }}</p>
+            @if (apiErrors() | keyvalue; as errors) {
+              <ul class="mt-2 space-y-1 opacity-80">
+                @for (err of errors; track err.key) {
+                  <li class="text-xs">{{ err.key }}: {{ err.value }}</li>
+                }
+              </ul>
+            }
           </div>
         </div>
       }
 
       <!-- BOTONES -->
       <div
-        class="p-5 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700"
+        class="p-4 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 sm:p-5"
       >
-        <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <div class="flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end sm:gap-3">
           <button
             (click)="onSave()"
             [disabled]="memberForm().invalid() || isCreating() || isEditing()"
-            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-48"
+            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-48 sm:py-3"
           >
             @if (isCreating() || isEditing()) {
               <span
@@ -350,18 +320,18 @@
           </button>
 
           <button
+            appearance="secondary"
+            size="m"
+            tuiButton
             type="button"
             (click)="onCancel()"
-            class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-40"
           >
-            <tui-icon icon="@tui.x" />
-            <span>Cancelar</span>
+            Cancelar
           </button>
         </div>
       </div>
     </form>
   </div>
-</div>
 
 <!-- MODAL: CONFIRMAR CANCELAR -->
 @if (showCancelModal()) {

@@ -1,0 +1,119 @@
+<tui-pull-to-refresh (pulled)="onPull()">
+<div class="min-h-screen px-3 py-4 pb-24 sm:px-6 sm:py-5 bg-[#f3f4f6] dark:bg-[#0f172a]">
+  <!-- HEADER -->
+  <div appearance="floating" tuiCardLarge="compact" class="mb-4 sm:mb-5 border border-slate-200 dark:border-slate-700">
+    <div class="flex items-center gap-4">
+      <div class="flex h-12 w-12 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-2xl bg-orange-50 dark:bg-orange-900/20">
+        <tui-icon icon="@tui.clock-alert" class="text-2xl sm:text-3xl text-orange-500 dark:text-orange-400" />
+      </div>
+      <div class="flex-1">
+        <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-2xl">
+          Membresías por vencer
+        </h1>
+        <p class="mt-0.5 text-sm font-medium text-slate-500 dark:text-slate-400">
+          {{ members().length }} miembros con vencimiento próximo
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BARRA DE BÚSQUEDA -->
+  <div appearance="floating" tuiCardLarge="compact" class="mb-4 sm:mb-5 border border-slate-200 dark:border-slate-700">
+    <div class="p-4 sm:p-5">
+      <div class="relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+          <tui-icon icon="@tui.search" class="text-slate-400 dark:text-slate-500" />
+        </span>
+        <input
+          #searchInput
+          tuiAutoFocus
+          type="text"
+          placeholder="Buscar nombre, email o teléfono..."
+          [value]="searchTerm()"
+          (input)="onSearch(searchInput.value)"
+          class="w-full py-3 pl-12 pr-12 text-sm transition-all duration-200 rounded-xl border outline-none bg-slate-50 text-slate-900 placeholder-slate-400 border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:bg-[#0f1624] dark:text-slate-100 dark:placeholder-slate-500 dark:border-slate-700 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
+        />
+        @if (searchTerm()) {
+          <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" (click)="onClearSearch()">
+            <tui-icon icon="@tui.eraser" class="w-4! h-4! text-base!" />
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  @if (error()) {
+    <div class="mb-4 sm:mb-5">
+      <div tuiNotification appearance="error" size="m">
+        <p class="text-sm font-semibold">Error al cargar</p>
+        <p class="text-xs opacity-80 mt-1">No se pudieron cargar los miembros. {{ error()?.message || 'Intenta recargar la página' }}.</p>
+      </div>
+    </div>
+  }
+
+  <!-- GRID -->
+  @if (hasMembers()) {
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
+      @for (member of members(); track member.id) {
+        <app-member-card [member]="member" (edit)="memberService.openEditModal($event)" (delete)="onDeleteMember($event)" />
+      }
+    </div>
+  }
+
+  <!-- EMPTY -->
+  @if (!hasMembers() && !isLoading() && !error()) {
+    <div appearance="floating" tuiCardLarge="compact" class="border border-slate-200 dark:border-slate-700">
+      <div class="p-6 sm:p-8">
+        <div class="flex flex-col items-center gap-4 text-center">
+          <div class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-[#1f2937] sm:w-32 sm:h-32">
+            <tui-icon icon="@tui.circle-check" class="text-4xl text-green-400 sm:text-6xl" />
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 sm:text-xl">Todo al día</h3>
+            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              No hay membresías próximas a vencer
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- LOADING -->
+  @if (isLoading() && !hasMembers() && !error()) {
+    <div class="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-[#f3f4f6]/95 backdrop-blur-sm dark:bg-[#0f172a]/95">
+      <div class="flex items-center justify-center w-20 h-20 rounded-full bg-orange-100 dark:bg-orange-900/20">
+        <div class="w-10 h-10 border-4 rounded-full border-t-transparent animate-spin border-orange-500 dark:border-orange-400"></div>
+      </div>
+      <div class="text-center">
+        <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Cargando miembros</h3>
+        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Espera un momento...</p>
+      </div>
+    </div>
+  }
+
+  <!-- FAB -->
+  @if (hasMembers()) {
+    <button tuiRipple class="fixed flex items-center justify-center w-16 h-16 text-white transition-all duration-300 shadow-2xl shadow-orange-500/30 bottom-20 right-6 lg:bottom-6 bg-linear-to-br from-orange-500 to-orange-600 rounded-2xl hover:scale-110 hover:shadow-orange-500/50 active:scale-95" title="Agregar Miembro" (click)="memberService.openCreateModal()">
+      <tui-icon icon="@tui.user-plus" class="text-3xl" />
+    </button>
+  }
+</div>
+</tui-pull-to-refresh>
+
+<ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">
+  <app-member-form [memberId]="isEditingMember()" (close)="closeModal()" />
+</ng-template>
+
+@if (showDeleteConfirmation()) {
+  <app-confirmation-modal
+    type="destructive"
+    title="Eliminar miembro"
+    message="¿Estás seguro de eliminar a este miembro?"
+    confirmText="Eliminar"
+    [disabled]="isDeleting()"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()"
+  />
+}

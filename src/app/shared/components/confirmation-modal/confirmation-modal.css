@@ -1,0 +1,5 @@
+@reference "tailwindcss";
+
+.drag-handle {
+  @apply h-1 w-10 rounded-full bg-gray-300 dark:bg-gray-600;
+}

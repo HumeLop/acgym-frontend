@@ -10,11 +10,13 @@ import type {
 } from '@app/features/members/models'
 import { environment } from '@environments/environment'
 import type { ApiValidationError, PaginatedResponse } from '@shared/models'
+import { TuiNotificationService } from '@taiga-ui/core'
 import { catchError, finalize, type Observable, tap, throwError } from 'rxjs'
 
 @Service()
 export class MemberService {
   private http = inject(HttpClient)
+  private alerts = inject(TuiNotificationService)
   private apiURL = `${environment.apiURL}/members`
 
   private mutationError = signal<ApiValidationError | null>(null)
@@ -87,6 +89,7 @@ export class MemberService {
       tap(() => {
         this.membersResource.reload()
         this.isModalOpen.set(false)
+        this.alerts.open('Miembro creado exitosamente').subscribe()
       }),
       catchError((err: HttpErrorResponse) => {
         this.mutationError.set(err.error as ApiValidationError)
@@ -105,6 +108,7 @@ export class MemberService {
         this.membersResource.reload()
         this.memberDetailResource.reload()
         this.isModalOpen.set(false)
+        this.alerts.open('Miembro actualizado correctamente').subscribe()
       }),
       catchError((err: HttpErrorResponse) => {
         this.mutationError.set(err.error as ApiValidationError)
@@ -122,6 +126,7 @@ export class MemberService {
       tap(() => {
         this.membersResource.reload()
         this.deletingMemberId.set(null)
+        this.alerts.open('Miembro eliminado').subscribe()
       }),
       catchError((err: HttpErrorResponse) => {
         this.mutationError.set(err.error as ApiValidationError)
@@ -280,5 +285,9 @@ export class MemberService {
 
   clearErrors() {
     this.mutationError.set(null)
+  }
+
+  reload() {
+    this.membersResource.reload()
   }
 }
