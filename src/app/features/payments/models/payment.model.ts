@@ -28,7 +28,7 @@ export interface PaymentStats {
 export interface PaymentDetail extends Payment {
   memberEmail: string
   memberPhone: string
-  memberStatus: string
+  memberIsActive: boolean
   membershipTypeDuration: number
   notes: string
   registeredBy: number | null

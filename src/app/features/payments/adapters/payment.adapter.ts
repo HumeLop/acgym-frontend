@@ -1,7 +1,7 @@
-import type { PaymentDetailEntity, PaymentListEntity, PaymentStatsEntity } from '../models/payment.entity'
+import type { PaymentDetailEntity, PaymentEntity, PaymentStatsEntity } from '../models/payment.entity'
 import type { Payment, PaymentDetail, PaymentStats } from '../models/payment.model'
 
-export function toPayment(entity: PaymentListEntity): Payment {
+export function toPayment(entity: PaymentEntity): Payment {
   return {
     id: entity.id,
     member: entity.member,
@@ -15,6 +15,10 @@ export function toPayment(entity: PaymentListEntity): Payment {
     endDate: entity.end_date,
     isActive: entity.is_active,
   }
+}
+
+export function toPayments(entities: PaymentEntity[]): Payment[] {
+  return entities.map(toPayment)
 }
 
 export function toPaymentStats(entity: PaymentStatsEntity): PaymentStats {
@@ -35,7 +39,7 @@ export function toPaymentDetail(entity: PaymentDetailEntity): PaymentDetail {
     ...toPayment(entity),
     memberEmail: entity.member_email,
     memberPhone: entity.member_phone,
-    memberStatus: entity.member_status,
+    memberIsActive: entity.member_is_active,
     membershipTypeDuration: entity.membership_type_duration,
     notes: entity.notes,
     registeredBy: entity.registered_by,

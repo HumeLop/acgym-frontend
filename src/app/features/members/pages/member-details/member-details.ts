@@ -1,8 +1,8 @@
 import { Component, computed, effect, inject, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { MemberService } from '@features/members/services/member-service'
-import { TuiIcon, TuiLink } from '@taiga-ui/core'
 import { TuiItem } from '@taiga-ui/cdk'
+import { TuiIcon, TuiLink } from '@taiga-ui/core'
 import { TuiBreadcrumbs } from '@taiga-ui/kit'
 
 @Component({
@@ -20,12 +20,10 @@ export class MemberDetails {
   protected isLoading = this.memberService.isLoadingDetail
   protected error = this.memberService.detailError
 
-  constructor() {
-    effect(() => {
-      const id = Number(this.id())
-      if (id) this.memberService.loadMemberDetail(id)
-    })
-  }
+  private _loadEffect = effect(() => {
+    const id = Number(this.id())
+    if (id) this.memberService.loadMemberDetail(id)
+  })
 
   protected memberSince = computed(() => {
     const m = this.memberDetail()

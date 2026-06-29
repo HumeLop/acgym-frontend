@@ -4,7 +4,6 @@ import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
 import { ConfirmationModal } from '@shared/components/confirmation-modal/confirmation-modal'
-import { TuiAutoFocus } from '@taiga-ui/cdk'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
@@ -13,6 +12,7 @@ import {
   TuiResponsiveDialog,
   TuiRipple,
 } from '@taiga-ui/addon-mobile'
+import { TuiAutoFocus } from '@taiga-ui/cdk'
 import { TuiIcon } from '@taiga-ui/core'
 import { TuiTabs } from '@taiga-ui/kit'
 import { TuiCardLarge } from '@taiga-ui/layout'
@@ -20,7 +20,18 @@ import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-members-list',
-  imports: [TuiIcon, MemberCard, MemberForm, ConfirmationModal, TuiResponsiveDialog, TuiPullToRefresh, TuiCardLarge, TuiTabs, TuiAutoFocus, TuiRipple],
+  imports: [
+    TuiIcon,
+    MemberCard,
+    MemberForm,
+    ConfirmationModal,
+    TuiResponsiveDialog,
+    TuiPullToRefresh,
+    TuiCardLarge,
+    TuiTabs,
+    TuiAutoFocus,
+    TuiRipple,
+  ],
   providers: [
     {
       provide: TUI_PULL_TO_REFRESH_LOADED,
@@ -86,7 +97,6 @@ export class MembersList {
     return end > this.totalMembers() ? this.totalMembers() : end
   })
 
-  
   onSearch(value: string) {
     this.memberService.search(value)
     this.memberService.page.set(1)

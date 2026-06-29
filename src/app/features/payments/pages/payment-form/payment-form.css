@@ -1,0 +1,7 @@
+/* ── Taiga UI Select dropdown theme fix ── */
+
+/*
+ * The dropdown overlay is portaled outside [tuiTheme] context.
+ * The host binding [attr.tuiTheme] on app-payment-form carries
+ * the theme into the overlay so options render with correct colors.
+ */

@@ -6,7 +6,7 @@ import { DateUtils } from '@app/shared/utils'
 import { MemberService } from '@features/members/services/member-service'
 import { ConfirmationModal } from '@shared/components/confirmation-modal/confirmation-modal'
 import { TuiAutoFocus, TuiDay, TuiMonth } from '@taiga-ui/cdk'
-import { TuiButton, TuiCalendar, TuiIcon, TuiNotification } from '@taiga-ui/core'
+import { TuiButton, TuiCalendar, TuiIcon } from '@taiga-ui/core'
 import { TuiSwitch } from '@taiga-ui/kit'
 
 @Component({

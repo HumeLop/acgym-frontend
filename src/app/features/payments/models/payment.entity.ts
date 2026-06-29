@@ -1,6 +1,6 @@
 import type { PaymentMethod } from '@shared/models'
 
-export interface PaymentListEntity {
+export interface PaymentEntity {
   id: number
   member: number
   member_name: string
@@ -25,10 +25,10 @@ export interface PaymentStatsEntity {
   average_payment: string
 }
 
-export interface PaymentDetailEntity extends PaymentListEntity {
+export interface PaymentDetailEntity extends PaymentEntity {
   member_email: string
   member_phone: string
-  member_status: string
+  member_is_active: boolean
   membership_type_duration: number
   notes: string
   registered_by: number | null

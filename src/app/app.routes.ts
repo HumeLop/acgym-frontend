@@ -14,6 +14,10 @@ export const routes: Routes = [
         path: 'members',
         loadChildren: () => import('@features/members/members.routes').then((m) => m.MEMBERS_ROUTES),
       },
+      {
+        path: 'payments',
+        loadChildren: () => import('@features/payments/payments.routes').then((m) => m.PAYMENTS_ROUTES),
+      },
     ],
   },
 ]
