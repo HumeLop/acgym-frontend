@@ -9,6 +9,7 @@ import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
   TUI_PULL_TO_REFRESH_LOADED,
+  TUI_PULL_TO_REFRESH_THRESHOLD,
   TuiPullToRefresh,
   TuiResponsiveDialog,
   TuiRipple,
@@ -48,13 +49,17 @@ import { Subject } from 'rxjs'
       provide: WA_IS_IOS,
       useValue: true,
     },
+    {
+      provide: TUI_PULL_TO_REFRESH_THRESHOLD,
+      useValue: 120,
+    },
   ],
   templateUrl: './payments-list.html',
-  styleUrl: './payments-list.css',
 })
 export class PaymentsList {
   protected router = inject(Router)
   protected paymentService = inject(PaymentService)
+  private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
   protected payments = this.paymentService.payments
   protected totalPayments = this.paymentService.totalPayments
   protected hasPayments = computed(() => (this.payments() ?? []).length > 0)
@@ -154,7 +159,8 @@ export class PaymentsList {
   })
 
   protected onPull() {
-    if (window.scrollY > 1) return
+    if (window.scrollY > 0) return
+    if (!this.isTouchDevice) return
 
     this.paymentService.page.set(1)
     this.paymentService.reload()

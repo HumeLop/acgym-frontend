@@ -1,28 +1,39 @@
 <div
   (click)="onCardClick()"
-  appearance="floating"
-  tuiCardLarge="compact"
-  class="flex flex-col items-center justify-center min-h-30 sm:min-h-35"
+  (keydown.enter)="onCardClick()"
+  [attr.role]="isClickable() ? 'button' : null"
+  [attr.tabindex]="isClickable() ? 0 : null"
+  class="relative p-4 overflow-hidden rounded-2xl border transition-all duration-200 bg-white dark:bg-[#0f1624] border-slate-200 dark:border-[#1e3a5f] shadow-sm"
   [class.cursor-pointer]="isClickable()"
-  [class.group]="isClickable()"
+  [class.hover:border-orange-300]="isClickable()"
+  [class.dark:hover:border-orange-600]="isClickable()"
+  [class.hover:shadow-md]="isClickable()"
+  [class.hover:scale-[1.02]]="isClickable()"
 >
-  <div class="flex flex-col items-center gap-3 text-center">
+  <div
+    class="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl"
+    [style.background]="accentBarStyle()"
+  ></div>
+
+  <div class="flex items-start gap-3">
     <div
-      class="flex items-center justify-center w-12 h-12 rounded-xl sm:w-14 sm:h-14 {{
+      class="flex items-center justify-center w-10 h-10 rounded-xl shrink-0 shadow-sm {{
         bgColorClass()
       }}"
-      [class.group-hover:scale-110]="isClickable()"
     >
-      <tui-icon [icon]="'@tui.' + icon()" class="text-lg sm:text-xl {{ iconColorClass() }}" />
+      <tui-icon [icon]="iconName()" class="text-base {{ iconColorClass() }}" />
     </div>
-    <div>
-      <p class="text-xs font-medium text-slate-500 dark:text-slate-400 leading-tight">
+
+    <div class="flex-1 min-w-0">
+      <p
+        class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate tracking-wide"
+      >
         {{ title() }}
       </p>
       <p
-        class="mt-0.5 font-bold text-slate-900 dark:text-slate-100 leading-tight"
-        [class.text-2xl]="value().toString().length <= 8"
-        [class.text-base]="value().toString().length > 8"
+        class="font-extrabold text-slate-900 dark:text-white tabular-nums tracking-tight mt-0.5 leading-none"
+        [class.text-lg]="value().toString().length <= 10"
+        [class.text-sm]="value().toString().length > 10"
       >
         {{ value() }}
       </p>

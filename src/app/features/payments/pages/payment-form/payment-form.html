@@ -1,22 +1,20 @@
 <div class="w-full max-w-4xl px-3 py-4 pb-28 sm:px-6 sm:pb-4">
   <!-- HEADER -->
   <div
-    class="p-4 mb-3 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 sm:p-5 sm:mb-4"
+    tuiSurface="elevated"
+    class="p-4 mb-3 rounded-2xl border border-(--tui-border-normal) sm:p-5 sm:mb-4"
   >
     <div class="flex items-center gap-3 sm:gap-4">
       <div
-        class="flex items-center justify-center shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-green-50 dark:bg-green-900/30"
+        class="flex items-center justify-center shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-linear-to-br from-emerald-500 to-emerald-600 shadow-lg shadow-emerald-500/25"
       >
-        <tui-icon
-          icon="@tui.dollar-sign"
-          class="text-2xl! sm:text-3xl! text-green-600 dark:text-green-400"
-        />
+        <tui-icon icon="@tui.dollar-sign" class="text-2xl! sm:text-3xl! text-white" />
       </div>
       <div class="flex-1">
-        <h1 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
+        <h1 class="text-xl font-bold tracking-tight text-(--tui-text-primary) sm:text-2xl">
           {{ editMode() ? 'Editar Pago' : 'Nuevo Pago' }}
         </h1>
-        <span class="block mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
+        <span class="block mt-0.5 text-sm font-medium text-(--tui-text-secondary)">
           @if (isEditing()) {
             Actualiza la información del pago
           } @else {
@@ -24,33 +22,24 @@
           }
         </span>
       </div>
-      <button
-        type="button"
-        (click)="onCancel()"
-        class="flex items-center justify-center w-10 h-10 text-gray-400 transition-colors rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-500"
-      >
-        <tui-icon icon="@tui.x" class="text-xl!" />
-      </button>
     </div>
   </div>
 
   <!-- FORM -->
   <form class="space-y-3 sm:space-y-4">
     <div
-      class="p-4 mb-3 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 sm:p-5 sm:mb-4"
+      tuiSurface="elevated"
+      class="p-4 mb-3 rounded-2xl border border-(--tui-border-normal) sm:p-5 sm:mb-4"
     >
       <!-- MIEMBRO Y MEMBRESÍA -->
       <div class="mb-5 sm:mb-8">
         <div class="flex items-center gap-2.5 mb-3 sm:mb-4">
           <div
-            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-50 dark:bg-orange-900/30"
+            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25"
           >
-            <tui-icon
-              icon="@tui.users"
-              class="text-lg! sm:text-xl! text-orange-600 dark:text-orange-400"
-            />
+            <tui-icon icon="@tui.users" class="text-lg! sm:text-xl! text-white" />
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
+          <h3 class="text-base sm:text-lg font-bold text-(--tui-text-primary)">
             Miembro y Membresía
           </h3>
         </div>
@@ -74,9 +63,7 @@
               </tui-data-list>
             </tui-textfield>
             @if (paymentForm.member().touched() && paymentForm.member().invalid()) {
-              <p
-                class="flex items-center gap-1 mt-2 text-xs font-medium text-red-600 dark:text-red-400"
-              >
+              <p class="flex items-center gap-1 mt-2 text-xs font-medium text-(--tui-status-negative)">
                 <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
                 {{ paymentForm.member().errors()[0].message }}
               </p>
@@ -108,9 +95,7 @@
             @if (
               paymentForm.membership_type().touched() && paymentForm.membership_type().invalid()
             ) {
-              <p
-                class="flex items-center gap-1 mt-2 text-xs font-medium text-red-600 dark:text-red-400"
-              >
+              <p class="flex items-center gap-1 mt-2 text-xs font-medium text-(--tui-status-negative)">
                 <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
                 {{ paymentForm.membership_type().errors()[0].message }}
               </p>
@@ -120,7 +105,7 @@
           <!-- Monto -->
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-              <tui-icon icon="@tui.dollar-sign" class="text-gray-400 text-lg!" />
+              <tui-icon icon="@tui.dollar-sign" class="text-(--tui-text-tertiary) text-lg!" />
             </span>
             <input
               type="number"
@@ -131,7 +116,7 @@
               (input)="
                 paymentFormModel.update((d) => ({ ...d, amount: +$any($event.target).value || 0 }))
               "
-              class="w-full h-14 pl-10 pr-4 text-sm font-medium rounded-2xl border-2 border-gray-200 bg-gray-50 text-gray-900 placeholder-gray-400 outline-none transition-colors dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 focus:border-orange-400 focus:bg-white dark:focus:border-orange-500 dark:focus:bg-gray-800"
+              class="w-full h-14 pl-10 pr-4 text-sm font-medium rounded-2xl border-2 outline-none transition-colors bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:border-(--tui-primary) focus:bg-(--tui-background-elevated-1)"
             />
           </div>
         </div>
@@ -141,14 +126,11 @@
       <div class="mb-5 sm:mb-8">
         <div class="flex items-center gap-2.5 mb-3 sm:mb-4">
           <div
-            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30"
+            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-linear-to-br from-sky-500 to-sky-600 shadow-lg shadow-sky-500/25"
           >
-            <tui-icon
-              icon="@tui.credit-card"
-              class="text-lg! sm:text-xl! text-blue-600 dark:text-blue-400"
-            />
+            <tui-icon icon="@tui.credit-card" class="text-lg! sm:text-xl! text-white" />
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
+          <h3 class="text-base sm:text-lg font-bold text-(--tui-text-primary)">
             Detalles del Pago
           </h3>
         </div>
@@ -156,14 +138,14 @@
         <div class="grid gap-4 lg:grid-cols-2">
           <!-- Fecha de Pago -->
           <div class="lg:col-span-2">
-            <label class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+            <label class="block mb-2 text-sm font-semibold text-(--tui-text-primary)">
               Fecha de Pago
             </label>
             <div class="relative">
               <span
                 class="absolute inset-y-0 left-0 z-10 flex items-center pl-3 pointer-events-none"
               >
-                <tui-icon icon="@tui.calendar" class="text-gray-400" />
+                <tui-icon icon="@tui.calendar" class="text-(--tui-text-tertiary)" />
               </span>
               <input
                 type="text"
@@ -171,11 +153,11 @@
                 [value]="formatTuiDay(paymentFormModel().payment_date)"
                 (click)="calendarOpen.set(true)"
                 placeholder="Selecciona una fecha"
-                class="w-full py-3 pl-10 pr-4 text-gray-900 placeholder-gray-400 cursor-pointer border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700/50 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                class="w-full py-3 pl-10 pr-4 rounded-xl border transition-all duration-200 cursor-pointer bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary)"
               />
               @if (calendarOpen()) {
                 <div
-                  class="absolute left-0 top-full z-50 mt-2 w-full max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:w-88 sm:max-w-88"
+                  class="absolute left-0 top-full z-50 mt-2 w-full max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border shadow-2xl border-(--tui-border-normal) bg-(--tui-background-elevation-3) sm:w-88 sm:max-w-88"
                   (click)="$event.stopPropagation()"
                 >
                   <tui-calendar
@@ -212,31 +194,25 @@
       <div class="mb-5 sm:mb-8">
         <div class="flex items-center gap-2.5 mb-3 sm:mb-4">
           <div
-            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gray-100 dark:bg-gray-700"
+            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-linear-to-br from-slate-500 to-slate-600 shadow-lg shadow-slate-500/25"
           >
-            <tui-icon
-              icon="@tui.file-text"
-              class="text-lg! sm:text-xl! text-gray-600 dark:text-gray-400"
-            />
+            <tui-icon icon="@tui.file-text" class="text-lg! sm:text-xl! text-white" />
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white">Notas</h3>
+          <h3 class="text-base sm:text-lg font-bold text-(--tui-text-primary)">Notas</h3>
         </div>
 
         <textarea
           [formField]="paymentForm.notes"
           placeholder="Notas adicionales sobre el pago..."
           rows="3"
-          class="w-full py-3 pl-4 pr-4 text-gray-900 placeholder-gray-400 transition-all duration-200 border border-gray-300 rounded-xl dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent resize-none"
+          class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent resize-none"
         ></textarea>
       </div>
 
       <!-- INFO -->
       <div class="mt-5 sm:mt-6">
         <div tuiNotification appearance="info" size="m">
-          <span
-            >Los campos marcados con * son obligatorios. El monto se autocompleta al seleccionar el
-            tipo de membresía.</span
-          >
+          Los campos marcados con * son obligatorios. El monto se autocompleta al seleccionar el tipo de membresía.
         </div>
       </div>
     </div>
@@ -259,23 +235,20 @@
 
     <!-- BOTONES -->
     <div
-      class="p-4 transition-all duration-300 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-2xl dark:border-gray-700 sm:p-5"
+      tuiSurface="elevated"
+      class="p-4 rounded-2xl border border-(--tui-border-normal) sm:p-5"
     >
       <div class="flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end sm:gap-3">
         <button
-          (click)="onSave()"
+          tuiButton
+          appearance="primary"
+          type="button"
+          [iconStart]="editMode() ? '@tui.save' : '@tui.dollar-sign'"
+          [loading]="isCreating() || isEditing()"
           [disabled]="paymentForm().invalid() || isCreating() || isEditing()"
-          class="inline-flex items-center justify-center gap-2 rounded-2xl bg-green-600 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-48 sm:py-3"
+          (click)="onSave()"
         >
-          @if (isCreating() || isEditing()) {
-            <span
-              class="w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin"
-            ></span>
-            <span>Guardando...</span>
-          } @else {
-            <tui-icon [icon]="editMode() ? '@tui.save' : '@tui.dollar-sign'" />
-            <span>{{ editMode() ? 'Guardar Cambios' : 'Registrar Pago' }}</span>
-          }
+          {{ editMode() ? 'Guardar Cambios' : 'Registrar Pago' }}
         </button>
 
         <button appearance="secondary" size="m" tuiButton type="button" (click)="onCancel()">

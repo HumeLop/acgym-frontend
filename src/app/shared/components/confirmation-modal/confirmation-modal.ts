@@ -5,7 +5,6 @@ import { TuiIcon } from '@taiga-ui/core'
   selector: 'app-confirmation-modal',
   imports: [TuiIcon],
   templateUrl: './confirmation-modal.html',
-  styleUrl: './confirmation-modal.css',
 })
 export class ConfirmationModal {
   title = input<string>('Confirmación')

@@ -5,7 +5,7 @@
       <img
         src="/assets/images/ACGYM_LOGO.webp"
         alt="Ac Gym Logo"
-        class="h-16 brightness-0 invert"
+          class="h-16 brightness-0 dark:invert"
       />
     </span>
 
@@ -13,16 +13,20 @@
       <button
         tuiHeaderCell
         type="button"
-        class="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-slate-300 hover:bg-white/10"
+        class="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-(--tui-text-secondary) hover:bg-[var(--tui-clear-hover)]"
         (click)="nextMode()"
       >
-        <tui-icon [icon]="modeIcons[mode()]" class="text-lg" tuiTooltip="Cambiar tema (Claro / Oscuro / Sistema)" />
+        <tui-icon
+          [icon]="modeIcons[mode()]"
+          class="text-lg"
+          tuiTooltip="Cambiar tema (Claro / Oscuro / Sistema)"
+        />
         {{ modeLabels[mode()] }}
       </button>
 
       <button
         type="button"
-        class="flex items-center justify-center rounded-xl p-2 text-slate-400 transition-colors hover:bg-white/10"
+        class="flex items-center justify-center rounded-xl p-2 transition-colors text-(--tui-text-secondary) hover:bg-[var(--tui-clear-hover)]"
         [attr.aria-label]="'Cerrar sesión'"
       >
         <tui-icon icon="@tui.log-out" class="text-xl" tuiTooltip="Cerrar sesión" />
@@ -31,14 +35,12 @@
   </header>
 
   <!-- HEADER MOBILE -->
-  <header
-    class="header-mobile items-center gap-3 px-4 py-3 border-b border-[#1f2937] bg-[#111827]"
-  >
+  <header class="header-mobile items-center gap-3 px-4 py-3 border-b bg-[var(--acgym-header-bg)] border-(--acgym-header-border)">
     <img
       routerLink="/dashboard"
       src="/assets/images/ACGYM_LOGO.webp"
       alt="Ac Gym Logo"
-      class="h-12 brightness-0 invert"
+          class="h-12 brightness-0 dark:invert"
     />
 
     <span class="ml-auto flex items-center gap-1">
@@ -53,7 +55,7 @@
 
       <button
         type="button"
-        class="flex items-center justify-center rounded-xl p-2 text-slate-400 transition-colors hover:bg-white/10"
+        class="flex items-center justify-center rounded-xl p-2 transition-colors text-(--tui-text-secondary) hover:bg-[var(--tui-clear-hover)]"
         [attr.aria-label]="'Cerrar sesión'"
       >
         <tui-icon icon="@tui.log-out" class="text-xl" tuiTooltip="Cerrar sesión" />

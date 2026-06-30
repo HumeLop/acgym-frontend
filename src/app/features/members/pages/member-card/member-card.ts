@@ -3,13 +3,13 @@ import { RouterLink } from '@angular/router'
 import type { Member } from '@features/members/models'
 import type { TuiSwipeEvent } from '@taiga-ui/cdk'
 import { TuiSwipe } from '@taiga-ui/cdk'
-import { TuiButton, TuiCell, TuiIcon, TuiTitle } from '@taiga-ui/core'
-import { TuiAvatar, TuiBadge, TuiChip, TuiProgress } from '@taiga-ui/kit'
-import { TuiCardLarge } from '@taiga-ui/layout'
+import { TuiButton, TuiIcon } from '@taiga-ui/core'
+import { TuiProgress } from '@taiga-ui/kit'
+import { TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-member-card',
-  imports: [RouterLink, TuiSwipe, TuiIcon, TuiCardLarge, TuiCell, TuiTitle, TuiBadge, TuiAvatar, TuiProgress, TuiButton, TuiChip],
+  imports: [RouterLink, TuiSwipe, TuiIcon, TuiSurface, TuiProgress, TuiButton],
   templateUrl: './member-card.html',
 })
 export class MemberCard {
@@ -17,6 +17,7 @@ export class MemberCard {
 
   edit = output<number>()
   delete = output<number>()
+  viewDetail = output<Member>()
 
   protected swiped = signal(false)
   protected readonly actionsWidth = 144

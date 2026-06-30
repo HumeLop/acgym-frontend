@@ -1,181 +1,211 @@
 <div
-  class="relative overflow-hidden group rounded-3xl border transition-all duration-200 hover:-translate-y-1 hover:shadow-xl border-slate-200 bg-white hover:border-orange-400 shadow-sm dark:border-[#1e3a5f] dark:bg-[#0f1624] dark:hover:border-orange-500 dark:shadow-blue-950/40"
+  tuiSurface="elevated"
+  class="relative overflow-hidden group rounded-3xl border transition-all duration-200 hover:-translate-y-1 hover:shadow-xl border-(--tui-border-normal) hover:border-(--tui-border-hover)"
   tuiSwipe
   (tuiSwipe)="onSwipe($event)"
 >
-  <!-- Barra superior: gradiente naranja → azul para reflejar el tema -->
   <div class="h-1.5 rounded-t-3xl bg-linear-to-r from-orange-500 via-orange-400 to-blue-500"></div>
 
   <div
     class="flex transition-transform duration-200 ease-out"
     [style.transform]="swiped() ? 'translateX(-' + actionsWidth + 'px)' : 'translateX(0)'"
   >
-    <a
-      appearance="floating"
-      tuiCardLarge="compact"
-      class="w-full shrink-0"
-      [routerLink]="['/members', member().id]"
-      (click)="closeSwipe()"
-    >
-      @let expirationDays = member().daysUntilExpiration ?? -1;
-      @let hasExpiration = member().daysUntilExpiration !== null;
+    <a class="w-full shrink-0" [routerLink]="['/members', member().id]" (click)="closeSwipe()">
+      @let m = member();
+      @let expirationDays = m.daysUntilExpiration ?? -1;
+      @let hasExpiration = m.daysUntilExpiration !== null;
 
-      <div tuiCell>
-        <div
-          appearance="primary"
-          tuiAvatar
-          class="text-lg font-bold tracking-tight transition-colors text-white group-hover:brightness-110 dark:text-[#080c14]"
-          [class.bg-orange-500!]="member().isActive"
-          [class.bg-slate-400!]="!member().isActive"
-        >
-          {{ getInitials(member().name) }}
-        </div>
-        <div tuiTitle>
-          <span
-            class="font-semibold transition-colors text-gray-900 group-hover:text-orange-500 dark:text-slate-100 dark:group-hover:text-blue-400"
-          >
-            {{ member().name }}
-          </span>
-          <div tuiSubtitle>{{ member().email ?? 'Sin email' }}</div>
-        </div>
-        <aside tuiAccessories>
-          <span tuiBadge [appearance]="member().isActive ? 'positive' : 'neutral'">
-            {{ member().isActive ? 'Activo' : 'Inactivo' }}
-          </span>
-        </aside>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-2 px-5 pb-2">
-        <span tuiChip>
-          <tui-icon icon="@tui.phone" class="text-xs!" />
-          {{ member().phone ?? 'Sin teléfono' }}
-        </span>
-
-        <span tuiChip>
-          <tui-icon icon="@tui.credit-card" class="text-xs!" />
-          {{ member().activePaymentsCount }} pagos
-        </span>
-
-        @if (!hasExpiration) {
-          <span tuiBadge appearance="neutral">Sin vencimiento</span>
-        } @else if (expirationDays <= 0) {
-          <span tuiBadge appearance="negative">Vencida</span>
-        } @else if (expirationDays <= 3) {
-          <span tuiBadge appearance="negative">Urgente</span>
-        } @else if (expirationDays <= 7) {
-          <span tuiBadge appearance="warning">Próxima</span>
-        } @else {
-          <span tuiBadge appearance="positive">
-            {{ expirationDays }} días
-          </span>
-        }
-      </div>
-
-      <div
-        class="mx-5 mb-1 flex items-center justify-between gap-3 rounded-xl border p-4 transition-colors bg-slate-50 dark:bg-[#080c14]/60"
-        [class.border-green-300]="hasExpiration && expirationDays > 7"
-        [class.bg-green-100!]="hasExpiration && expirationDays > 7"
-        [class.dark:border-green-800]="hasExpiration && expirationDays > 7"
-        [class.border-amber-300]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
-        [class.bg-amber-100!]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
-        [class.dark:border-amber-800]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
-        [class.border-red-300]="hasExpiration && expirationDays <= 0"
-        [class.bg-red-100!]="hasExpiration && expirationDays <= 0"
-        [class.dark:border-red-800]="hasExpiration && expirationDays <= 0"
-        [class.border-slate-200]="!hasExpiration"
-        [class.dark:border-[#1e3a5f]]="!hasExpiration"
-      >
-        <div class="flex items-center gap-3">
-          <tui-icon
-            class="text-xl!"
-            [icon]="
-              hasExpiration && expirationDays <= 0
-                ? '@tui.alert-triangle'
-                : hasExpiration && expirationDays <= 7
-                  ? '@tui.hourglass'
-                  : '@tui.check-circle'
-            "
-            [class.text-green-500!]="hasExpiration && expirationDays > 7"
-            [class.text-amber-500!]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
-            [class.text-red-500!]="hasExpiration && expirationDays <= 0"
-            [class.text-slate-400!]="!hasExpiration"
-          />
-          <div>
-            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-              Membresía
-            </p>
-            <p
-              class="text-sm font-bold"
-              [class.text-green-600!]="hasExpiration && expirationDays > 7"
-              [class.text-amber-600!]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
-              [class.text-red-600!]="hasExpiration && expirationDays <= 0"
-              [class.text-slate-500!]="!hasExpiration"
+      <div class="flex-1 p-5" (click)="viewDetail.emit(member())">
+        <!-- Header -->
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div class="flex items-center flex-1 min-w-0 gap-3">
+            <div
+              class="flex items-center justify-center shrink-0 text-xl font-bold text-white rounded-full shadow-md w-14 h-14"
+              [class.bg-orange-500]="m.isActive"
+              [class.bg-slate-400]="!m.isActive"
             >
-              {{
-                member().daysUntilExpiration === null
-                  ? 'Sin vencimiento'
-                  : expirationDays <= 0
-                    ? 'Vencida'
-                    : expirationDays <= 3
-                      ? 'Urgente'
-                      : expirationDays <= 7
-                        ? 'Próxima'
-                        : 'Activa'
-              }}
-            </p>
+              {{ getInitials(m.name) }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3
+                class="text-base font-bold truncate transition-colors text-(--tui-text-primary) group-hover:text-(--tui-primary)"
+              >
+                {{ m.name }}
+              </h3>
+              <p class="text-sm truncate text-(--tui-text-secondary)">
+                {{ m.email ?? 'Sin email' }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full shrink-0"
+            [class.bg-orange-100]="m.isActive"
+            [class.text-orange-800]="m.isActive"
+            [class.dark:bg-orange-900/30]="m.isActive"
+            [class.dark:text-orange-200]="m.isActive"
+            [class.bg-slate-100]="!m.isActive"
+            [class.text-slate-800]="!m.isActive"
+            [class.dark:bg-slate-700]="!m.isActive"
+            [class.dark:text-slate-200]="!m.isActive"
+          >
+            <span
+              class="w-2 h-2 rounded-full"
+              [class.bg-orange-500]="m.isActive"
+              [class.bg-slate-400]="!m.isActive"
+            ></span>
+            {{ m.isActive ? 'Activo' : 'Inactivo' }}
           </div>
         </div>
 
-        <div class="text-right">
-          <p
-            class="text-3xl font-black leading-none"
-            [class.text-green-500!]="hasExpiration && expirationDays > 7"
-            [class.text-amber-500!]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
-            [class.text-red-500!]="hasExpiration && expirationDays <= 0"
-            [class.text-slate-500!]="!hasExpiration"
-          >
-            {{ member().daysUntilExpiration ?? '—' }}
-          </p>
-          <p class="text-xs font-medium text-slate-400">
-            {{ member().daysUntilExpiration === 1 ? 'día restante' : 'días' }}
-          </p>
-          @if (member().daysUntilExpiration !== null) {
-            <progress
-              max="100"
-              tuiProgressBar
-              [value]="progressValue()"
-              size="xs"
-              [color]="
-                member().daysUntilExpiration! > 7
-                  ? 'var(--tui-status-positive)'
-                  : member().daysUntilExpiration! > 3
-                    ? 'var(--tui-status-warning)'
-                    : 'var(--tui-status-negative)'
+        <!-- Detalles -->
+        <div class="pt-4 space-y-3 border-t border-(--tui-border-normal)">
+          <div class="flex items-center gap-3">
+            <div
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30"
+            >
+              <tui-icon icon="@tui.phone" class="text-orange-600 dark:text-orange-400 text-base!" />
+            </div>
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Teléfono</span>
+            <span class="text-sm font-bold text-(--tui-text-primary)">{{
+              m.phone ?? 'Sin teléfono'
+            }}</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30"
+            >
+              <tui-icon
+                icon="@tui.credit-card"
+                class="text-blue-600 dark:text-blue-400 text-base!"
+              />
+            </div>
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Pagos</span>
+            <span class="text-sm font-bold text-(--tui-text-primary)">{{
+              m.activePaymentsCount
+            }}</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div
+              class="flex items-center justify-center w-8 h-8 rounded-lg"
+              [class.bg-red-100]="hasExpiration && expirationDays <= 0"
+              [class.dark:bg-red-900/30]="hasExpiration && expirationDays <= 0"
+              [class.bg-amber-100]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
+              [class.dark:bg-amber-900/30]="
+                hasExpiration && expirationDays <= 7 && expirationDays > 0
               "
-              class="mt-2 w-full"
-            ></progress>
+              [class.bg-green-100]="hasExpiration && expirationDays > 7"
+              [class.dark:bg-green-900/30]="hasExpiration && expirationDays > 7"
+              [class.bg-slate-100]="!hasExpiration"
+              [class.dark:bg-slate-700]="!hasExpiration"
+            >
+              <tui-icon
+                icon="@tui.check-circle"
+                class="text-base!"
+                [class.text-red-600]="hasExpiration && expirationDays <= 0"
+                [class.dark:text-red-400]="hasExpiration && expirationDays <= 0"
+                [class.text-amber-600]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
+                [class.dark:text-amber-400]="
+                  hasExpiration && expirationDays <= 7 && expirationDays > 0
+                "
+                [class.text-green-600]="hasExpiration && expirationDays > 7"
+                [class.dark:text-green-400]="hasExpiration && expirationDays > 7"
+                [class.text-(--tui-text-tertiary)]="!hasExpiration"
+              />
+            </div>
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Membresía</span>
+            <span
+              class="text-sm font-bold"
+              [class.text-red-600]="hasExpiration && expirationDays <= 3"
+              [class.text-amber-600]="hasExpiration && expirationDays <= 7 && expirationDays > 3"
+              [class.text-green-600]="hasExpiration && expirationDays > 7"
+              [class.text-(--tui-text-secondary)]="!hasExpiration"
+            >
+              @if (!hasExpiration) {
+                Sin vencimiento
+              } @else if (expirationDays <= 0) {
+                Vencida
+              } @else if (expirationDays <= 3) {
+                Urgente
+              } @else if (expirationDays <= 7) {
+                Próxima
+              } @else {
+                Activa
+              }
+            </span>
+          </div>
+
+          @if (hasExpiration) {
+            <div class="flex items-center gap-3">
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-lg"
+                [class.bg-red-100]="expirationDays <= 0"
+                [class.dark:bg-red-900/30]="expirationDays <= 0"
+                [class.bg-amber-100]="expirationDays <= 7 && expirationDays > 0"
+                [class.dark:bg-amber-900/30]="expirationDays <= 7 && expirationDays > 0"
+                [class.bg-green-100]="expirationDays > 7"
+                [class.dark:bg-green-900/30]="expirationDays > 7"
+              >
+                <tui-icon
+                  icon="@tui.hourglass"
+                  class="text-base!"
+                  [class.text-red-600]="expirationDays <= 0"
+                  [class.dark:text-red-400]="expirationDays <= 0"
+                  [class.text-amber-600]="expirationDays <= 7 && expirationDays > 0"
+                  [class.dark:text-amber-400]="expirationDays <= 7 && expirationDays > 0"
+                  [class.text-green-600]="expirationDays > 7"
+                  [class.dark:text-green-400]="expirationDays > 7"
+                />
+              </div>
+              <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)"
+                >Días restantes</span
+              >
+              <div class="flex items-center gap-2">
+                <span
+                  class="text-sm font-bold"
+                  [class.text-red-600]="expirationDays <= 0"
+                  [class.text-amber-600]="expirationDays <= 7 && expirationDays > 0"
+                  [class.text-green-600]="expirationDays > 7"
+                >
+                  {{ expirationDays }}
+                </span>
+                <progress
+                  max="100"
+                  tuiProgressBar
+                  [value]="progressValue()"
+                  size="xs"
+                  [color]="
+                    expirationDays > 7
+                      ? 'var(--tui-status-positive)'
+                      : expirationDays > 3
+                        ? 'var(--tui-status-warning)'
+                        : 'var(--tui-status-negative)'
+                  "
+                  class="w-20"
+                ></progress>
+              </div>
+            </div>
           }
         </div>
       </div>
 
-      <footer class="flex gap-2">
+      <!-- Acciones -->
+      <div
+        class="flex items-center gap-2 px-4 py-3 border-t border-(--tui-border-normal) bg-(--tui-background-neutral-1)"
+      >
         <button
           appearance="secondary"
-          size="l"
-          tuiIconButton
-          iconStart="@tui.pencil"
-          title="Editar"
-          (click)="$event.preventDefault(); $event.stopPropagation(); edit.emit(member().id)"
-        ></button>
-        <button
-          appearance="secondary-destructive"
-          size="l"
-          tuiIconButton
-          iconStart="@tui.trash-2"
-          title="Eliminar"
-          (click)="$event.preventDefault(); $event.stopPropagation(); delete.emit(member().id)"
-        ></button>
-      </footer>
+          size="m"
+          tuiButton
+          class="flex-1"
+          (click)="viewDetail.emit(member()); $event.stopPropagation()"
+        >
+          <tui-icon icon="@tui.eye" />
+          Ver
+        </button>
+      </div>
     </a>
 
     <div class="flex shrink-0 lg:hidden" [style.width.px]="actionsWidth">

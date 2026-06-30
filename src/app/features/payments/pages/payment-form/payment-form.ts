@@ -10,7 +10,8 @@ import type { PaymentMethod } from '@shared/models'
 import { DateUtils } from '@shared/utils/date.utils'
 import { TuiDay, TuiMonth, type TuiStringHandler, type TuiStringMatcher } from '@taiga-ui/cdk'
 import { TuiButton, TuiCalendar, TuiDataList, TuiDropdown, TuiIcon, TuiLabel, TuiNotification } from '@taiga-ui/core'
-import { TuiChevron, TuiComboBox, TuiSelect } from '@taiga-ui/kit'
+import { TuiChevron, TuiComboBox, TuiSelect, TuiButtonLoading } from '@taiga-ui/kit'
+import { TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-payment-form',
@@ -30,9 +31,10 @@ import { TuiChevron, TuiComboBox, TuiSelect } from '@taiga-ui/kit'
     TuiComboBox,
     TuiDataList,
     TuiDropdown,
+    TuiSurface,
+    TuiButtonLoading,
   ],
   templateUrl: './payment-form.html',
-  styleUrl: './payment-form.css',
 })
 export class PaymentForm {
   protected paymentService = inject(PaymentService)

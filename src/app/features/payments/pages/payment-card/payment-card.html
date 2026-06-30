@@ -1,5 +1,6 @@
 <div
-  class="relative overflow-hidden group rounded-3xl border transition-all duration-200 hover:-translate-y-1 hover:shadow-xl border-slate-200 bg-white hover:border-orange-400 shadow-sm dark:border-[#1e3a5f] dark:bg-[#0f1624] dark:hover:border-orange-500 dark:shadow-blue-950/40"
+  tuiSurface="elevated"
+  class="relative overflow-hidden group rounded-3xl border transition-all duration-200 hover:-translate-y-1 hover:shadow-xl border-(--tui-border-normal) hover:border-(--tui-border-hover)"
   tuiSwipe
   (tuiSwipe)="onSwipe($event)"
 >
@@ -9,13 +10,7 @@
     class="flex transition-transform duration-200 ease-out"
     [style.transform]="swiped() ? 'translateX(-' + actionsWidth + 'px)' : 'translateX(0)'"
   >
-    <a
-      appearance="floating"
-      tuiCardLarge="compact"
-      class="w-full shrink-0"
-      [routerLink]="['/payments', item().id]"
-      (click)="closeSwipe()"
-    >
+    <a class="w-full shrink-0" [routerLink]="['/payments', item().id]" (click)="closeSwipe()">
       @let p = item();
       @let isActive = p.isActive;
 
@@ -32,11 +27,11 @@
             </div>
             <div class="flex-1 min-w-0">
               <h3
-                class="text-base font-bold truncate transition-colors text-slate-900 dark:text-slate-100 group-hover:text-orange-500 dark:group-hover:text-orange-400"
+                class="text-base font-bold truncate transition-colors text-(--tui-text-primary) group-hover:text-(--tui-primary)"
               >
                 {{ p.memberName }}
               </h3>
-              <p class="text-sm truncate text-slate-500 dark:text-slate-400">
+              <p class="text-sm truncate text-(--tui-text-secondary)">
                 {{ p.membershipTypeName }}
               </p>
             </div>
@@ -63,7 +58,7 @@
         </div>
 
         <!-- Detalles -->
-        <div class="pt-4 space-y-3 border-t border-slate-100 dark:border-slate-700">
+        <div class="pt-4 space-y-3 border-t border-(--tui-border-normal)">
           <div class="flex items-center gap-3">
             <div
               class="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30"
@@ -73,10 +68,8 @@
                 class="text-orange-600 dark:text-orange-400 text-base!"
               />
             </div>
-            <span class="flex-1 text-sm font-medium text-slate-500 dark:text-slate-400">Monto</span>
-            <span class="text-sm font-bold text-slate-900 dark:text-slate-100"
-              >${{ p.amount }}</span
-            >
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Monto</span>
+            <span class="text-sm font-bold text-(--tui-text-primary)">${{ p.amount }}</span>
           </div>
 
           <div class="flex items-center gap-3">
@@ -85,10 +78,10 @@
             >
               <tui-icon icon="@tui.calendar" class="text-blue-600 dark:text-blue-400 text-base!" />
             </div>
-            <span class="flex-1 text-sm font-medium text-slate-500 dark:text-slate-400"
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)"
               >Fecha de pago</span
             >
-            <span class="text-sm font-bold text-slate-900 dark:text-slate-100">{{
+            <span class="text-sm font-bold text-(--tui-text-primary)">{{
               formatDate(p.paymentDate)
             }}</span>
           </div>
@@ -102,12 +95,8 @@
                 class="text-amber-600 dark:text-amber-400 text-base!"
               />
             </div>
-            <span class="flex-1 text-sm font-medium text-slate-500 dark:text-slate-400"
-              >Método</span
-            >
-            <span class="text-sm font-bold text-slate-900 dark:text-slate-100">{{
-              p.paymentMethod
-            }}</span>
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Método</span>
+            <span class="text-sm font-bold text-(--tui-text-primary)">{{ p.paymentMethod }}</span>
           </div>
 
           <div class="flex items-center gap-3">
@@ -127,8 +116,8 @@
                 [class.dark:text-orange-400]="isActive"
               />
             </div>
-            <span class="flex-1 text-sm font-medium text-slate-500 dark:text-slate-400">Vence</span>
-            <span class="text-sm font-bold text-slate-900 dark:text-slate-100">{{
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Vence</span>
+            <span class="text-sm font-bold text-(--tui-text-primary)">{{
               formatDate(p.endDate)
             }}</span>
           </div>
@@ -137,7 +126,7 @@
 
       <!-- Acciones -->
       <div
-        class="flex items-center gap-2 px-4 py-3 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/30"
+        class="flex items-center gap-2 px-4 py-3 border-t border-(--tui-border-normal) bg-(--tui-background-neutral-1)"
       >
         <button
           appearance="secondary"

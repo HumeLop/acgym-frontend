@@ -28,6 +28,7 @@ export class ThemeService {
     }
 
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+    document.documentElement.setAttribute('tuiTheme', isDark ? 'dark' : 'light')
   })
 
   constructor() {

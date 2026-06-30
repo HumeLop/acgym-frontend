@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
   --font-sans: Montserrat, Roboto, 'Helvetica Neue', sans-serif;
@@ -9,7 +9,7 @@
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('/assets/fonts/Montserrat-VariableFont_wght.ttf') format('truetype-variations');
+  src: url('/assets/fonts/Montserrat-VariableFont_wght.woff2') format('woff2');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -17,7 +17,7 @@
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('/assets/fonts/Montserrat-Italic-VariableFont_wght.ttf') format('truetype-variations');
+  src: url('/assets/fonts/Montserrat-Italic-VariableFont_wght.woff2') format('woff2');
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
@@ -151,6 +151,11 @@ button,
   }
 }
 
+/* Chart colors */
+.chart-axes {
+  --tui-chart-categorical-00: #ea580c;
+}
+
 /* Page enter animation */
 @keyframes page-enter {
   from {
@@ -161,4 +166,10 @@ button,
 
 .page-enter {
   animation: page-enter 200ms ease-out;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

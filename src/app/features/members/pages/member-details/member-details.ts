@@ -1,15 +1,27 @@
 import { Component, computed, effect, inject, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { MemberService } from '@features/members/services/member-service'
+import { DateUtils } from '@shared/utils/date.utils'
 import { TuiItem } from '@taiga-ui/cdk'
-import { TuiIcon, TuiLink } from '@taiga-ui/core'
-import { TuiBreadcrumbs } from '@taiga-ui/kit'
+import { TuiButton, TuiIcon, TuiLink, TuiNotification } from '@taiga-ui/core'
+import { TuiBreadcrumbs, TuiSkeleton } from '@taiga-ui/kit'
+import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-member-details',
-  imports: [RouterLink, TuiIcon, TuiBreadcrumbs, TuiLink, TuiItem],
+  imports: [
+    RouterLink,
+    TuiIcon,
+    TuiBreadcrumbs,
+    TuiLink,
+    TuiItem,
+    TuiSurface,
+    TuiSkeleton,
+    TuiNotification,
+    TuiButton,
+    TuiBlockStatus,
+  ],
   templateUrl: './member-details.html',
-  styleUrl: './member-details.css',
 })
 export class MemberDetails {
   private memberService = inject(MemberService)
@@ -28,7 +40,8 @@ export class MemberDetails {
   protected memberSince = computed(() => {
     const m = this.memberDetail()
     if (!m) return ''
-    const date = new Date(m.createdAt)
+    const date = DateUtils.parseDateString(m.createdAt)
+    if (!date) return ''
     return date.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' })
   })
 
@@ -68,10 +81,8 @@ export class MemberDetails {
 
   protected formatDate(dateStr: string | null): string {
     if (!dateStr) return '—'
-    return new Date(dateStr).toLocaleDateString('es-MX', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    })
+    const date = DateUtils.parseDateString(dateStr)
+    if (!date) return '—'
+    return DateUtils.formatDateForDisplay(date)
   }
 }

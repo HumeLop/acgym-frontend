@@ -4,16 +4,19 @@ import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
 import { ConfirmationModal } from '@shared/components/confirmation-modal/confirmation-modal'
-import { TuiAutoFocus } from '@taiga-ui/cdk'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
   TUI_PULL_TO_REFRESH_LOADED,
+  TUI_PULL_TO_REFRESH_THRESHOLD,
+  TuiElasticSticky,
   TuiPullToRefresh,
   TuiResponsiveDialog,
   TuiRipple,
 } from '@taiga-ui/addon-mobile'
+import { tuiClamp } from '@taiga-ui/cdk'
 import { TuiIcon, TuiNotification } from '@taiga-ui/core'
+import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiCardLarge } from '@taiga-ui/layout'
 import { Subject } from 'rxjs'
 
@@ -28,8 +31,9 @@ import { Subject } from 'rxjs'
     ConfirmationModal,
     TuiResponsiveDialog,
     TuiPullToRefresh,
-    TuiAutoFocus,
     TuiRipple,
+    TuiElasticSticky,
+    TuiSkeleton,
   ],
   providers: [
     {
@@ -48,12 +52,16 @@ import { Subject } from 'rxjs'
       provide: WA_IS_IOS,
       useValue: true,
     },
+    {
+      provide: TUI_PULL_TO_REFRESH_THRESHOLD,
+      useValue: 120,
+    },
   ],
   templateUrl: './expiring-members.html',
-  styleUrl: './expiring-members.css',
 })
 export class ExpiringMembers {
   protected memberService = inject(MemberService)
+  private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
 
   protected members = this.memberService.expiringMembers
   protected hasMembers = this.memberService.hasExpiringMembers
@@ -95,6 +103,13 @@ export class ExpiringMembers {
     this.memberService.closeModal()
   }
 
+  // Elastic sticky header
+  protected headerScale = signal(1)
+
+  protected onElastic(scale: number): void {
+    this.headerScale.set(tuiClamp(scale, 0.6, 1))
+  }
+
   private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
   private readonly isPulling = signal(false)
 
@@ -106,6 +121,9 @@ export class ExpiringMembers {
   })
 
   protected onPull() {
+    if (window.scrollY > 0) return
+    if (!this.isTouchDevice) return
+    this.memberService.page.set(1)
     this.memberService.reload()
     this.isPulling.set(true)
   }

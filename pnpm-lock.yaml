@@ -29,18 +29,18 @@ importers:
       '@angular/router':
         specifier: ^22.0.4
         version: 22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@angular/platform-browser@22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2)))(rxjs@7.8.2)
+      '@date-fns/tz':
+        specifier: ^1.5.0
+        version: 1.5.0
       '@ng-web-apis/platform':
         specifier: ^5.3.0
         version: 5.3.0
-      '@taiga-ui/addon-commerce':
+      '@taiga-ui/addon-charts':
         specifier: ^5.12.0
-        version: 5.12.0(365a74bee3b84eba7f40bbc0979fc2dd)
+        version: 5.12.0(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@ng-web-apis/common@5.3.0(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@types/dom-speech-recognition@0.0.10)(rxjs@7.8.2))(@taiga-ui/cdk@5.12.0(62c4a2f4b250498d605c67bca7619ce4))(@taiga-ui/core@5.12.0(ff139738fdcd073e2a17b11e15012df3))(@taiga-ui/polymorpheus@5.0.1(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@angular/platform-browser@22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))))
       '@taiga-ui/addon-mobile':
         specifier: ^5.12.0
         version: 5.12.0(b4b44f326aae654c31779d33d4a434ce)
-      '@taiga-ui/addon-table':
-        specifier: ^5.12.0
-        version: 5.12.0(3d95e277bcb0247eb54e3fa6c7940852)
       '@taiga-ui/cdk':
         specifier: ^5.12.0
         version: 5.12.0(62c4a2f4b250498d605c67bca7619ce4)
@@ -62,15 +62,9 @@ importers:
       '@taiga-ui/styles':
         specifier: ^5.12.0
         version: 5.12.0(@taiga-ui/design-tokens@0.306.0)
-      echarts:
-        specifier: ^6.1.0
-        version: 6.1.0
-      luxon:
-        specifier: ^3.7.2
-        version: 3.7.2
-      ngx-echarts:
-        specifier: ^22.0.0
-        version: 22.0.0(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(echarts@6.1.0)
+      date-fns:
+        specifier: ^4.4.0
+        version: 4.4.0
       rxjs:
         specifier: ~7.8.2
         version: 7.8.2
@@ -93,9 +87,6 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.3.1
         version: 4.3.1
-      '@types/luxon':
-        specifier: ^3.7.2
-        version: 3.7.2
       jsdom:
         specifier: ^28.1.0
         version: 28.1.0
@@ -520,6 +511,9 @@ packages:
   '@csstools/css-tokenizer@4.0.0':
     resolution: {integrity: sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA==}
     engines: {node: '>=20.19.0'}
+
+  '@date-fns/tz@1.5.0':
+    resolution: {integrity: sha512-lwYN/vDPeNRULcepoE/LO2Pgx+7/RV+S9ARfbc9lr2DtGkOD7pAiruHvbR1RX3Qyf6ja47EWJDMsNK5vK08DJg==}
 
   '@esbuild/aix-ppc64@0.27.7':
     resolution: {integrity: sha512-EKX3Qwmhz1eMdEJokhALr0YiD0lhQNwDqkPYyPhiSwKrh7/4KRjQc04sZ8db+5DVVnZ1LmbNDI1uAMPEUBnQPg==}
@@ -1703,22 +1697,15 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
-  '@taiga-ui/addon-commerce@5.12.0':
-    resolution: {integrity: sha512-3Vx27OP/MiSAi1OfVEyvfzBMp6Gq4Nee2hIpRp5GAkCEpq1dWPpIdEUc6ob7rOCEF2kRHmg0oyaNNjOB57XDZQ==}
+  '@taiga-ui/addon-charts@5.12.0':
+    resolution: {integrity: sha512-TAJ/6uBvK/L8PRL7FLaoypEMhWvnMVV/urNq8u4vyGhIqHYGEpefeynDrJwK68AJ8VAiU2YX2XQWeJA2mxVRBA==}
     peerDependencies:
       '@angular/common': '>=19.0.0'
       '@angular/core': '>=19.0.0'
-      '@angular/forms': '>=19.0.0'
-      '@maskito/angular': ^5.3.1
-      '@maskito/core': ^5.3.1
-      '@maskito/kit': ^5.3.1
       '@ng-web-apis/common': ^5.3.0
       '@taiga-ui/cdk': 5.12.0
       '@taiga-ui/core': 5.12.0
-      '@taiga-ui/i18n': 5.12.0
-      '@taiga-ui/kit': 5.12.0
       '@taiga-ui/polymorpheus': ^5.0.1
-      rxjs: '>=7.0.0'
 
   '@taiga-ui/addon-mobile@5.12.0':
     resolution: {integrity: sha512-FAywGx4O7vcsDgaNrabO0x21LDm69anlKJGh1JzEBzikLL72jL5L6ejVT+qIAVqh4wFQVNyYLqktcXM5VMxnHQ==}
@@ -1732,19 +1719,6 @@ packages:
       '@taiga-ui/core': 5.12.0
       '@taiga-ui/kit': 5.12.0
       '@taiga-ui/layout': 5.12.0
-      '@taiga-ui/polymorpheus': ^5.0.1
-      rxjs: '>=7.0.0'
-
-  '@taiga-ui/addon-table@5.12.0':
-    resolution: {integrity: sha512-7fswhTXNaIUoh8F108dWv5hqwSfS1dLLXx7ynRE55ft9vg9jw3+Yz+WVVSZyHxxbApwrAaaF4EASjg7yrheYow==}
-    peerDependencies:
-      '@angular/common': '>=19.0.0'
-      '@angular/core': '>=19.0.0'
-      '@ng-web-apis/intersection-observer': ^5.3.0
-      '@taiga-ui/cdk': 5.12.0
-      '@taiga-ui/core': 5.12.0
-      '@taiga-ui/i18n': 5.12.0
-      '@taiga-ui/kit': 5.12.0
       '@taiga-ui/polymorpheus': ^5.0.1
       rxjs: '>=7.0.0'
 
@@ -1969,9 +1943,6 @@ packages:
 
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
-
-  '@types/luxon@3.7.2':
-    resolution: {integrity: sha512-gW+Oib+vUtGJBtNC8V9Reww0oIpusw+4m81uncg9REGZAJfqOQHfo/nkabnc7w0QReXyPqjrbWMJk6NuAkiX3Q==}
 
   '@types/semver@7.7.1':
     resolution: {integrity: sha512-FmgJfu+MOcQ370SD0ev7EI8TlCAfKYU+B4m5T3yXc1CiRN94g/SZPtsCkk506aUDtlMnFZvasDwHHUcZUEaYuA==}
@@ -2226,6 +2197,9 @@ packages:
     resolution: {integrity: sha512-23XHcCF+coGYevirZceTVD7NdJOqVn+49IHyxgszm+JIiHLoB2TkmPtsYkNWT1pvRSGkc35L6NHs0yHkN2SumA==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
 
+  date-fns@4.4.0:
+    resolution: {integrity: sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w==}
+
   debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
     engines: {node: '>=6.0'}
@@ -2262,9 +2236,6 @@ packages:
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
-
-  echarts@6.1.0:
-    resolution: {integrity: sha512-q0yaFPggC9FUdsWH4blavRWFmxdrIodbkoKNAjJudAI6CA9gNPxHtV2RcZNEepZVlk4yvBYkOkbk6HIVpIyHZA==}
 
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
@@ -2725,10 +2696,6 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  luxon@3.7.2:
-    resolution: {integrity: sha512-vtEhXh/gNjI9Yg1u4jX/0YVPMvxzHuGgCm6tC5kZyb08yjGWGnqAjGJvcXbqQR2P3MyMEFnRbpcdFS6PBcLqew==}
-    engines: {node: '>=12'}
-
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -2851,12 +2818,6 @@ packages:
       '@angular-devkit/schematics': '>=19.0.0'
       '@types/semver': ^7.7.1
       tslib: ^2.8.1
-
-  ngx-echarts@22.0.0:
-    resolution: {integrity: sha512-evh5+CgEg3f/jmDLKwzUdih8unuhtwrpPzLTtoFwF/jwr6BM5QEb46QKdqXrwBTmSDZCL//iK9jlQJGIzM9LkQ==}
-    peerDependencies:
-      '@angular/core': '>=22.0.0'
-      echarts: '>=5.0.0'
 
   node-addon-api@6.1.0:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
@@ -3297,9 +3258,6 @@ packages:
   ts-morph@27.0.2:
     resolution: {integrity: sha512-fhUhgeljcrdZ+9DZND1De1029PrE+cMkIP7ooqkLRTrRLTqcki2AstsyJm0vRNbTbVCNJ0idGlbBrfqc7/nA8w==}
 
-  tslib@2.3.0:
-    resolution: {integrity: sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==}
-
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
@@ -3515,9 +3473,6 @@ packages:
 
   zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
-
-  zrender@6.1.0:
-    resolution: {integrity: sha512-oEGMDB6pOP2S6OwRR4PdVv610zrjnA3Bh+JnSG12fYJlBKjtNAoEb5fSUoCOOINlH96I2fU38/A2UpRKs67xYQ==}
 
 snapshots:
 
@@ -4005,6 +3960,8 @@ snapshots:
       css-tree: 3.2.1
 
   '@csstools/css-tokenizer@4.0.0': {}
+
+  '@date-fns/tz@1.5.0': {}
 
   '@esbuild/aix-ppc64@0.27.7':
     optional: true
@@ -4799,21 +4756,14 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@taiga-ui/addon-commerce@5.12.0(365a74bee3b84eba7f40bbc0979fc2dd)':
+  '@taiga-ui/addon-charts@5.12.0(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@ng-web-apis/common@5.3.0(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@types/dom-speech-recognition@0.0.10)(rxjs@7.8.2))(@taiga-ui/cdk@5.12.0(62c4a2f4b250498d605c67bca7619ce4))(@taiga-ui/core@5.12.0(ff139738fdcd073e2a17b11e15012df3))(@taiga-ui/polymorpheus@5.0.1(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@angular/platform-browser@22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))))':
     dependencies:
       '@angular/common': 22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2)
       '@angular/core': 22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2)
-      '@angular/forms': 22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@angular/platform-browser@22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2)))(rxjs@7.8.2)
-      '@maskito/angular': 5.3.1(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@angular/forms@22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@angular/platform-browser@22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2)))(rxjs@7.8.2))(@maskito/core@5.3.1)
-      '@maskito/core': 5.3.1
-      '@maskito/kit': 5.3.1(@maskito/core@5.3.1)
       '@ng-web-apis/common': 5.3.0(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@types/dom-speech-recognition@0.0.10)(rxjs@7.8.2)
       '@taiga-ui/cdk': 5.12.0(62c4a2f4b250498d605c67bca7619ce4)
       '@taiga-ui/core': 5.12.0(ff139738fdcd073e2a17b11e15012df3)
-      '@taiga-ui/i18n': 5.12.0(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@ng-web-apis/common@5.3.0(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@types/dom-speech-recognition@0.0.10)(rxjs@7.8.2))(rxjs@7.8.2)
-      '@taiga-ui/kit': 5.12.0(52013f447a619e215193f3a2c517abb9)
       '@taiga-ui/polymorpheus': 5.0.1(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@angular/platform-browser@22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2)))
-      rxjs: 7.8.2
       tslib: 2.8.1
 
   '@taiga-ui/addon-mobile@5.12.0(b4b44f326aae654c31779d33d4a434ce)':
@@ -4827,19 +4777,6 @@ snapshots:
       '@taiga-ui/core': 5.12.0(ff139738fdcd073e2a17b11e15012df3)
       '@taiga-ui/kit': 5.12.0(52013f447a619e215193f3a2c517abb9)
       '@taiga-ui/layout': 5.12.0(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@taiga-ui/cdk@5.12.0(62c4a2f4b250498d605c67bca7619ce4))(@taiga-ui/core@5.12.0(ff139738fdcd073e2a17b11e15012df3))(@taiga-ui/kit@5.12.0(52013f447a619e215193f3a2c517abb9))(@taiga-ui/polymorpheus@5.0.1(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@angular/platform-browser@22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))))(rxjs@7.8.2)
-      '@taiga-ui/polymorpheus': 5.0.1(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@angular/platform-browser@22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2)))
-      rxjs: 7.8.2
-      tslib: 2.8.1
-
-  '@taiga-ui/addon-table@5.12.0(3d95e277bcb0247eb54e3fa6c7940852)':
-    dependencies:
-      '@angular/common': 22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2)
-      '@angular/core': 22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2)
-      '@ng-web-apis/intersection-observer': 5.3.0(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@ng-web-apis/common@5.3.0(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@types/dom-speech-recognition@0.0.10)(rxjs@7.8.2))
-      '@taiga-ui/cdk': 5.12.0(62c4a2f4b250498d605c67bca7619ce4)
-      '@taiga-ui/core': 5.12.0(ff139738fdcd073e2a17b11e15012df3)
-      '@taiga-ui/i18n': 5.12.0(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@ng-web-apis/common@5.3.0(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@types/dom-speech-recognition@0.0.10)(rxjs@7.8.2))(rxjs@7.8.2)
-      '@taiga-ui/kit': 5.12.0(52013f447a619e215193f3a2c517abb9)
       '@taiga-ui/polymorpheus': 5.0.1(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(@angular/platform-browser@22.0.4(@angular/common@22.0.4(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2)))
       rxjs: 7.8.2
       tslib: 2.8.1
@@ -5052,8 +4989,6 @@ snapshots:
   '@types/estree@1.0.8': {}
 
   '@types/estree@1.0.9': {}
-
-  '@types/luxon@3.7.2': {}
 
   '@types/semver@7.7.1':
     optional: true
@@ -5333,6 +5268,8 @@ snapshots:
     transitivePeerDependencies:
       - '@noble/hashes'
 
+  date-fns@4.4.0: {}
+
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
@@ -5366,11 +5303,6 @@ snapshots:
       call-bind-apply-helpers: 1.0.2
       es-errors: 1.3.0
       gopd: 1.2.0
-
-  echarts@6.1.0:
-    dependencies:
-      tslib: 2.3.0
-      zrender: 6.1.0
 
   ee-first@1.1.1: {}
 
@@ -5873,8 +5805,6 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  luxon@3.7.2: {}
-
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -6007,12 +5937,6 @@ snapshots:
       ts-morph: 27.0.2
       tslib: 2.8.1
     optional: true
-
-  ngx-echarts@22.0.0(@angular/core@22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2))(echarts@6.1.0):
-    dependencies:
-      '@angular/core': 22.0.4(@angular/compiler@22.0.4)(rxjs@7.8.2)
-      echarts: 6.1.0
-      tslib: 2.8.1
 
   node-addon-api@6.1.0:
     optional: true
@@ -6553,8 +6477,6 @@ snapshots:
       code-block-writer: 13.0.3
     optional: true
 
-  tslib@2.3.0: {}
-
   tslib@2.8.1: {}
 
   tuf-js@4.1.0:
@@ -6714,7 +6636,3 @@ snapshots:
   zod@4.4.2: {}
 
   zod@4.4.3: {}
-
-  zrender@6.1.0:
-    dependencies:
-      tslib: 2.3.0

@@ -4,13 +4,12 @@ import type { Payment } from '@features/payments/models'
 import { DateUtils } from '@shared/utils'
 import { TuiSwipe, type TuiSwipeEvent } from '@taiga-ui/cdk'
 import { TuiButton, TuiIcon } from '@taiga-ui/core'
-import { TuiCardLarge } from '@taiga-ui/layout'
+import { TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-payment-card',
-  imports: [RouterLink, TuiIcon, TuiButton, TuiSwipe, TuiCardLarge],
+  imports: [RouterLink, TuiIcon, TuiButton, TuiSwipe, TuiSurface],
   templateUrl: './payment-card.html',
-  styleUrl: './payment-card.css',
 })
 export class PaymentCard {
   item = input.required<Payment>()

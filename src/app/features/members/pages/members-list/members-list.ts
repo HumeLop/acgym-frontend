@@ -1,4 +1,5 @@
 import { Component, computed, effect, inject, signal } from '@angular/core'
+import { Router } from '@angular/router'
 import { MemberCard } from '@features/members/pages/member-card/member-card'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
@@ -8,13 +9,15 @@ import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
   TUI_PULL_TO_REFRESH_LOADED,
+  TUI_PULL_TO_REFRESH_THRESHOLD,
+  TuiElasticSticky,
   TuiPullToRefresh,
   TuiResponsiveDialog,
   TuiRipple,
 } from '@taiga-ui/addon-mobile'
-import { TuiAutoFocus } from '@taiga-ui/cdk'
-import { TuiIcon } from '@taiga-ui/core'
-import { TuiTabs } from '@taiga-ui/kit'
+import { tuiClamp } from '@taiga-ui/cdk'
+import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
+import { TuiSkeleton, TuiTabs } from '@taiga-ui/kit'
 import { TuiCardLarge } from '@taiga-ui/layout'
 import { Subject } from 'rxjs'
 
@@ -29,8 +32,11 @@ import { Subject } from 'rxjs'
     TuiPullToRefresh,
     TuiCardLarge,
     TuiTabs,
-    TuiAutoFocus,
     TuiRipple,
+    TuiButton,
+    TuiNotification,
+    TuiElasticSticky,
+    TuiSkeleton,
   ],
   providers: [
     {
@@ -49,12 +55,17 @@ import { Subject } from 'rxjs'
       provide: WA_IS_IOS,
       useValue: true,
     },
+    {
+      provide: TUI_PULL_TO_REFRESH_THRESHOLD,
+      useValue: 120,
+    },
   ],
   templateUrl: './members-list.html',
-  styleUrl: './members-list.css',
 })
 export class MembersList {
+  protected router = inject(Router)
   protected memberService = inject(MemberService)
+  private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
   protected members = this.memberService.members
   protected totalMembers = this.memberService.totalMembers
   protected hasMembers = computed(() => (this.members() ?? []).length > 0)
@@ -138,7 +149,18 @@ export class MembersList {
     this.memberService.closeModal()
   }
 
+  // Elastic sticky header
+  protected headerScale = signal(1)
+
+  protected onElastic(scale: number): void {
+    this.headerScale.set(tuiClamp(scale, 0.6, 1))
+  }
+
   protected onPull() {
+    if (window.scrollY > 0) return
+    if (!this.isTouchDevice) return
+
+    this.memberService.page.set(1)
     this.memberService.reload()
     this.isPulling.set(true)
   }

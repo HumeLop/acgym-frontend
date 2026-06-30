@@ -1,0 +1,4 @@
+.chart-axes tui-axes {
+  --tui-border-normal: color-mix(in srgb, currentColor 10%, transparent);
+  --tui-text-secondary: color-mix(in srgb, currentColor 40%, transparent);
+}

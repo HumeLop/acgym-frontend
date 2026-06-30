@@ -1,8 +1,8 @@
 <tui-pull-to-refresh (pulled)="onPull()">
-  <div class="min-h-screen pb-24 bg-[#f1f5f9] dark:bg-[#080c14] overscroll-behavior-y-contain">
+  <div class="min-h-screen pb-24 bg-[#f3f4f6] dark:bg-[#0f172a] overscroll-behavior-y-contain">
     <!-- STICKY HEADER -->
     <header
-      class="sticky top-0 z-40 backdrop-blur-xl bg-[#f1f5f9]/90 dark:bg-[#080c14]/90 border-b border-transparent dark:border-[#1e3a5f]/50"
+      class="sticky top-0 z-40 backdrop-blur-xl bg-[#f3f4f6]/90 dark:bg-[#0f172a]/90 border-b border-transparent dark:border-[#1e3a5f]/50"
     >
       <div class="px-5 pt-4 pb-3 sm:px-6">
         <!-- Title row -->
@@ -73,7 +73,7 @@
     <div class="px-5 pt-3 sm:px-6">
       <!-- SEARCH + TABS -->
       <div
-        class="mb-4 overflow-hidden bg-white dark:bg-[#0f1624] rounded-2xl border border-slate-200 dark:border-[#1e3a5f] shadow-sm"
+        class="mb-4 overflow-hidden rounded-2xl border shadow-sm bg-(--tui-background-elevated-1) border-(--tui-border-normal)"
       >
         <div class="px-4 pt-4 pb-2">
           <div class="relative">
@@ -87,7 +87,7 @@
               placeholder="Buscar por nombre o método..."
               [value]="searchTerm()"
               (input)="onSearch(searchInput.value)"
-              class="w-full py-2.5 pl-11 pr-10 text-sm font-medium rounded-xl border-none outline-none bg-slate-50 text-slate-900 placeholder-slate-400 focus:bg-white dark:bg-[#0a0f1a] dark:text-slate-100 dark:placeholder-slate-500 dark:focus:bg-[#0a0f1a] transition-all duration-200 ring-1 ring-slate-200 dark:ring-[#1e3a5f] focus:ring-2 focus:ring-orange-500/40"
+              class="w-full py-2.5 pl-11 pr-10 text-sm font-medium rounded-xl outline-none transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) ring-1 ring-(--tui-border-normal) focus:ring-2 focus:ring-(--tui-primary)/40"
             />
             @if (searchTerm()) {
               <button
@@ -155,8 +155,12 @@
 
       <!-- MUTATION ERROR -->
       @if (mutationError()) {
-        <div class="p-3 mb-4 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-900/20 shadow-sm">
-          <p class="text-sm font-medium text-amber-800 dark:text-amber-300">{{ mutationError() }}</p>
+        <div
+          class="p-3 mb-4 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-900/20 shadow-sm"
+        >
+          <p class="text-sm font-medium text-amber-800 dark:text-amber-300">
+            {{ mutationError() }}
+          </p>
         </div>
       }
 
@@ -164,14 +168,14 @@
       @if (hasPayments()) {
         <div class="grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
           @for (payment of payments(); track payment.id; let i = $index) {
-            <div [style.animation-delay.ms]="i * 50" class="animate-fade-up">
-              <app-payment-card
-                [item]="payment"
-                (edit)="paymentService.openEditModal($event.id)"
-                (delete)="onDeletePayment($event.id)"
-                (viewDetail)="router.navigate(['/payments', $event.id])"
-              />
-            </div>
+            <app-payment-card
+              [style.animation-delay.ms]="i * 50"
+              class="animate-fade-in-up"
+              [item]="payment"
+              (edit)="paymentService.openEditModal($event.id)"
+              (delete)="onDeletePayment($event.id)"
+              (viewDetail)="router.navigate(['/payments', $event.id])"
+            />
           }
         </div>
       }

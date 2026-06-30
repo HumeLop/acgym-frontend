@@ -3,14 +3,14 @@ import { RouterLink } from '@angular/router'
 import { PaymentService } from '@features/payments/services/payment-service'
 import { DateUtils } from '@shared/utils/date.utils'
 import { TuiItem } from '@taiga-ui/cdk'
-import { TuiIcon, TuiLink } from '@taiga-ui/core'
-import { TuiBreadcrumbs } from '@taiga-ui/kit'
+import { TuiButton, TuiIcon, TuiLink } from '@taiga-ui/core'
+import { TuiBreadcrumbs, TuiSkeleton } from '@taiga-ui/kit'
+import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-payment-details',
-  imports: [RouterLink, TuiIcon, TuiBreadcrumbs, TuiLink, TuiItem],
+  imports: [RouterLink, TuiIcon, TuiBreadcrumbs, TuiLink, TuiItem, TuiSurface, TuiSkeleton, TuiBlockStatus, TuiButton],
   templateUrl: './payment-details.html',
-  styleUrl: './payment-details.css',
 })
 export class PaymentDetails {
   private paymentService = inject(PaymentService)

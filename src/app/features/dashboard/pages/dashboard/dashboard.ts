@@ -6,25 +6,19 @@ import { MemberService } from '@app/features/members/services/member-service'
 import { StatsCard } from '@features/dashboard/pages/stats-card/stats-card'
 import { DashboardService } from '@features/dashboard/services/dashboard-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
-import { TuiAutoFocus } from '@taiga-ui/cdk'
+import { TuiAxes, TuiBarChart, TuiChartHint, TuiLegendItem, TuiRingChart } from '@taiga-ui/addon-charts'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
   TUI_PULL_TO_REFRESH_LOADED,
+  TuiElasticSticky,
   TuiPullToRefresh,
 } from '@taiga-ui/addon-mobile'
-import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
-import { TuiProgress } from '@taiga-ui/kit'
-import { TuiCardLarge } from '@taiga-ui/layout'
-import type { EChartsOption } from 'echarts'
-import { BarChart, PieChart } from 'echarts/charts'
-import { GridComponent, TooltipComponent } from 'echarts/components'
-import * as echarts from 'echarts/core'
-import { CanvasRenderer } from 'echarts/renderers'
-import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts'
+import { type TuiContext, TuiHovered, tuiClamp } from '@taiga-ui/cdk'
+import { TuiAppearance, TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
+import { TuiSkeleton } from '@taiga-ui/kit'
+import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
 import { Subject } from 'rxjs'
-
-echarts.use([BarChart, PieChart, GridComponent, TooltipComponent, CanvasRenderer])
 
 @Component({
   selector: 'app-dashboard',
@@ -33,17 +27,23 @@ echarts.use([BarChart, PieChart, GridComponent, TooltipComponent, CanvasRenderer
     TuiIcon,
     TuiButton,
     TuiNotification,
-    TuiProgress,
     CurrencyPipe,
     StatsCard,
-    NgxEchartsDirective,
     FormField,
     TuiPullToRefresh,
-    TuiCardLarge,
-    TuiAutoFocus,
+    TuiRingChart,
+    TuiLegendItem,
+    TuiAxes,
+    TuiBarChart,
+    TuiChartHint,
+    TuiSkeleton,
+    TuiHovered,
+    TuiBlockStatus,
+    TuiSurface,
+    TuiAppearance,
+    TuiElasticSticky,
   ],
   providers: [
-    provideEchartsCore({ echarts }),
     {
       provide: TUI_PULL_TO_REFRESH_LOADED,
       useClass: Subject,
@@ -71,6 +71,7 @@ export class Dashboard {
 
   protected dashboardStats = this.dashboardService.dashboardStats
   protected paymentMethodsData = this.dashboardService.paymentMethodsList
+  protected dashboardError = this.dashboardService.error
 
   protected activeMembers = computed(() => this.dashboardStats()?.activeMembers ?? 0)
   protected totalMembers = computed(() => this.dashboardStats()?.totalMembers ?? 0)
@@ -86,57 +87,47 @@ export class Dashboard {
   protected inactiveSearchError = this.memberService.inactiveSearchError
   protected showInactiveResults = this.memberService.showInactiveResults
 
-  protected monthlyIncomeChartOptions = computed(() => {
-    const data = this.dashboardService.monthlyIncome()
-    if (!data) return undefined
-    return {
-      tooltip: { trigger: 'axis' },
-      xAxis: {
-        type: 'category',
-        data: data.labels,
-        axisLabel: { rotate: data.labels.length > 4 ? 45 : 0, fontSize: 11 },
-        axisLine: { lineStyle: { color: '#9ca3af' } },
-      },
-      yAxis: {
-        type: 'value',
-        axisLabel: { fontSize: 11 },
-        splitLine: { lineStyle: { color: '#374151', opacity: 0.3 } },
-      },
-      series: [
-        {
-          type: 'bar',
-          data: data.income,
-          itemStyle: { color: '#ea580c', borderRadius: [4, 4, 0, 0] },
-          barMaxWidth: 100,
-        },
-      ],
-      grid: { left: 36, right: 8, top: 12, bottom: 28 },
-    } satisfies EChartsOption
+  // Ring chart (payment methods)
+  protected activeRingIndex = signal(NaN)
+
+  protected ringChartValues = computed(() => this.paymentMethodsData().map((m) => m.total))
+
+  protected ringChartTotal = computed(() => this.ringChartValues().reduce((a, b) => a + b, 0))
+
+  // Bar chart (monthly income)
+  protected incomeLabels = computed(() => this.dashboardService.monthlyIncome()?.labels ?? [])
+
+  protected incomeValues = computed(() => this.dashboardService.monthlyIncome()?.income ?? [])
+
+  protected incomeMax = computed(() => {
+    const vals = this.incomeValues()
+    return vals.length ? Math.max(...vals) * 1.15 : 0
   })
 
-  protected paymentMethodsChartOptions = computed(() => {
-    const data = this.dashboardService.paymentMethods()
-    if (!data) return undefined
-    return {
-      tooltip: { trigger: 'item', formatter: '{b}: {c}' },
-      series: [
-        {
-          type: 'pie',
-          radius: ['50%', '70%'],
-          center: ['50%', '50%'],
-          data: data.labels.map((label, i) => ({
-            name: label,
-            value: data.totals[i] ?? 0,
-          })),
-          itemStyle: { borderRadius: 4 },
-          label: { show: false },
-          emphasis: {
-            label: { show: true, fontSize: 14, fontWeight: 'bold' },
-          },
-        },
-      ],
-    } satisfies EChartsOption
+  protected incomeYLabels = computed(() => {
+    const max = this.incomeMax()
+    const fmt = (n: number) => `$${Math.round(n).toLocaleString('es-MX')}`
+    return ['$0', max > 0 ? fmt(max / 2) : '', fmt(max)]
   })
+
+  protected incomeHint = ({ $implicit }: TuiContext<number>): string => {
+    const val = this.incomeValues()[$implicit] ?? 0
+    return `$${Math.round(val).toLocaleString('es-MX')}`
+  }
+
+  // Skeleton loading
+  protected isInitialLoading = computed(() => this.dashboardService.isLoading() && !this.dashboardStats())
+
+  // Elastic sticky header
+  protected headerScale = signal(1)
+
+  protected onElastic(scale: number): void {
+    this.headerScale.set(tuiClamp(scale, 0.6, 1))
+  }
+
+  protected onLegendHover(index: number, hovered: boolean): void {
+    this.activeRingIndex.set(hovered ? index : NaN)
+  }
 
   protected currentDate = computed(() => {
     return new Date().toLocaleDateString('es-MX', {
@@ -157,6 +148,14 @@ export class Dashboard {
     this.router.navigate(['/members', 'expiring-memberships'])
   }
 
+  protected goToMembers() {
+    this.router.navigate(['/members'])
+  }
+
+  protected goToPayments() {
+    this.router.navigate(['/payments'])
+  }
+
   private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
   private readonly isPulling = signal(false)
 
@@ -170,5 +169,9 @@ export class Dashboard {
   protected onPull() {
     this.dashboardService.reload()
     this.isPulling.set(true)
+  }
+
+  protected reloadAll() {
+    this.dashboardService.reload()
   }
 }
