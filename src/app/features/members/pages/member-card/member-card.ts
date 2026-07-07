@@ -6,10 +6,11 @@ import { TuiSwipe } from '@taiga-ui/cdk'
 import { TuiButton, TuiIcon } from '@taiga-ui/core'
 import { TuiProgress } from '@taiga-ui/kit'
 import { TuiSurface } from '@taiga-ui/layout'
+import { TuiRipple, TuiTouchable } from '@taiga-ui/addon-mobile'
 
 @Component({
   selector: 'app-member-card',
-  imports: [RouterLink, TuiSwipe, TuiIcon, TuiSurface, TuiProgress, TuiButton],
+  imports: [RouterLink, TuiSwipe, TuiIcon, TuiSurface, TuiProgress, TuiButton, TuiTouchable, TuiRipple],
   templateUrl: './member-card.html',
 })
 export class MemberCard {

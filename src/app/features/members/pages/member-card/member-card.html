@@ -1,10 +1,14 @@
 <div
   tuiSurface="elevated"
+  tuiTouchable
+  tuiRipple
   class="relative overflow-hidden group rounded-3xl border transition-all duration-200 hover:-translate-y-1 hover:shadow-xl border-(--tui-border-normal) hover:border-(--tui-border-hover)"
   tuiSwipe
   (tuiSwipe)="onSwipe($event)"
 >
-  <div class="h-1.5 rounded-t-3xl bg-linear-to-r from-orange-500 via-orange-400 to-blue-500"></div>
+  <div
+    class="h-1.5 rounded-t-3xl bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"
+  ></div>
 
   <div
     class="flex transition-transform duration-200 ease-out"
@@ -21,8 +25,8 @@
           <div class="flex items-center flex-1 min-w-0 gap-3">
             <div
               class="flex items-center justify-center shrink-0 text-xl font-bold text-white rounded-full shadow-md w-14 h-14"
-              [class.bg-orange-500]="m.isActive"
-              [class.bg-slate-400]="!m.isActive"
+              [class.bg-(--tui-primary)]="m.isActive"
+              [class.bg-(--tui-text-tertiary)]="!m.isActive"
             >
               {{ getInitials(m.name) }}
             </div>
@@ -40,19 +44,15 @@
 
           <div
             class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full shrink-0"
-            [class.bg-orange-100]="m.isActive"
-            [class.text-orange-800]="m.isActive"
-            [class.dark:bg-orange-900/30]="m.isActive"
-            [class.dark:text-orange-200]="m.isActive"
-            [class.bg-slate-100]="!m.isActive"
-            [class.text-slate-800]="!m.isActive"
-            [class.dark:bg-slate-700]="!m.isActive"
-            [class.dark:text-slate-200]="!m.isActive"
+            [class.bg-(--acgym-section-orange-pale)]="m.isActive"
+            [class.text-(--tui-primary)]="m.isActive"
+            [class.bg-(--tui-background-neutral-1)]="!m.isActive"
+            [class.text-(--tui-text-tertiary)]="!m.isActive"
           >
             <span
               class="w-2 h-2 rounded-full"
-              [class.bg-orange-500]="m.isActive"
-              [class.bg-slate-400]="!m.isActive"
+              [class.bg-(--tui-primary)]="m.isActive"
+              [class.bg-(--tui-text-tertiary)]="!m.isActive"
             ></span>
             {{ m.isActive ? 'Activo' : 'Inactivo' }}
           </div>
@@ -62,9 +62,9 @@
         <div class="pt-4 space-y-3 border-t border-(--tui-border-normal)">
           <div class="flex items-center gap-3">
             <div
-              class="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30"
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-(--acgym-section-orange-pale)"
             >
-              <tui-icon icon="@tui.phone" class="text-orange-600 dark:text-orange-400 text-base!" />
+              <tui-icon icon="@tui.phone" class="text-(--tui-primary) text-base!" />
             </div>
             <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Teléfono</span>
             <span class="text-sm font-bold text-(--tui-text-primary)">{{
@@ -74,11 +74,11 @@
 
           <div class="flex items-center gap-3">
             <div
-              class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30"
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-(--tui-status-info-pale)"
             >
               <tui-icon
                 icon="@tui.credit-card"
-                class="text-blue-600 dark:text-blue-400 text-base!"
+                class="text-(--tui-status-info) text-base!"
               />
             </div>
             <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Pagos</span>
@@ -90,37 +90,26 @@
           <div class="flex items-center gap-3">
             <div
               class="flex items-center justify-center w-8 h-8 rounded-lg"
-              [class.bg-red-100]="hasExpiration && expirationDays <= 0"
-              [class.dark:bg-red-900/30]="hasExpiration && expirationDays <= 0"
-              [class.bg-amber-100]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
-              [class.dark:bg-amber-900/30]="
-                hasExpiration && expirationDays <= 7 && expirationDays > 0
-              "
-              [class.bg-green-100]="hasExpiration && expirationDays > 7"
-              [class.dark:bg-green-900/30]="hasExpiration && expirationDays > 7"
-              [class.bg-slate-100]="!hasExpiration"
-              [class.dark:bg-slate-700]="!hasExpiration"
+              [class.bg-(--tui-status-negative-pale)]="hasExpiration && expirationDays <= 0"
+              [class.bg-(--tui-status-warning-pale)]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
+              [class.bg-(--tui-status-positive-pale)]="hasExpiration && expirationDays > 7"
+              [class.bg-(--tui-background-neutral-1)]="!hasExpiration"
             >
               <tui-icon
                 icon="@tui.check-circle"
                 class="text-base!"
-                [class.text-red-600]="hasExpiration && expirationDays <= 0"
-                [class.dark:text-red-400]="hasExpiration && expirationDays <= 0"
-                [class.text-amber-600]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
-                [class.dark:text-amber-400]="
-                  hasExpiration && expirationDays <= 7 && expirationDays > 0
-                "
-                [class.text-green-600]="hasExpiration && expirationDays > 7"
-                [class.dark:text-green-400]="hasExpiration && expirationDays > 7"
+                [class.text-(--tui-status-negative)]="hasExpiration && expirationDays <= 0"
+                [class.text-(--tui-status-warning)]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
+                [class.text-(--tui-status-positive)]="hasExpiration && expirationDays > 7"
                 [class.text-(--tui-text-tertiary)]="!hasExpiration"
               />
             </div>
             <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Membresía</span>
             <span
               class="text-sm font-bold"
-              [class.text-red-600]="hasExpiration && expirationDays <= 3"
-              [class.text-amber-600]="hasExpiration && expirationDays <= 7 && expirationDays > 3"
-              [class.text-green-600]="hasExpiration && expirationDays > 7"
+              [class.text-(--tui-status-negative)]="hasExpiration && expirationDays <= 3"
+              [class.text-(--tui-status-warning)]="hasExpiration && expirationDays <= 7 && expirationDays > 3"
+              [class.text-(--tui-status-positive)]="hasExpiration && expirationDays > 7"
               [class.text-(--tui-text-secondary)]="!hasExpiration"
             >
               @if (!hasExpiration) {
@@ -141,22 +130,16 @@
             <div class="flex items-center gap-3">
               <div
                 class="flex items-center justify-center w-8 h-8 rounded-lg"
-                [class.bg-red-100]="expirationDays <= 0"
-                [class.dark:bg-red-900/30]="expirationDays <= 0"
-                [class.bg-amber-100]="expirationDays <= 7 && expirationDays > 0"
-                [class.dark:bg-amber-900/30]="expirationDays <= 7 && expirationDays > 0"
-                [class.bg-green-100]="expirationDays > 7"
-                [class.dark:bg-green-900/30]="expirationDays > 7"
+                [class.bg-(--tui-status-negative-pale)]="expirationDays <= 0"
+                [class.bg-(--tui-status-warning-pale)]="expirationDays <= 7 && expirationDays > 0"
+                [class.bg-(--tui-status-positive-pale)]="expirationDays > 7"
               >
                 <tui-icon
                   icon="@tui.hourglass"
                   class="text-base!"
-                  [class.text-red-600]="expirationDays <= 0"
-                  [class.dark:text-red-400]="expirationDays <= 0"
-                  [class.text-amber-600]="expirationDays <= 7 && expirationDays > 0"
-                  [class.dark:text-amber-400]="expirationDays <= 7 && expirationDays > 0"
-                  [class.text-green-600]="expirationDays > 7"
-                  [class.dark:text-green-400]="expirationDays > 7"
+                  [class.text-(--tui-status-negative)]="expirationDays <= 0"
+                  [class.text-(--tui-status-warning)]="expirationDays <= 7 && expirationDays > 0"
+                  [class.text-(--tui-status-positive)]="expirationDays > 7"
                 />
               </div>
               <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)"
@@ -165,9 +148,9 @@
               <div class="flex items-center gap-2">
                 <span
                   class="text-sm font-bold"
-                  [class.text-red-600]="expirationDays <= 0"
-                  [class.text-amber-600]="expirationDays <= 7 && expirationDays > 0"
-                  [class.text-green-600]="expirationDays > 7"
+                  [class.text-(--tui-status-negative)]="expirationDays <= 0"
+                  [class.text-(--tui-status-warning)]="expirationDays <= 7 && expirationDays > 0"
+                  [class.text-(--tui-status-positive)]="expirationDays > 7"
                 >
                   {{ expirationDays }}
                 </span>
@@ -210,14 +193,14 @@
 
     <div class="flex shrink-0 lg:hidden" [style.width.px]="actionsWidth">
       <button
-        class="flex w-18 flex-col items-center justify-center gap-1 bg-orange-500 hover:bg-orange-600 text-white transition-colors"
+        class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-primary) hover:bg-(--tui-primary-hover) text-white transition-colors"
         (click)="$event.stopPropagation(); edit.emit(member().id); closeSwipe()"
       >
         <tui-icon icon="@tui.pencil" class="text-xl" />
         <span class="text-xs font-semibold">Editar</span>
       </button>
       <button
-        class="flex w-18 flex-col items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white transition-colors"
+        class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-status-negative) hover:bg-red-700 text-white transition-colors"
         (click)="$event.stopPropagation(); delete.emit(member().id); closeSwipe()"
       >
         <tui-icon icon="@tui.trash-2" class="text-xl" />

@@ -5,7 +5,7 @@
       <img
         src="/assets/images/ACGYM_LOGO.webp"
         alt="Ac Gym Logo"
-          class="h-16 brightness-0 dark:invert"
+        class="h-16 brightness-0 dark:invert"
       />
     </span>
 
@@ -13,7 +13,7 @@
       <button
         tuiHeaderCell
         type="button"
-        class="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-(--tui-text-secondary) hover:bg-[var(--tui-clear-hover)]"
+        class="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-(--acgym-header-text-secondary) hover:bg-(--acgym-header-hover)"
         (click)="nextMode()"
       >
         <tui-icon
@@ -26,7 +26,7 @@
 
       <button
         type="button"
-        class="flex items-center justify-center rounded-xl p-2 transition-colors text-(--tui-text-secondary) hover:bg-[var(--tui-clear-hover)]"
+        class="flex items-center justify-center rounded-xl p-2 transition-colors text-(--acgym-header-text-secondary) hover:bg-(--acgym-header-hover)"
         [attr.aria-label]="'Cerrar sesión'"
       >
         <tui-icon icon="@tui.log-out" class="text-xl" tuiTooltip="Cerrar sesión" />
@@ -35,18 +35,20 @@
   </header>
 
   <!-- HEADER MOBILE -->
-  <header class="header-mobile items-center gap-3 px-4 py-3 border-b bg-[var(--acgym-header-bg)] border-(--acgym-header-border)">
+  <header
+    class="header-mobile items-center gap-3 px-4 py-3 border-b bg-(--acgym-header-bg) border-(--acgym-header-border)"
+  >
     <img
       routerLink="/dashboard"
       src="/assets/images/ACGYM_LOGO.webp"
       alt="Ac Gym Logo"
-          class="h-12 brightness-0 dark:invert"
+      class="h-12 brightness-0 dark:invert"
     />
 
     <span class="ml-auto flex items-center gap-1">
       <button
         type="button"
-        class="flex items-center justify-center rounded-xl p-2 text-slate-400 transition-colors hover:bg-white/10"
+        class="flex items-center justify-center rounded-xl p-2 text-(--tui-text-tertiary) transition-colors hover:bg-white/10"
         (click)="nextMode()"
         [attr.aria-label]="modeAriaLabels[mode()]"
       >
@@ -55,7 +57,7 @@
 
       <button
         type="button"
-        class="flex items-center justify-center rounded-xl p-2 transition-colors text-(--tui-text-secondary) hover:bg-[var(--tui-clear-hover)]"
+        class="flex items-center justify-center rounded-xl p-2 transition-colors text-(--tui-text-secondary) hover:bg-(--tui-clear-hover)"
         [attr.aria-label]="'Cerrar sesión'"
       >
         <tui-icon icon="@tui.log-out" class="text-xl" tuiTooltip="Cerrar sesión" />
@@ -94,12 +96,6 @@
 
       <hr />
 
-      <span class="aside-label">ADMINISTRACIÓN</span>
-
-      <a iconStart="@tui.settings" tuiAsideItem routerLink="/admin" routerLinkActive="active-link">
-        Panel Administrativo
-      </a>
-
       <hr class="aside-footer-sep" />
 
       <footer></footer>
@@ -122,6 +118,6 @@
     </a>
     <a icon="@tui.users" routerLinkActive tuiTabBarItem routerLink="/members"> Miembros </a>
     <a icon="@tui.credit-card" routerLinkActive tuiTabBarItem routerLink="/payments"> Pagos </a>
-    <a icon="@tui.settings" routerLinkActive tuiTabBarItem routerLink="/admin"> Ajustes </a>
+
   </nav>
 </div>

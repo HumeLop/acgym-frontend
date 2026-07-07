@@ -1,26 +1,26 @@
 import { KeyValuePipe } from '@angular/common'
 import { Component, computed, effect, inject, input, output, signal } from '@angular/core'
-import { FormField, form, required } from '@angular/forms/signals'
+import { FormField, form, maxLength, required } from '@angular/forms/signals'
 import type { MemberWriteDto } from '@app/features/members/models'
 import { DateUtils } from '@app/shared/utils'
 import { MemberService } from '@features/members/services/member-service'
-import { ConfirmationModal } from '@shared/components/confirmation-modal/confirmation-modal'
+import { ConfirmService } from '@shared/services/confirm-service'
 import { TuiDay, TuiMonth } from '@taiga-ui/cdk'
 import { TuiButton, TuiCalendar, TuiIcon } from '@taiga-ui/core'
 import { TuiButtonLoading, TuiSwitch } from '@taiga-ui/kit'
 
 @Component({
   selector: 'app-member-form',
-  imports: [KeyValuePipe, TuiIcon, ConfirmationModal, FormField, TuiCalendar, TuiSwitch, TuiButton, TuiButtonLoading],
+  imports: [KeyValuePipe, TuiIcon, FormField, TuiCalendar, TuiSwitch, TuiButton, TuiButtonLoading],
   templateUrl: './member-form.html',
 })
 export class MemberForm {
   private memberService = inject(MemberService)
+  private confirmSvc = inject(ConfirmService)
 
   memberId = input<number | null>(null)
   close = output<void>()
 
-  protected showCancelModal = signal(false)
   protected calendarOpen = signal(false)
   protected calendarMonth = computed(
     () => new TuiMonth(this.memberData().dateOfBirth.year, this.memberData().dateOfBirth.month)
@@ -84,7 +84,10 @@ export class MemberForm {
 
   memberForm = form(this.memberData, (path) => {
     required(path.name, { message: 'El nombre es obligatorio' })
-    required(path.phone, { message: 'El teléfono es obligatorio' })
+    required(path.phone, {
+      message: 'El teléfono es obligatorio',
+    })
+    maxLength(path.phone, 10, { message: 'El teléfono debe tener máximo 10 dígitos' })
     required(path.dateOfBirth, { message: 'La fecha de nacimiento es obligatoria' })
   })
 
@@ -94,17 +97,20 @@ export class MemberForm {
     this.calendarOpen.set(false)
   }
   onCancel() {
-    this.showCancelModal.set(true)
-  }
-
-  onConfirmCancel() {
-    this.showCancelModal.set(false)
-    this.memberForm().reset()
-    this.close.emit()
-  }
-
-  onDismissCancel() {
-    this.showCancelModal.set(false)
+    this.confirmSvc
+      .open({
+        title: this.isEditing() ? 'Descartar Cambios' : 'Cancelar Creación',
+        message: this.isEditing() ? 'Los cambios no guardados se perderán' : 'La información ingresada se perderá',
+        type: 'destructive',
+        confirmText: 'Sí, Descartar',
+        cancelText: 'No, Quedarme',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.memberForm().reset()
+          this.close.emit()
+        }
+      })
   }
 
   onSave() {

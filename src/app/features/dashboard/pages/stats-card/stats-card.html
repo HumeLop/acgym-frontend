@@ -3,10 +3,9 @@
   (keydown.enter)="onCardClick()"
   [attr.role]="isClickable() ? 'button' : null"
   [attr.tabindex]="isClickable() ? 0 : null"
-  class="relative p-4 overflow-hidden rounded-2xl border transition-all duration-200 bg-white dark:bg-[#0f1624] border-slate-200 dark:border-[#1e3a5f] shadow-sm"
+  class="relative p-4 overflow-hidden rounded-2xl border transition-all duration-200 bg-(--tui-background-elevated-1) border-(--tui-border-normal) shadow-sm"
   [class.cursor-pointer]="isClickable()"
-  [class.hover:border-orange-300]="isClickable()"
-  [class.dark:hover:border-orange-600]="isClickable()"
+  [class.hover:border-(--tui-primary)]="isClickable()"
   [class.hover:shadow-md]="isClickable()"
   [class.hover:scale-[1.02]]="isClickable()"
 >
@@ -26,12 +25,12 @@
 
     <div class="flex-1 min-w-0">
       <p
-        class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate tracking-wide"
+        class="text-[11px] font-semibold text-(--tui-text-secondary) truncate tracking-wide"
       >
         {{ title() }}
       </p>
       <p
-        class="font-extrabold text-slate-900 dark:text-white tabular-nums tracking-tight mt-0.5 leading-none"
+        class="font-extrabold text-(--tui-text-primary) tabular-nums tracking-tight mt-0.5 leading-none"
         [class.text-lg]="value().toString().length <= 10"
         [class.text-sm]="value().toString().length > 10"
       >

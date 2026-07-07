@@ -2,6 +2,7 @@
 
 /* ── Aside: override tokens de Taiga ── */
 :host [tuiNavigationAside] {
+  background: var(--acgym-aside-bg);
   --tui-text-primary: var(--acgym-aside-text);
   --tui-text-secondary: var(--acgym-aside-text-secondary);
   --tui-background-neutral-1-hover: var(--acgym-aside-hover);
@@ -69,6 +70,20 @@
   background-color: var(--acgym-header-bg);
   border-bottom: 1px solid var(--acgym-header-border);
   min-height: 56px;
+  color: var(--acgym-header-text);
+  --tui-text-primary: var(--acgym-header-text);
+  --tui-text-secondary: var(--acgym-header-text-secondary);
+  --tui-clear: var(--acgym-header-hover);
+  --tui-clear-hover: var(--acgym-header-hover);
+  --tui-clear-active: var(--acgym-header-hover);
+}
+
+:host [tuiNavigationHeader] tui-icon {
+  color: inherit;
+}
+
+:host [tuiNavigationHeader] [tuiHeaderCell] {
+  color: var(--acgym-header-text-secondary);
 }
 
 .aside-footer-sep {

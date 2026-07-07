@@ -4,33 +4,39 @@ import { PaymentCard } from '@features/payments/pages/payment-card/payment-card'
 import { PaymentForm } from '@features/payments/pages/payment-form/payment-form'
 import { PaymentService } from '@features/payments/services/payment-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
-import { ConfirmationModal } from '@shared/components/confirmation-modal/confirmation-modal'
+import { ConfirmService } from '@shared/services/confirm-service'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
   TUI_PULL_TO_REFRESH_LOADED,
   TUI_PULL_TO_REFRESH_THRESHOLD,
+  TuiElasticSticky,
   TuiPullToRefresh,
   TuiResponsiveDialog,
   TuiRipple,
 } from '@taiga-ui/addon-mobile'
-import { TuiAutoFocus } from '@taiga-ui/cdk'
-import { TuiIcon } from '@taiga-ui/core'
-import { TuiTabs } from '@taiga-ui/kit'
+import { TuiAutoFocus, tuiClamp } from '@taiga-ui/cdk'
+import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
+import { TuiSegmented, TuiSkeleton } from '@taiga-ui/kit'
+import { TuiCardLarge } from '@taiga-ui/layout'
 import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-payments-list',
   imports: [
     TuiIcon,
-    ConfirmationModal,
+    TuiButton,
+    TuiNotification,
     TuiResponsiveDialog,
     TuiPullToRefresh,
-    TuiTabs,
+    TuiSegmented,
     TuiAutoFocus,
     TuiRipple,
     PaymentCard,
     PaymentForm,
+    TuiElasticSticky,
+    TuiSkeleton,
+    TuiCardLarge,
   ],
   providers: [
     {
@@ -59,6 +65,7 @@ import { Subject } from 'rxjs'
 export class PaymentsList {
   protected router = inject(Router)
   protected paymentService = inject(PaymentService)
+  private readonly confirmSvc = inject(ConfirmService)
   private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
   protected payments = this.paymentService.payments
   protected totalPayments = this.paymentService.totalPayments
@@ -68,9 +75,9 @@ export class PaymentsList {
   protected nextPage = this.paymentService.nextPage
   protected previousPage = this.paymentService.previousPage
   protected isLoading = this.paymentService.isLoading
+  protected status = this.paymentService.status
   protected isDeleting = this.paymentService.isDeleting
   protected error = this.paymentService.error
-  protected showDeleteConfirmation = signal(false)
   protected activeTabIndex = signal(0)
 
   searchTerm = this.paymentService.searchTerm
@@ -113,23 +120,19 @@ export class PaymentsList {
   }
 
   onDeletePayment(id: number) {
-    this.paymentService.deletingPaymentId.set(id)
-    this.showDeleteConfirmation.set(true)
-  }
-
-  onConfirmDelete() {
-    const id = this.paymentService.deletingPaymentId()
-    if (id === null) return
-    this.paymentService.deletePayment(id).subscribe({
-      next: () => {
-        this.showDeleteConfirmation.set(false)
-      },
-    })
-  }
-
-  onCancelDelete() {
-    this.showDeleteConfirmation.set(false)
-    this.paymentService.deletingPaymentId.set(null)
+    this.confirmSvc
+      .open({
+        title: 'Eliminar pago',
+        message: '¿Estás seguro de eliminar este pago?',
+        type: 'destructive',
+        confirmText: 'Eliminar',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.paymentService.deletingPaymentId.set(id)
+          this.paymentService.deletePayment(id).subscribe()
+        }
+      })
   }
 
   closeModal() {
@@ -157,6 +160,12 @@ export class PaymentsList {
       this.isPulling.set(false)
     }
   })
+
+  protected headerScale = signal(1)
+
+  protected onElastic(scale: number): void {
+    this.headerScale.set(tuiClamp(scale, 0.6, 1))
+  }
 
   protected onPull() {
     if (window.scrollY > 0) return

@@ -6,7 +6,7 @@
   >
     <div class="flex items-center gap-3 sm:gap-4">
       <div
-        class="flex items-center justify-center shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25"
+        class="flex items-center justify-center shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
       >
         <tui-icon icon="@tui.user-plus" class="text-2xl! sm:text-3xl! text-white" />
       </div>
@@ -42,7 +42,7 @@
       <div class="mb-5 sm:mb-8">
         <div class="flex items-center gap-2.5 mb-3 sm:mb-4">
           <div
-            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25"
+            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
           >
             <tui-icon icon="@tui.user" class="text-lg! sm:text-xl! text-white" />
           </div>
@@ -186,7 +186,7 @@
       <div class="mb-5 sm:mb-8">
         <div class="flex items-center gap-2.5 mb-3 sm:mb-4">
           <div
-            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-linear-to-br from-amber-500 to-amber-600 shadow-lg shadow-amber-500/25"
+            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-linear-to-br from-(--acgym-section-amber) to-(--acgym-section-amber-hover) shadow-lg shadow-(--acgym-section-amber)/25"
           >
             <tui-icon icon="@tui.phone-forwarded" class="text-lg! sm:text-xl! text-white" />
           </div>
@@ -236,7 +236,7 @@
       <div class="mb-5 sm:mb-8">
         <div class="flex items-center gap-2.5 mb-3 sm:mb-4">
           <div
-            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-linear-to-br from-sky-500 to-sky-600 shadow-lg shadow-sky-500/25"
+            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-linear-to-br from-(--acgym-section-blue) to-(--acgym-section-blue-hover) shadow-lg shadow-(--acgym-section-blue)/25"
           >
             <tui-icon icon="@tui.file-text" class="text-lg! sm:text-xl! text-white" />
           </div>
@@ -257,7 +257,7 @@
       >
         <div class="flex items-center flex-1 gap-3">
           <div
-            class="flex items-center justify-center shrink-0 w-10 h-10 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25"
+            class="flex items-center justify-center shrink-0 w-10 h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
           >
             <tui-icon icon="@tui.bell" class="text-lg! text-white" />
           </div>
@@ -318,19 +318,3 @@
     </div>
   </form>
 </div>
-
-<!-- MODAL: CONFIRMAR CANCELAR -->
-@if (showCancelModal()) {
-  <app-confirmation-modal
-    [title]="isEditing() ? 'Descartar Cambios' : 'Cancelar Creación'"
-    [message]="
-      isEditing() ? 'Los cambios no guardados se perderán' : 'La información ingresada se perderá'
-    "
-    confirmText="Sí, Descartar"
-    cancelText="No, Quedarme"
-    icon="@tui.alert-circle"
-    type="destructive"
-    (confirm)="onConfirmCancel()"
-    (cancel)="onDismissCancel()"
-  />
-}

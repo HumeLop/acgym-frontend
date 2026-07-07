@@ -1,12 +1,14 @@
 <tui-pull-to-refresh (pulled)="onPull()">
-  <div class="min-h-screen pb-24 bg-[#f3f4f6] dark:bg-[#0f172a]">
+  <div class="min-h-screen pb-24 bg-(--tui-background-base)">
     <!-- STICKY HEADER with elastic effect -->
     <header
       tuiElasticSticky
       (tuiElasticSticky)="onElastic($event)"
-      class="sticky top-0 z-40 backdrop-blur-xl bg-[#f3f4f6]/90 dark:bg-[#0f172a]/90 border-b border-transparent dark:border-[#1e3a5f]/50 px-3 sm:px-6"
+      class="sticky top-0 z-40 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-transparent dark:border-(--acgym-header-border)/50 px-3 sm:px-6"
     >
-      <div class="h-1 bg-linear-to-r from-orange-500 via-orange-400 to-blue-500"></div>
+      <div
+        class="h-1 bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"
+      ></div>
 
       <div class="pt-4 pb-3">
         <div
@@ -15,17 +17,17 @@
           [style.transform-origin]="'left center'"
         >
           <div
-            class="flex items-center justify-center w-10 h-10 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25"
+            class="flex items-center justify-center w-10 h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
           >
             <tui-icon icon="@tui.clock-alert" class="text-xl text-white" />
           </div>
           <div class="flex-1">
             <h1
-              class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-2xl"
+              class="text-xl font-bold tracking-tight text-(--acgym-header-text) sm:text-2xl"
             >
               Membresías por vencer
             </h1>
-            <p class="mt-0.5 text-sm font-medium text-slate-500 dark:text-slate-400">
+            <p class="mt-0.5 text-sm font-medium text-(--acgym-header-text-secondary)">
               {{ members().length }} miembros con vencimiento próximo
             </p>
           </div>
@@ -38,12 +40,12 @@
       <div
         appearance="floating"
         tuiCardLarge="compact"
-        class="border border-slate-200 dark:border-slate-700"
+        class="border border-(--tui-border-normal)"
       >
         <div class="p-4 sm:p-5">
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-              <tui-icon icon="@tui.search" class="text-slate-400 dark:text-slate-500" />
+              <tui-icon icon="@tui.search" class="text-(--tui-text-tertiary)" />
             </span>
             <input
               #searchInput
@@ -51,12 +53,12 @@
               placeholder="Buscar nombre, email o teléfono..."
               [value]="searchTerm()"
               (input)="onSearch(searchInput.value)"
-              class="w-full py-3 pl-12 pr-12 text-sm transition-all duration-200 rounded-xl border outline-none bg-slate-50 text-slate-900 placeholder-slate-400 border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:bg-[#0f1624] dark:text-slate-100 dark:placeholder-slate-500 dark:border-slate-700 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
+              class="w-full py-3 pl-12 pr-12 text-sm transition-all duration-200 rounded-xl border outline-none bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) ring-1 ring-(--tui-border-normal) focus:ring-2 focus:ring-(--tui-primary)/40"
             />
             @if (searchTerm()) {
               <button
                 type="button"
-                class="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                class="absolute inset-y-0 right-0 flex items-center px-3 text-(--tui-text-tertiary) hover:text-(--tui-text-secondary) dark:hover:text-(--tui-text-primary)"
                 (click)="onClearSearch()"
               >
                 <tui-icon icon="@tui.eraser" class="w-4! h-4! text-base!" />
@@ -99,18 +101,18 @@
         @for (item of [1, 2, 3, 4]; track item) {
           <div
             [tuiSkeleton]="true"
-            class="overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0f1624]"
+            class="overflow-hidden rounded-3xl border border-(--tui-border-normal) bg-(--tui-background-elevated-1)"
           >
-            <div class="h-1.5 rounded-t-3xl bg-slate-200 dark:bg-slate-700"></div>
+            <div class="h-1.5 rounded-t-3xl bg-(--tui-background-neutral-2)"></div>
             <div class="p-5 space-y-4">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                <div class="w-12 h-12 rounded-full bg-(--tui-background-neutral-2)"></div>
                 <div class="flex-1 space-y-2">
-                  <div class="h-4 w-3/4 rounded bg-slate-200 dark:bg-slate-700"></div>
-                  <div class="h-3 w-1/2 rounded bg-slate-200 dark:bg-slate-700"></div>
+                  <div class="h-4 w-3/4 rounded bg-(--tui-background-neutral-2)"></div>
+                  <div class="h-3 w-1/2 rounded bg-(--tui-background-neutral-2)"></div>
                 </div>
               </div>
-              <div class="h-24 rounded-xl bg-slate-200 dark:bg-slate-700"></div>
+              <div class="h-24 rounded-xl bg-(--tui-background-neutral-2)"></div>
             </div>
           </div>
         }
@@ -123,20 +125,20 @@
         <div
           appearance="floating"
           tuiCardLarge="compact"
-          class="border border-slate-200 dark:border-slate-700"
+          class="border border-(--tui-border-normal)"
         >
           <div class="p-6 sm:p-8">
             <div class="flex flex-col items-center gap-4 text-center">
               <div
-                class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-[#1f2937] sm:w-32 sm:h-32"
+                class="flex items-center justify-center w-20 h-20 rounded-full bg-(--tui-background-neutral-1) sm:w-32 sm:h-32"
               >
-                <tui-icon icon="@tui.circle-check" class="text-4xl text-green-400 sm:text-6xl" />
+                <tui-icon icon="@tui.circle-check" class="text-4xl text-(--tui-status-positive) sm:text-6xl" />
               </div>
               <div>
-                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 sm:text-xl">
+                <h3 class="text-lg font-bold text-(--tui-text-primary) sm:text-xl">
                   Todo al día
                 </h3>
-                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                <p class="mt-2 text-sm text-(--tui-text-secondary)">
                   No hay membresías próximas a vencer
                 </p>
               </div>
@@ -150,7 +152,7 @@
     @if (hasMembers()) {
       <button
         tuiRipple
-        class="fixed z-50 flex items-center justify-center w-16 h-16 text-white transition-all duration-300 shadow-2xl shadow-orange-500/30 bottom-20 right-6 lg:bottom-6 bg-linear-to-br from-orange-500 to-orange-600 rounded-2xl hover:scale-110 hover:shadow-orange-500/50 active:scale-95"
+        class="fixed z-50 flex items-center justify-center w-16 h-16 text-white transition-all duration-300 shadow-2xl shadow-(--tui-primary)/30 bottom-20 right-6 lg:bottom-6 bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) rounded-2xl hover:scale-110 hover:shadow-(--tui-primary)/50 active:scale-95"
         title="Agregar Miembro"
         (click)="memberService.openCreateModal()"
       >
@@ -163,15 +165,3 @@
 <ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">
   <app-member-form [memberId]="isEditingMember()" (close)="closeModal()" />
 </ng-template>
-
-@if (showDeleteConfirmation()) {
-  <app-confirmation-modal
-    type="destructive"
-    title="Eliminar miembro"
-    message="¿Estás seguro de eliminar a este miembro?"
-    confirmText="Eliminar"
-    [disabled]="isDeleting()"
-    (confirm)="onConfirmDelete()"
-    (cancel)="onCancelDelete()"
-  />
-}

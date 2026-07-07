@@ -3,11 +3,12 @@ import { computed, effect, inject, Service, signal } from '@angular/core'
 import { environment } from '@environments/environment'
 import { toMembershipType } from '@features/membership-type/adapters/membership-type.adapter'
 import type { MembershipTypeEntity } from '@features/membership-type/models'
-import { toPaymentDetail, toPayments } from '@features/payments/adapters/payment.adapter'
+import { toPaymentDetail, toPaymentStats, toPayments } from '@features/payments/adapters/payment.adapter'
 import type {
   PaymentDetailEntity,
   PaymentEntity,
   PaymentFilterParams,
+  PaymentStatsEntity,
   PaymentWriteDto,
 } from '@features/payments/models'
 import type { ApiValidationError, PaginatedResponse } from '@shared/models'
@@ -64,6 +65,10 @@ export class PaymentService {
     return id ? { url: `${this.apiURL}/${id}/` } : undefined
   })
 
+  readonly paymentStatsResource = httpResource<PaymentStatsEntity>(() => ({
+    url: `${this.apiURL}/stats/`,
+  }))
+
   private memberOptionsResource = httpResource<PaginatedResponse<{ id: number; name: string }>>(() => ({
     url: `${environment.apiURL}/members/options/`,
     params: { page_size: '500' },
@@ -93,14 +98,17 @@ export class PaymentService {
   readonly memberOptions = computed(() => {
     const term = this.memberSearchTerm().trim()
     if (!term) {
+      if (this.memberOptionsResource.status() === 'error') return []
       return this.memberOptionsResource.value()?.results ?? []
     }
     const local = this.localMemberResults()
     if (local.length > 0) return local
+    if (this.memberRemoteSearchResource.status() === 'error') return local
     return this.memberRemoteSearchResource.value()?.results ?? local
   })
 
   private _memberCacheEffect = effect(() => {
+    if (this.memberOptionsResource.status() === 'error') return
     const results = this.memberOptionsResource.value()?.results
     if (results && !this.memberSearchTerm()) {
       this.cachedMemberOptions.update((prev) => {
@@ -132,6 +140,7 @@ export class PaymentService {
   }))
 
   readonly membershipTypes = computed(() => {
+    if (this.membershipTypesResource.status() === 'error') return []
     return this.membershipTypesResource.value()?.results?.map(toMembershipType) ?? []
   })
 
@@ -201,6 +210,7 @@ export class PaymentService {
   })
 
   private readonly _cacheEffect = effect(() => {
+    if (this.paymentsResource.status() === 'error') return
     const results = this.paymentsResource.value()?.results
     if (results && !this.remoteSearchTerm()) {
       this.cachedPayments.update((prev) => {
@@ -213,6 +223,9 @@ export class PaymentService {
   })
 
   readonly payments = computed(() => {
+    if (this.paymentsResource.status() === 'error') {
+      return []
+    }
     const term = this.searchTerm().trim()
     if (!term) {
       const results = this.paymentsResource.value()?.results ?? []
@@ -228,8 +241,19 @@ export class PaymentService {
   })
 
   readonly paymentDetail = computed(() => {
+    if (this.paymentDetailResource.status() === 'error') {
+      return null
+    }
     const detail = this.paymentDetailResource.value()
     return detail ? toPaymentDetail(detail) : null
+  })
+
+  readonly paymentStats = computed(() => {
+    if (this.paymentStatsResource.status() === 'error') {
+      return null
+    }
+    const stats = this.paymentStatsResource.value()
+    return stats ? toPaymentStats(stats) : null
   })
 
   search(term: string) {
@@ -247,16 +271,25 @@ export class PaymentService {
     this.remoteSearchTerm.set(trimmed)
   }
 
-  readonly totalCount = computed(() => this.paymentsResource.value()?.count ?? 0)
+  readonly totalCount = computed(() => {
+    if (this.paymentsResource.status() === 'error') return 0
+    return this.paymentsResource.value()?.count ?? 0
+  })
   readonly totalPayments = this.totalCount
   readonly isLoadingPayments = this.paymentsResource.isLoading
   readonly isLoading = this.isLoadingPayments
+  readonly paymentsStatus = this.paymentsResource.status
+  readonly status = this.paymentsStatus
   readonly paymentsError = this.paymentsResource.error
   readonly error = this.paymentsError
 
   // Detail payment
   readonly isLoadingDetail = this.paymentDetailResource.isLoading
   readonly detailError = this.paymentDetailResource.error
+
+  // Stast payment
+  readonly isLoadingStats = this.paymentStatsResource.isLoading
+  readonly statsError = this.paymentStatsResource.error
 
   loadPaymentDetail(id: number) {
     this.detailId.set(id)

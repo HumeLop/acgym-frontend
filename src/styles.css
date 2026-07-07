@@ -3,6 +3,250 @@
 @import 'tailwindcss';
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/* ─── ACGYM TAIGA UI THEME — Blue + Orange ─── */
+
+[tuiTheme='light'] {
+  /* Backgrounds */
+  --tui-theme-color: #f97316;
+  --tui-background-base: #f3f4f6;
+  --tui-background-elevation-1: #ffffff;
+  --tui-background-elevation-2: #ffffff;
+  --tui-background-elevation-3: #e5e7eb;
+  --tui-background-base-alt: #e5e7eb;
+  --tui-background-elevated-1: #ffffff;
+
+  --acgym-header-bg: #f8fafc;
+  --acgym-header-border: #e2e8f0;
+  --acgym-header-text: #1e293b;
+  --acgym-header-text-secondary: #475569;
+  --acgym-header-hover: rgba(0, 0, 0, 0.08);
+
+  /* Borders */
+  --tui-border-normal: #e2e8f0;
+  --tui-border-hover: #f97316;
+  --tui-border-focus: #2563eb;
+
+  /* Text */
+  --tui-text-primary: #111827;
+  --tui-text-secondary: #4b5563;
+  --tui-text-tertiary: #9ca3af;
+
+  /* Primary — Naranja */
+  --tui-primary: #f97316;
+  --tui-primary-hover: #ea580c;
+  --tui-primary-active: #c2410c;
+  --tui-primary-text: #ffffff;
+
+  /* Secondary — Azul */
+  --tui-secondary: #dbeafe;
+  --tui-secondary-hover: #bfdbfe;
+  --tui-secondary-active: #93c5fd;
+  --tui-secondary-text: #2563eb;
+
+  /* Status */
+  --tui-status-positive: #16a34a;
+  --tui-status-positive-pale: #dcfce7;
+  --tui-status-negative: #dc2626;
+  --tui-status-negative-pale: #fee2e2;
+  --tui-status-warning: #f97316;
+  --tui-status-warning-pale: #ffedd5;
+  --tui-status-info: #2563eb;
+  --tui-status-info-pale: #dbeafe;
+  --tui-status-neutral: #64748b;
+  --tui-status-neutral-pale: #f8fafc;
+
+  /* Link */
+  --tui-link: #2563eb;
+  --tui-link-hover: #1d4ed8;
+
+  /* Autofill */
+  --tui-autofill: #fff7ed;
+
+  --tui-background-neutral-1: #f3f4f6;
+  --tui-background-neutral-1-hover: #e5e7eb;
+  --tui-background-neutral-1-pressed: #d1d5db;
+  --tui-background-neutral-2: #e5e7eb;
+  --tui-background-neutral-2-hover: #d1d5db;
+  --tui-background-neutral-2-pressed: #9ca3af;
+
+  --tui-skeleton-color: #e5e7eb;
+  --tui-skeleton-color-dark: #d1d5db;
+
+  /* Clear/ghost buttons y chips */
+  --tui-clear: rgba(17, 24, 39, 0.06);
+  --tui-clear-hover: rgba(17, 24, 39, 0.1);
+  --tui-clear-active: rgba(17, 24, 39, 0.15);
+  --tui-clear-inverse: rgba(255, 255, 255, 0.08);
+  --tui-clear-inverse-hover: rgba(255, 255, 255, 0.16);
+
+  /* Overlays / modals */
+  --tui-backdrop: rgba(15, 23, 42, 0.48);
+
+  /* Shell navigation active link */
+  --acgym-active-bg: rgba(249, 115, 22, 0.2);
+  --acgym-active-text: #f97316;
+  --acgym-active-accent: #f97316;
+
+  /* Shell navigation divider */
+  --acgym-divider: #374151;
+
+  /* Shell sidebar items hover */
+  --acgym-aside-hover: rgba(255, 255, 255, 0.06);
+  /* Shell aside text colors (tuiNavigationAside siempre tiene tuiTheme=dark) */
+  --acgym-aside-bg: #182336;
+  --acgym-aside-text: #f9fafb;
+  --acgym-aside-text-secondary: #64748b;
+
+  --acgym-badge-bg: #ffedd5;
+  --acgym-badge-text: #c2410c;
+  --acgym-badge-hover-text: #7c2d12;
+
+  --acgym-warning-border: #fde68a;
+  --acgym-warning-bg: #fffbeb;
+  --acgym-warning-text: #92400e;
+
+  --acgym-loading-ring-bg: #ffedd5;
+  --acgym-loading-ring: #f97316;
+
+  --acgym-section-green: #10b981;
+  --acgym-section-green-hover: #059669;
+  --acgym-section-blue: #0ea5e9;
+  --acgym-section-blue-hover: #0284c7;
+  --acgym-section-amber: #f59e0b;
+  --acgym-section-amber-hover: #d97706;
+  --acgym-section-slate: #64748b;
+  --acgym-section-slate-hover: #475569;
+
+  --acgym-section-orange-pale: #ffedd5;
+  --acgym-section-green-pale: #d1fae5;
+  --acgym-section-blue-pale: #e0f2fe;
+  --acgym-section-amber-pale: #fef3c7;
+  --acgym-section-cyan-pale: #cffafe;
+
+  --acgym-section-purple: #a855f7;
+  --acgym-section-purple-hover: #9333ea;
+}
+
+[tuiTheme='dark'] {
+  /* Backgrounds — charcoal cálido con matiz navy */
+  --tui-theme-color: #fb923c;
+  --tui-background-base: #0f172a;
+  --tui-background-elevation-1: #182336;
+  --tui-background-elevation-2: #212d42;
+  --tui-background-elevation-3: #2b384c;
+  --tui-background-base-alt: #182336;
+  --tui-background-elevated-1: #182336;
+
+  --acgym-header-bg: #0d1424;
+  --acgym-header-border: #1a2740;
+  --acgym-header-text: #f1f5f9;
+  --acgym-header-text-secondary: #94a3b8;
+  --acgym-header-hover: rgba(255, 255, 255, 0.1);
+
+  /* Borders */
+  --tui-border-normal: #25344a;
+  --tui-border-hover: #fb923c;
+  --tui-border-focus: #60a5fa;
+
+  /* Text */
+  --tui-text-primary: #f1f5f9;
+  --tui-text-secondary: #94a3b8;
+  --tui-text-tertiary: #64748b;
+
+  /* Primary — Naranja vibrante en dark */
+  --tui-primary: #fb923c;
+  --tui-primary-hover: #f97316;
+  --tui-primary-active: #ea6c0a;
+  --tui-primary-text: #080c14;
+
+  /* Secondary */
+  --tui-secondary: #25344a;
+  --tui-secondary-hover: #2d3d54;
+  --tui-secondary-active: #36485f;
+  --tui-secondary-text: #93c5fd;
+
+  /* Status */
+  --tui-status-positive: #22c55e;
+  --tui-status-positive-pale: #14532d;
+  --tui-status-negative: #f87171;
+  --tui-status-negative-pale: #7f1d1d;
+  --tui-status-warning: #fb923c;
+  --tui-status-warning-pale: #431407;
+  --tui-status-info: #60a5fa;
+  --tui-status-info-pale: #1e3a5f;
+  --tui-status-neutral: #94a3b8;
+  --tui-status-neutral-pale: #1e293b;
+
+  /* Link */
+  --tui-link: #60a5fa;
+  --tui-link-hover: #93c5fd;
+
+  /* Autofill */
+  --tui-autofill: #1a1a00;
+
+  --tui-background-neutral-1: #1e2a3e;
+  --tui-background-neutral-1-hover: #25344a;
+  --tui-background-neutral-1-pressed: #2d3d54;
+  --tui-background-neutral-2: #25344a;
+  --tui-background-neutral-2-hover: #2d3d54;
+  --tui-background-neutral-2-pressed: #36485f;
+
+  --tui-skeleton-color: #1e293b;
+  --tui-skeleton-color-dark: #273548;
+
+  --tui-clear: rgba(241, 245, 249, 0.06);
+  --tui-clear-hover: rgba(241, 245, 249, 0.1);
+  --tui-clear-active: rgba(241, 245, 249, 0.15);
+  --tui-clear-inverse: rgba(0, 0, 0, 0.3);
+  --tui-clear-inverse-hover: rgba(0, 0, 0, 0.45);
+
+  --tui-backdrop: rgba(0, 0, 0, 0.72);
+
+  /* Shell navigation active link */
+  --acgym-active-bg: rgba(251, 146, 60, 0.15);
+  --acgym-active-text: #fb923c;
+  --acgym-active-accent: #fb923c;
+
+  /* Shell navigation divider */
+  --acgym-divider: #1e2d42;
+  /* Shell sidebar items hover */
+  --acgym-aside-hover: rgba(251, 146, 60, 0.08);
+
+  /* Shell aside text colors (tuiNavigationAside siempre tiene tuiTheme=dark) */
+  --acgym-aside-bg: #182336;
+  --acgym-aside-text: #e2e8f0;
+  --acgym-aside-text-secondary: #475569;
+
+  --acgym-badge-bg: rgba(124, 45, 18, 0.3);
+  --acgym-badge-text: #fdba74;
+  --acgym-badge-hover-text: #ffedd5;
+
+  --acgym-warning-border: rgba(120, 53, 15, 0.6);
+  --acgym-warning-bg: rgba(120, 53, 15, 0.2);
+  --acgym-warning-text: #fcd34d;
+
+  --acgym-loading-ring-bg: rgba(124, 45, 18, 0.2);
+  --acgym-loading-ring: #fb923c;
+
+  --acgym-section-green: #34d399;
+  --acgym-section-green-hover: #10b981;
+  --acgym-section-blue: #38bdf8;
+  --acgym-section-blue-hover: #0ea5e9;
+  --acgym-section-amber: #fbbf24;
+  --acgym-section-amber-hover: #f59e0b;
+  --acgym-section-slate: #94a3b8;
+  --acgym-section-slate-hover: #64748b;
+
+  --acgym-section-orange-pale: rgba(251, 146, 60, 0.2);
+  --acgym-section-green-pale: rgba(52, 211, 153, 0.2);
+  --acgym-section-blue-pale: rgba(56, 189, 248, 0.2);
+  --acgym-section-amber-pale: rgba(251, 191, 36, 0.2);
+  --acgym-section-cyan-pale: rgba(34, 211, 238, 0.2);
+
+  --acgym-section-purple: #c084fc;
+  --acgym-section-purple-hover: #a855f7;
+}
+
 @theme {
   --font-sans: Montserrat, Roboto, 'Helvetica Neue', sans-serif;
 }

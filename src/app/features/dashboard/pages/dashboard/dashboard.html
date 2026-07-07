@@ -1,12 +1,14 @@
 <tui-pull-to-refresh (pulled)="onPull()">
-  <div class="min-h-screen pb-24 bg-[#f3f4f6] dark:bg-[#0f172a]">
+  <div class="min-h-screen pb-24 bg-(--tui-background-base)">
     <!-- STICKY HEADER with elastic effect -->
     <header
       tuiElasticSticky
       (tuiElasticSticky)="onElastic($event)"
-      class="sticky top-0 z-40 backdrop-blur-xl bg-[#f3f4f6]/90 dark:bg-[#0f172a]/90 border-b border-transparent dark:border-[#1e3a5f]/50"
+      class="sticky top-0 z-40 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-transparent dark:border-(--acgym-header-border)/50"
     >
-      <div class="h-1 bg-linear-to-r from-orange-500 via-orange-400 to-blue-500"></div>
+      <div
+        class="h-1 bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"
+      ></div>
 
       <div class="px-5 pt-4 pb-3 sm:px-6">
         <div
@@ -15,15 +17,15 @@
           [style.transform-origin]="'left center'"
         >
           <div
-            class="flex items-center justify-center w-10 h-10 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25"
+            class="flex items-center justify-center w-10 h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
           >
             <tui-icon icon="@tui.layout-dashboard" class="text-xl text-white" />
           </div>
           <div>
-            <h1 class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            <h1 class="text-xl font-extrabold tracking-tight text-(--tui-text-primary)">
               Panel de Control
             </h1>
-            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <p class="text-xs font-medium text-(--tui-text-secondary)">
               {{ currentDate() }}
             </p>
           </div>
@@ -61,8 +63,8 @@
           icon="users"
           title="Activos"
           [value]="activeMembers()"
-          bgColorClass="bg-orange-100 dark:bg-orange-900/30"
-          iconColorClass="text-orange-600 dark:text-orange-400"
+          bgColorClass="bg-(--acgym-section-orange-pale)"
+          iconColorClass="text-(--tui-primary)"
           accentColor="orange"
           [isClickable]="false"
         />
@@ -70,8 +72,8 @@
           icon="user-plus"
           title="Totales"
           [value]="totalMembers()"
-          bgColorClass="bg-cyan-100 dark:bg-cyan-900/30"
-          iconColorClass="text-cyan-600 dark:text-cyan-400"
+          bgColorClass="bg-(--acgym-section-cyan-pale)"
+          iconColorClass="text-(--tui-link)"
           accentColor="cyan"
           [isClickable]="true"
           (cardClick)="goToMembers()"
@@ -80,8 +82,8 @@
           icon="user-x"
           title="Inactivos"
           [value]="inactiveMembersCount()"
-          bgColorClass="bg-gray-100 dark:bg-gray-800"
-          iconColorClass="text-gray-500 dark:text-gray-400"
+          bgColorClass="bg-(--tui-background-neutral-1)"
+          iconColorClass="text-(--tui-text-tertiary)"
           accentColor="gray"
           [isClickable]="false"
         />
@@ -89,8 +91,8 @@
           icon="hourglass"
           title="Por expirar"
           [value]="expiringMembers()"
-          bgColorClass="bg-amber-100 dark:bg-amber-900/30"
-          iconColorClass="text-amber-600 dark:text-amber-400"
+          bgColorClass="bg-(--acgym-section-amber-pale)"
+          iconColorClass="text-(--tui-status-warning)"
           accentColor="amber"
           [isClickable]="true"
           (cardClick)="goToExpiring()"
@@ -99,8 +101,8 @@
           icon="credit-card"
           title="Pagos mes"
           [value]="paymentsThisMonth()"
-          bgColorClass="bg-sky-100 dark:bg-sky-900/30"
-          iconColorClass="text-sky-600 dark:text-sky-400"
+          bgColorClass="bg-(--acgym-section-blue-pale)"
+          iconColorClass="text-(--acgym-section-blue)"
           accentColor="sky"
           [isClickable]="false"
         />
@@ -108,8 +110,8 @@
           icon="circle-dollar-sign"
           title="Ingresos"
           [value]="(monthlyIncome() | currency: 'MXN' : 'symbol-narrow' : '1.0-0') ?? ''"
-          bgColorClass="bg-emerald-100 dark:bg-emerald-900/30"
-          iconColorClass="text-emerald-600 dark:text-emerald-400"
+          bgColorClass="bg-(--acgym-section-green-pale)"
+          iconColorClass="text-(--tui-status-positive)"
           accentColor="emerald"
           [isClickable]="true"
           (cardClick)="goToPayments()"
@@ -121,50 +123,40 @@
         <!-- LEFT: Inactive Search -->
         <div class="animate-fade-in-up" style="animation-delay: 100ms">
           <div tuiSurface tuiAppearance="floating" class="p-5 rounded-2xl">
-            <!-- Section header -->
             <div class="flex items-center gap-3 mb-4">
               <div
-                class="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 shrink-0"
+                class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale) shrink-0"
               >
-                <tui-icon icon="@tui.search" class="text-orange-600 dark:text-orange-400" />
+                <tui-icon icon="@tui.search" class="text-(--tui-primary)" />
               </div>
               <div>
-                <h3 class="text-sm font-bold leading-tight text-slate-900 dark:text-slate-100">
+                <h3 class="text-sm font-bold leading-tight text-(--tui-text-primary)">
                   Búsqueda de Inactivos
                 </h3>
-                <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                <p class="mt-0.5 text-xs text-(--tui-text-secondary)">
                   Miembros sin actividad reciente
                 </p>
               </div>
             </div>
 
-            <!-- Search bar -->
             <div class="flex items-center gap-3 mb-3">
               <div
-                class="flex items-center flex-1 gap-2 h-9 pl-3 pr-4 rounded-xl ring-1 ring-slate-200 dark:ring-[#1e3a5f] bg-slate-50 dark:bg-[#0a0f1a] focus-within:ring-2 focus-within:ring-orange-500/40 transition-all duration-200"
+                class="flex items-center flex-1 gap-2 h-9 pl-3 pr-4 rounded-xl ring-1 ring-(--tui-border-normal) bg-(--tui-background-neutral-1) focus-within:ring-2 focus-within:ring-(--tui-primary)/40 transition-all duration-200"
               >
-                <tui-icon
-                  icon="@tui.clock"
-                  class="text-slate-400 dark:text-slate-500 text-sm shrink-0 pointer-events-none"
-                />
+                <tui-icon icon="@tui.clock" class="text-(--tui-text-tertiary) text-sm shrink-0 pointer-events-none" />
                 <input
                   type="number"
                   [formField]="searchForm.days"
                   placeholder="Días de inactividad"
-                  class="flex-1 h-full text-sm font-medium bg-transparent border-none outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
+                  class="flex-1 h-full text-sm font-medium bg-transparent border-none outline-none text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary)"
                 />
               </div>
               <button
-                appearance="primary"
-                size="m"
-                tuiButton
-                (click)="searchInactive()"
-                [disabled]="inactiveSearchLoading()"
+                appearance="primary" size="m" tuiButton
+                (click)="searchInactive()" [disabled]="inactiveSearchLoading()"
               >
                 @if (inactiveSearchLoading()) {
-                  <span
-                    class="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"
-                  ></span>
+                  <span class="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></span>
                 } @else {
                   <tui-icon icon="@tui.search" />
                   <span class="hidden sm:inline">Buscar</span>
@@ -172,69 +164,53 @@
               </button>
             </div>
 
-            <!-- Error -->
             @if (inactiveSearchError(); as error) {
               <div class="mt-4">
                 <div tuiNotification appearance="error" size="m">
-                  <p class="text-sm font-semibold">
-                    {{ error?.message || 'Error al buscar' }}
-                  </p>
+                  <p class="text-sm font-semibold">{{ error?.message || 'Error al buscar' }}</p>
                 </div>
               </div>
             }
 
-            <!-- Results -->
             @if (!inactiveSearchError() && showInactiveResults()) {
               <div class="mt-4">
                 @if (inactiveSearchLoading()) {
                   <div class="flex items-center justify-center gap-2 py-4">
-                    <div
-                      class="w-5 h-5 border-t-2 border-b-2 border-orange-600 rounded-full animate-spin dark:border-orange-400"
-                    ></div>
-                    <span class="text-sm text-slate-500 dark:text-slate-400">Buscando...</span>
+                    <div class="w-5 h-5 border-t-2 border-b-2 border-(--tui-primary) rounded-full animate-spin"></div>
+                    <span class="text-sm text-(--tui-text-secondary)">Buscando...</span>
                   </div>
                 } @else if (inactiveMembers(); as members) {
                   @if (members.length > 0) {
                     <div>
                       <div class="flex items-center justify-between mb-3">
-                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
-                          {{ members.length }}
-                          {{ members.length === 1 ? 'miembro encontrado' : 'miembros encontrados' }}
+                        <p class="text-sm font-medium text-(--tui-text-secondary)">
+                          {{ members.length }} {{ members.length === 1 ? 'miembro encontrado' : 'miembros encontrados' }}
                         </p>
                         <button
                           (click)="clearInactiveMembers()"
-                          class="p-1 transition-colors rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300"
+                          class="p-1 transition-colors rounded-lg text-(--tui-text-tertiary) hover:bg-(--tui-background-neutral-1-hover) hover:text-(--tui-text-secondary)"
                         >
                           <tui-icon icon="@tui.circle-x" />
                         </button>
                       </div>
-
                       <div class="space-y-2 overflow-y-auto max-h-96">
                         @for (member of members; track member.id) {
                           <div
                             [routerLink]="['/members', member.id]"
-                            class="flex items-center gap-3 p-3 transition-all duration-200 border rounded-xl cursor-pointer border-slate-200 bg-slate-50 dark:border-slate-600 dark:bg-[#0f1624] hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md group"
+                            class="flex items-center gap-3 p-3 transition-all duration-200 border rounded-xl cursor-pointer border-(--tui-border-normal) bg-(--tui-background-neutral-1) hover:border-(--tui-primary) hover:shadow-md group"
                           >
-                            <div
-                              class="flex items-center justify-center shrink-0 w-10 h-10 text-sm font-bold text-white rounded-full shadow-sm bg-linear-to-br from-orange-500 to-orange-600"
-                            >
+                            <div class="flex items-center justify-center shrink-0 w-10 h-10 text-sm font-bold text-white rounded-full shadow-sm bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover)">
                               {{ member.name.charAt(0).toUpperCase() }}
                             </div>
                             <div class="flex-1 min-w-0">
-                              <p
-                                class="text-sm font-bold truncate text-slate-900 dark:text-slate-100 group-hover:text-orange-600 dark:group-hover:text-orange-400"
-                              >
+                              <p class="text-sm font-bold truncate text-(--tui-text-primary) group-hover:text-(--tui-primary)">
                                 {{ member.name }}
                               </p>
                               @if (member.phone) {
-                                <p class="text-xs truncate text-slate-500 dark:text-slate-400">
-                                  {{ member.phone }}
-                                </p>
+                                <p class="text-xs truncate text-(--tui-text-secondary)">{{ member.phone }}</p>
                               }
                             </div>
-                            <span
-                              class="shrink-0 text-xs font-medium text-red-600 dark:text-red-400"
-                            >
+                            <span class="shrink-0 text-xs font-medium text-(--tui-status-negative)">
                               {{ member.daysUntilExpiration }} días
                             </span>
                           </div>
@@ -254,117 +230,67 @@
 
         <!-- RIGHT: Charts -->
         <div class="flex flex-col gap-5">
-          <!-- Monthly Income -->
           <div class="animate-fade-in-up" style="animation-delay: 150ms">
             <div tuiSurface tuiAppearance="floating" class="p-5 rounded-2xl">
               <div class="flex items-center gap-3 mb-4">
-                <div
-                  class="flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 shrink-0"
-                >
-                  <tui-icon
-                    icon="@tui.trending-up"
-                    class="text-emerald-600 dark:text-emerald-400"
-                  />
+                <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-green-pale) shrink-0">
+                  <tui-icon icon="@tui.trending-up" class="text-(--tui-status-positive)" />
                 </div>
                 <div>
-                  <h3 class="text-sm font-bold leading-tight text-slate-900 dark:text-slate-100">
-                    Ingresos Mensuales
-                  </h3>
-                  <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Últimos 6 meses</p>
+                  <h3 class="text-sm font-bold leading-tight text-(--tui-text-primary)">Ingresos Mensuales</h3>
+                  <p class="mt-0.5 text-xs text-(--tui-text-secondary)">Últimos 6 meses</p>
                 </div>
               </div>
-
               @defer {
                 @if (incomeValues().length > 0) {
                   <div class="h-56 chart-axes" [tuiSkeleton]="isInitialLoading()">
-                    <tui-axes
-                      class="block h-full w-full"
-                      [axisXLabels]="incomeLabels()"
-                      [axisYLabels]="incomeYLabels()"
-                    >
-                      <tui-bar-chart
-                        [value]="[incomeValues()]"
-                        [max]="incomeMax()"
-                        [tuiHintContent]="incomeHint"
-                        size="l"
-                      />
+                    <tui-axes class="block h-full w-full" [axisXLabels]="incomeLabels()" [axisYLabels]="incomeYLabels()">
+                      <tui-bar-chart [value]="[incomeValues()]" [max]="incomeMax()" [tuiHintContent]="incomeHint" size="l" />
                     </tui-axes>
                   </div>
                 } @else if (!isInitialLoading()) {
                   <div class="flex items-center justify-center h-56">
                     <tui-block-status size="m">
-                      <h4 class="text-sm font-medium text-slate-500 dark:text-slate-400">
-                        Sin ingresos registrados
-                      </h4>
-                      <span class="text-xs text-slate-400 dark:text-slate-500">
-                        No hay datos en los últimos 6 meses
-                      </span>
+                      <h4 class="text-sm font-medium text-(--tui-text-secondary)">Sin ingresos registrados</h4>
+                      <span class="text-xs text-(--tui-text-tertiary)">No hay datos en los últimos 6 meses</span>
                     </tui-block-status>
                   </div>
                 }
               } @placeholder {
                 <div class="flex items-center justify-center h-56">
                   <div class="text-center">
-                    <div
-                      class="w-8 h-8 mx-auto border-4 border-orange-600 rounded-full border-t-transparent animate-spin dark:border-orange-400"
-                    ></div>
-                    <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                      Cargando gráfico...
-                    </p>
+                    <div class="w-8 h-8 mx-auto border-4 border-(--tui-primary) rounded-full border-t-transparent animate-spin"></div>
+                    <p class="mt-3 text-sm text-(--tui-text-secondary)">Cargando gráfico...</p>
                   </div>
                 </div>
               }
             </div>
           </div>
 
-          <!-- Payment Methods -->
           <div class="animate-fade-in-up" style="animation-delay: 200ms">
             <div tuiSurface tuiAppearance="floating" class="p-5 rounded-2xl">
               <div class="flex items-center gap-3 mb-4">
-                <div
-                  class="flex items-center justify-center w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-900/30 shrink-0"
-                >
-                  <tui-icon icon="@tui.credit-card" class="text-sky-600 dark:text-sky-400" />
+                <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-blue-pale) shrink-0">
+                  <tui-icon icon="@tui.credit-card" class="text-(--acgym-section-blue)" />
                 </div>
                 <div>
-                  <h3 class="text-sm font-bold leading-tight text-slate-900 dark:text-slate-100">
-                    Métodos de Pago
-                  </h3>
-                  <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-                    Distribución de pagos
-                  </p>
+                  <h3 class="text-sm font-bold leading-tight text-(--tui-text-primary)">Métodos de Pago</h3>
+                  <p class="mt-0.5 text-xs text-(--tui-text-secondary)">Distribución de pagos</p>
                 </div>
               </div>
-
               @defer {
                 @if (paymentMethodsData().length > 0) {
-                  <div
-                    class="flex flex-col items-center gap-6 sm:flex-row sm:items-start"
-                    [tuiSkeleton]="isInitialLoading()"
-                  >
-                    <tui-ring-chart
-                      [value]="ringChartValues()"
-                      [(activeItemIndex)]="activeRingIndex"
-                      class="shrink-0"
-                    >
-                      <span
-                        class="text-lg font-extrabold text-slate-900 dark:text-white tabular-nums"
-                      >
+                  <div class="flex flex-col items-center gap-6 sm:flex-row sm:items-start" [tuiSkeleton]="isInitialLoading()">
+                    <tui-ring-chart [value]="ringChartValues()" [(activeItemIndex)]="activeRingIndex" class="shrink-0">
+                      <span class="text-lg font-extrabold text-(--tui-text-primary) tabular-nums">
                         ${{ ringChartTotal().toLocaleString('es-MX') }}
                       </span>
-                      <div class="text-xs text-slate-500 dark:text-slate-400">Total</div>
+                      <div class="text-xs text-(--tui-text-secondary)">Total</div>
                     </tui-ring-chart>
-
                     <div class="flex flex-col gap-2 self-center sm:self-start">
                       @for (method of paymentMethodsData(); track method.label; let i = $index) {
-                        <tui-legend-item
-                          [text]="method.label"
-                          [color]="method.color"
-                          [active]="activeRingIndex() === i"
-                          size="s"
-                          (tuiHoveredChange)="onLegendHover(i, $event)"
-                        >
-                          <span class="text-xs font-bold text-slate-900 dark:text-slate-100">
+                        <tui-legend-item [text]="method.label" [color]="method.color" [active]="activeRingIndex() === i" size="s" (tuiHoveredChange)="onLegendHover(i, $event)">
+                          <span class="text-xs font-bold text-(--tui-text-primary)">
                             ${{ method.total.toLocaleString('es-MX') }} ({{ method.percentage }}%)
                           </span>
                         </tui-legend-item>
@@ -374,24 +300,16 @@
                 } @else if (!isInitialLoading()) {
                   <div class="flex items-center justify-center h-56">
                     <tui-block-status size="m">
-                      <h4 class="text-sm font-medium text-slate-500 dark:text-slate-400">
-                        Sin métodos de pago
-                      </h4>
-                      <span class="text-xs text-slate-400 dark:text-slate-500">
-                        No hay pagos registrados
-                      </span>
+                      <h4 class="text-sm font-medium text-(--tui-text-secondary)">Sin métodos de pago</h4>
+                      <span class="text-xs text-(--tui-text-tertiary)">No hay pagos registrados</span>
                     </tui-block-status>
                   </div>
                 }
               } @placeholder {
                 <div class="flex items-center justify-center h-56">
                   <div class="text-center">
-                    <div
-                      class="w-8 h-8 mx-auto border-4 border-orange-600 rounded-full border-t-transparent animate-spin dark:border-orange-400"
-                    ></div>
-                    <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                      Cargando gráfico...
-                    </p>
+                    <div class="w-8 h-8 mx-auto border-4 border-(--tui-primary) rounded-full border-t-transparent animate-spin"></div>
+                    <p class="mt-3 text-sm text-(--tui-text-secondary)">Cargando gráfico...</p>
                   </div>
                 </div>
               }

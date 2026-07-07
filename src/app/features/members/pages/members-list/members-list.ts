@@ -4,7 +4,7 @@ import { MemberCard } from '@features/members/pages/member-card/member-card'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
-import { ConfirmationModal } from '@shared/components/confirmation-modal/confirmation-modal'
+import { ConfirmService } from '@shared/services/confirm-service'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
@@ -17,7 +17,7 @@ import {
 } from '@taiga-ui/addon-mobile'
 import { tuiClamp } from '@taiga-ui/cdk'
 import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
-import { TuiSkeleton, TuiTabs } from '@taiga-ui/kit'
+import { TuiSegmented, TuiSkeleton } from '@taiga-ui/kit'
 import { TuiCardLarge } from '@taiga-ui/layout'
 import { Subject } from 'rxjs'
 
@@ -27,11 +27,10 @@ import { Subject } from 'rxjs'
     TuiIcon,
     MemberCard,
     MemberForm,
-    ConfirmationModal,
     TuiResponsiveDialog,
     TuiPullToRefresh,
     TuiCardLarge,
-    TuiTabs,
+    TuiSegmented,
     TuiRipple,
     TuiButton,
     TuiNotification,
@@ -65,6 +64,7 @@ import { Subject } from 'rxjs'
 export class MembersList {
   protected router = inject(Router)
   protected memberService = inject(MemberService)
+  private readonly confirmSvc = inject(ConfirmService)
   private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
   protected members = this.memberService.members
   protected totalMembers = this.memberService.totalMembers
@@ -76,7 +76,6 @@ export class MembersList {
   protected isLoading = this.memberService.isLoading
   protected isDeleting = this.memberService.isDeleting
   protected error = this.memberService.error
-  protected showDeleteConfirmation = signal(false)
   protected activeTabIndex = signal(0)
   searchTerm = this.memberService.searchTerm
   statusFilter = this.memberService.statusFilter
@@ -119,20 +118,19 @@ export class MembersList {
   }
 
   onDeleteMember(id: number) {
-    this.memberService.deletingMemberId.set(id)
-    this.showDeleteConfirmation.set(true)
-  }
-
-  onConfirmDelete() {
-    const id = this.memberService.deletingMemberId()
-    if (id === null) return
-    this.memberService.deleteMember(id).subscribe()
-    this.showDeleteConfirmation.set(false)
-  }
-
-  onCancelDelete() {
-    this.showDeleteConfirmation.set(false)
-    this.memberService.deletingMemberId.set(null)
+    this.confirmSvc
+      .open({
+        title: 'Eliminar miembro',
+        message: '¿Estás seguro de eliminar a este miembro?',
+        type: 'destructive',
+        confirmText: 'Eliminar',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.memberService.deletingMemberId.set(id)
+          this.memberService.deleteMember(id).subscribe()
+        }
+      })
   }
 
   private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)

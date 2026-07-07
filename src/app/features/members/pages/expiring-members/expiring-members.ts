@@ -2,8 +2,8 @@ import { Component, effect, inject, signal } from '@angular/core'
 import { MemberCard } from '@features/members/pages/member-card/member-card'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
+import { ConfirmService } from '@shared/services/confirm-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
-import { ConfirmationModal } from '@shared/components/confirmation-modal/confirmation-modal'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
@@ -28,7 +28,6 @@ import { Subject } from 'rxjs'
     TuiCardLarge,
     MemberCard,
     MemberForm,
-    ConfirmationModal,
     TuiResponsiveDialog,
     TuiPullToRefresh,
     TuiRipple,
@@ -61,6 +60,7 @@ import { Subject } from 'rxjs'
 })
 export class ExpiringMembers {
   protected memberService = inject(MemberService)
+  private readonly confirmSvc = inject(ConfirmService)
   private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
 
   protected members = this.memberService.expiringMembers
@@ -69,7 +69,6 @@ export class ExpiringMembers {
   protected isDeleting = this.memberService.isDeleting
   protected error = this.memberService.error
   protected searchTerm = this.memberService.searchTerm
-  protected showDeleteConfirmation = signal(false)
 
   isModalOpen = this.memberService.isModalOpen
   isEditingMember = this.memberService.editingMemberId
@@ -83,20 +82,19 @@ export class ExpiringMembers {
   }
 
   onDeleteMember(id: number) {
-    this.memberService.deletingMemberId.set(id)
-    this.showDeleteConfirmation.set(true)
-  }
-
-  protected onConfirmDelete() {
-    const id = this.memberService.deletingMemberId()
-    if (id === null) return
-    this.memberService.deleteMember(id).subscribe()
-    this.showDeleteConfirmation.set(false)
-  }
-
-  protected onCancelDelete() {
-    this.memberService.deletingMemberId.set(null)
-    this.showDeleteConfirmation.set(false)
+    this.confirmSvc
+      .open({
+        title: 'Eliminar miembro',
+        message: '¿Estás seguro de eliminar a este miembro?',
+        type: 'destructive',
+        confirmText: 'Eliminar',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.memberService.deletingMemberId.set(id)
+          this.memberService.deleteMember(id).subscribe()
+        }
+      })
   }
 
   closeModal() {

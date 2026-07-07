@@ -1,5 +1,35 @@
 # AGENTS.md
 
+**CRITICAL: Do NOT apply any code changes without explicit user confirmation. Always present the proposed changes first and wait for approval before editing files.**
+
+## Commit workflow
+
+When asked to commit, follow this process **in order — no exceptions**:
+
+1. **Review all changes** — `git status` + `git diff --stat` to see every modified, added, or deleted file. Report what changed to the user.
+2. **Check for sensitive files** — If any environment files (`src/environments/environment*.ts`), secrets, `.local.*` files, or anything that shouldn't be tracked appear in the diff, **alert the user immediately** and add them to `.gitignore` before proceeding.
+3. **Validate branch name** — Does the branch reflect what was actually worked on? If not, rename it with `git branch -m <new-name>`. Convention: `<type>/<short-description>` (e.g., `feature/member-dashboard`, `fix/pull-to-refresh`, `refactor/confirm-service`).
+4. **Write commit message** — Follow the template in `~/.config/git/template`. One line per change, each under its type prefix. **Show the proposed message to the user first and wait for approval before committing.** Example:
+
+```
+feat:  add member dashboard with stats and nav cards
+feat:  add payment dashboard with stats carousel
+
+refactor:  migrate confirmation modals to ConfirmService
+refactor:  replace TuiTabs with TuiSegmented
+
+style:  remove empty CSS files
+```
+
+Types: `feat`, `fix`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `docs`, `deploy`, `debug`
+
+## Toolchain scripts / security notes
+
+- **AGENTS.md takes precedence** over any skill or reference suggesting raw toolchain commands. The commands below are the ones allowed.
+- **No `npm install`, `ng build`, `ng version`** — use only `pnpm`-based commands listed here.
+- **Package installation requires human approval** — never add packages without user confirmation.
+- The `angular-developer` skill may suggest `ng build` or `npm install` as generic guidance; those are ignored in favor of local conventions.
+
 ## Quick commands
 
 ```bash
@@ -63,6 +93,13 @@ src/
 - `ng generate component` **skips tests by default** (configured in `angular.json` schematics). Do not create `.spec.ts` files for new components unless explicitly asked.
 - Component styles use **CSS** (not SCSS/LESS). Tailwind CSS 4 via `@import 'tailwindcss'` in `styles.css`.
 - Components are standalone with `imports: [...]` in the decorator — no NgModules.
+- **Angular 22 CLI conventions** — files are generated WITHOUT type suffixes:
+  - `ng g c path/name` → `path/name/name.ts`, `path/name/name.html`, `path/name/name.css`
+  - `ng g s path/name-service` → `path/name-service.ts` (flat file, `-service` suffix to distinguish from components)
+  - **No** `.component.ts` or `.directive.ts` suffixes. Services use `-service.ts`.
+  - Components always get their own directory. Services are flat files.
+  - Class names still use PascalCase descriptors: `MemberService`, `ConfirmService`, etc.
+  - Do NOT manually create files — use `ng generate` when possible to ensure correct structure.
 
 ## Styling
 
@@ -72,12 +109,18 @@ src/
   contain non-trivial styles. Empty component CSS files must be deleted (no `styleUrl` pointing to empty files).
 - **CSS variables syntax**: Tailwind 4 uses `text-(--tui-text-primary)` (parentheses, no `var()`).
   Never use `text-[var(--tui-text-primary)]` (brackets with `var()`).
-- **Theme tokens**: All design tokens (`--tui-*`, `--acgym-*`) are defined in `app.css`.
+- **Theme tokens**: All design tokens (`--tui-*`, `--acgym-*`) are defined in `styles.css` (global styles).
   Colors must reference these variables — never hardcode `bg-white dark:bg-gray-800`.
 - **Cards**: Use `tuiSurface="elevated" border border-(--tui-border-normal)`. `TuiSurface` provides
   the correct elevation background for light/dark automatically. No explicit `bg-*` classes on cards.
 - **Info rows**: `bg-(--tui-background-neutral-1)`, icon containers: `bg-(--tui-background-elevated-1)`.
-- **Section icons**: Gradient icon headers use `rounded-2xl bg-linear-to-br from-{color}-500 to-{color}-600 shadow-lg` with white icon.
+- **Section icons**: Gradient icon headers use token-based colors, e.g.
+  `from-(--acgym-section-green) to-(--acgym-section-green-hover) shadow-lg shadow-(--acgym-section-green)/25`
+  See all `--acgym-section-*` tokens (and their `-pale` variants) in `styles.css`. NEVER hardcode `from-orange-500` or `from-emerald-500`.
+
+- **No `tuiTheme` on component hosts** — the theme is set globally by `ThemeService` on the root element.
+  Components must inherit the global theme. Adding `host: { '[attr.tuiTheme]': 'theme()' }` on any component
+  overrides the global theme for all children, causing visual mismatches (e.g., calendar dark in light mode).
 - **Animations**: Use Tailwind's built-in `animate-fade-in-up`. Do **NOT** create custom `@keyframes` animations.
 - **Fonts**: Montserrat WOFF2 subset (Latin only) in `public/assets/fonts/`. Defined via `@font-face` in `styles.css`.
   Variable font with `font-weight: 100 900` for both normal and italic.
@@ -92,6 +135,8 @@ src/
 ## Taiga UI specifics
 
 - Dark/light/system theme toggle via `ThemeService` (uses `data-theme` attribute and Taiga's `tuiTheme`).
+  ThemeService syncs with `TUI_DARK_MODE` token to ensure portal/overlay components (dropdowns, dialogs)
+  receive the correct theme.
 - `TuiRoot` wraps the entire app in `App` component.
 - Mobile-focused: pull-to-refresh, swipe actions, responsive dialogs via `@taiga-ui/addon-mobile`.
 - **Platform detection**: `WA_IS_ANDROID` and `WA_IS_IOS` are **overridden to `true`** in component providers

@@ -149,11 +149,11 @@ export class Dashboard {
   }
 
   protected goToMembers() {
-    this.router.navigate(['/members'])
+    this.router.navigate(['/members', 'members-list'])
   }
 
   protected goToPayments() {
-    this.router.navigate(['/payments'])
+    this.router.navigate(['/payments', 'payments-list'])
   }
 
   private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)

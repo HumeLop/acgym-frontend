@@ -3,6 +3,11 @@ import type { Routes } from '@angular/router'
 export const MEMBERS_ROUTES: Routes = [
   {
     path: '',
+    loadComponent: () =>
+      import('@features/members/pages/member-dashboard/member-dashboard').then((m) => m.MemberDashboard),
+  },
+  {
+    path: 'members-list',
     loadComponent: () => import('@features/members/pages/members-list/members-list').then((m) => m.MembersList),
   },
   {

@@ -1,10 +1,14 @@
 <div
   tuiSurface="elevated"
+  tuiTouchable
+  tuiRipple
   class="relative overflow-hidden group rounded-3xl border transition-all duration-200 hover:-translate-y-1 hover:shadow-xl border-(--tui-border-normal) hover:border-(--tui-border-hover)"
   tuiSwipe
   (tuiSwipe)="onSwipe($event)"
 >
-  <div class="h-1.5 rounded-t-3xl bg-linear-to-r from-orange-500 via-orange-400 to-blue-500"></div>
+  <div
+    class="h-1.5 rounded-t-3xl bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"
+  ></div>
 
   <div
     class="flex transition-transform duration-200 ease-out"
@@ -20,8 +24,8 @@
           <div class="flex items-center flex-1 min-w-0 gap-3">
             <div
               class="flex items-center justify-center shrink-0 text-xl font-bold text-white rounded-full shadow-md w-14 h-14"
-              [class.bg-orange-500]="isActive"
-              [class.bg-slate-400]="!isActive"
+              [class.bg-(--tui-primary)]="isActive"
+              [class.bg-(--tui-text-tertiary)]="!isActive"
             >
               {{ initial() }}
             </div>
@@ -39,19 +43,15 @@
 
           <div
             class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full shrink-0"
-            [class.bg-orange-100]="isActive"
-            [class.text-orange-800]="isActive"
-            [class.dark:bg-orange-900/30]="isActive"
-            [class.dark:text-orange-200]="isActive"
-            [class.bg-red-100]="!isActive"
-            [class.text-red-800]="!isActive"
-            [class.dark:bg-red-900/30]="!isActive"
-            [class.dark:text-red-200]="!isActive"
+            [class.bg-(--acgym-section-orange-pale)]="isActive"
+            [class.text-(--tui-primary)]="isActive"
+            [class.bg-(--tui-status-negative-pale)]="!isActive"
+            [class.text-(--tui-status-negative)]="!isActive"
           >
             <span
               class="w-2 h-2 rounded-full"
-              [class.bg-orange-500]="isActive"
-              [class.bg-red-500]="!isActive"
+              [class.bg-(--tui-primary)]="isActive"
+              [class.bg-(--tui-status-negative)]="!isActive"
             ></span>
             {{ isActive ? 'Activo' : 'Expirado' }}
           </div>
@@ -61,12 +61,9 @@
         <div class="pt-4 space-y-3 border-t border-(--tui-border-normal)">
           <div class="flex items-center gap-3">
             <div
-              class="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30"
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-(--acgym-section-orange-pale)"
             >
-              <tui-icon
-                icon="@tui.dollar-sign"
-                class="text-orange-600 dark:text-orange-400 text-base!"
-              />
+              <tui-icon icon="@tui.dollar-sign" class="text-(--tui-primary) text-base!" />
             </div>
             <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Monto</span>
             <span class="text-sm font-bold text-(--tui-text-primary)">${{ p.amount }}</span>
@@ -74,26 +71,19 @@
 
           <div class="flex items-center gap-3">
             <div
-              class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30"
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-(--tui-status-info-pale)"
             >
-              <tui-icon icon="@tui.calendar" class="text-blue-600 dark:text-blue-400 text-base!" />
+              <tui-icon icon="@tui.calendar" class="text-(--tui-status-info) text-base!" />
             </div>
-            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)"
-              >Fecha de pago</span
-            >
-            <span class="text-sm font-bold text-(--tui-text-primary)">{{
-              formatDate(p.paymentDate)
-            }}</span>
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Fecha de pago</span>
+            <span class="text-sm font-bold text-(--tui-text-primary)">{{ formatDate(p.paymentDate) }}</span>
           </div>
 
           <div class="flex items-center gap-3">
             <div
-              class="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30"
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-(--tui-status-warning-pale)"
             >
-              <tui-icon
-                icon="@tui.credit-card"
-                class="text-amber-600 dark:text-amber-400 text-base!"
-              />
+              <tui-icon icon="@tui.credit-card" class="text-(--tui-status-warning) text-base!" />
             </div>
             <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Método</span>
             <span class="text-sm font-bold text-(--tui-text-primary)">{{ p.paymentMethod }}</span>
@@ -102,24 +92,18 @@
           <div class="flex items-center gap-3">
             <div
               class="flex items-center justify-center w-8 h-8 rounded-lg"
-              [class.bg-red-100]="!isActive"
-              [class.dark:bg-red-900/30]="!isActive"
-              [class.bg-orange-100]="isActive"
-              [class.dark:bg-orange-900/30]="isActive"
+              [class.bg-(--tui-status-negative-pale)]="!isActive"
+              [class.bg-(--acgym-section-orange-pale)]="isActive"
             >
               <tui-icon
                 icon="@tui.calendar-x"
                 class="text-base!"
-                [class.text-red-600]="!isActive"
-                [class.dark:text-red-400]="!isActive"
-                [class.text-orange-600]="isActive"
-                [class.dark:text-orange-400]="isActive"
+                [class.text-(--tui-status-negative)]="!isActive"
+                [class.text-(--tui-primary)]="isActive"
               />
             </div>
             <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Vence</span>
-            <span class="text-sm font-bold text-(--tui-text-primary)">{{
-              formatDate(p.endDate)
-            }}</span>
+            <span class="text-sm font-bold text-(--tui-text-primary)">{{ formatDate(p.endDate) }}</span>
           </div>
         </div>
       </div>
@@ -129,35 +113,34 @@
         class="flex items-center gap-2 px-4 py-3 border-t border-(--tui-border-normal) bg-(--tui-background-neutral-1)"
       >
         <button
-          appearance="secondary"
-          size="m"
-          tuiButton
-          class="flex-1"
+          appearance="secondary" size="m" tuiButton class="flex-1"
           (click)="viewDetail.emit(p); $event.stopPropagation()"
         >
           <tui-icon icon="@tui.eye" />
           Ver
         </button>
         @if (isAdmin()) {
-          <button
-            appearance="secondary"
-            size="m"
-            tuiIconButton
-            iconStart="@tui.pencil"
-            title="Editar"
-            (click)="edit.emit(p); $event.stopPropagation()"
-          ></button>
-          <button
-            appearance="secondary-destructive"
-            size="m"
-            tuiIconButton
-            iconStart="@tui.trash-2"
-            title="Eliminar"
-            [disabled]="isDeleting()"
-            (click)="delete.emit(p); $event.stopPropagation()"
-          ></button>
+          <button appearance="secondary" size="m" tuiIconButton iconStart="@tui.pencil" title="Editar" (click)="edit.emit(p); $event.stopPropagation()"></button>
+          <button appearance="secondary-destructive" size="m" tuiIconButton iconStart="@tui.trash-2" title="Eliminar" [disabled]="isDeleting()" (click)="delete.emit(p); $event.stopPropagation()"></button>
         }
       </div>
     </a>
+
+    <div class="flex shrink-0 lg:hidden" [style.width.px]="actionsWidth">
+      <button
+        class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-primary) hover:bg-(--tui-primary-hover) text-white transition-colors"
+        (click)="$event.stopPropagation(); edit.emit(item()); closeSwipe()"
+      >
+        <tui-icon icon="@tui.pencil" class="text-xl" />
+        <span class="text-xs font-semibold">Editar</span>
+      </button>
+      <button
+        class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-status-negative) hover:bg-red-700 text-white transition-colors"
+        (click)="$event.stopPropagation(); delete.emit(item()); closeSwipe()"
+      >
+        <tui-icon icon="@tui.trash-2" class="text-xl" />
+        <span class="text-xs font-semibold">Eliminar</span>
+      </button>
+    </div>
   </div>
 </div>

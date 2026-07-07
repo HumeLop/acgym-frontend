@@ -1,4 +1,4 @@
-import type { PaymentMethod, PaymentStatus } from '@shared/models'
+import type { PaymentMethod } from '@shared/models'
 
 export interface Payment {
   id: number

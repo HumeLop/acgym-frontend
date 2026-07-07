@@ -2,10 +2,9 @@ import { KeyValuePipe } from '@angular/common'
 import { Component, computed, effect, inject, input, output, signal } from '@angular/core'
 import { FormControl, ReactiveFormsModule } from '@angular/forms'
 import { FormField, form, required } from '@angular/forms/signals'
-import { ThemeService } from '@core/services/theme-service'
 import type { PaymentWriteDto } from '@features/payments/models'
 import { PaymentService } from '@features/payments/services/payment-service'
-import { ConfirmationModal } from '@shared/components/confirmation-modal/confirmation-modal'
+import { ConfirmService } from '@shared/services/confirm-service'
 import type { PaymentMethod } from '@shared/models'
 import { DateUtils } from '@shared/utils/date.utils'
 import { TuiDay, TuiMonth, type TuiStringHandler, type TuiStringMatcher } from '@taiga-ui/cdk'
@@ -15,7 +14,6 @@ import { TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-payment-form',
-  host: { '[attr.tuiTheme]': 'theme()' },
   imports: [
     ReactiveFormsModule,
     KeyValuePipe,
@@ -23,7 +21,6 @@ import { TuiSurface } from '@taiga-ui/layout'
     TuiButton,
     TuiLabel,
     TuiNotification,
-    ConfirmationModal,
     FormField,
     TuiCalendar,
     TuiSelect,
@@ -38,13 +35,11 @@ import { TuiSurface } from '@taiga-ui/layout'
 })
 export class PaymentForm {
   protected paymentService = inject(PaymentService)
-  private themeService = inject(ThemeService)
-  protected theme = computed(() => (this.themeService.isDark() ? 'dark' : 'light'))
+  private confirmSvc = inject(ConfirmService)
 
   paymentId = input<number | null>(null)
   close = output<void>()
 
-  protected showCancelModal = signal(false)
   protected calendarOpen = signal(false)
   protected calendarMonth = computed(
     () => new TuiMonth(this.paymentFormModel().payment_date.year, this.paymentFormModel().payment_date.month)
@@ -182,17 +177,20 @@ export class PaymentForm {
   }
 
   onCancel() {
-    this.showCancelModal.set(true)
-  }
-
-  onConfirmCancel() {
-    this.showCancelModal.set(false)
-    this.paymentForm().reset()
-    this.close.emit()
-  }
-
-  onDismissCancel() {
-    this.showCancelModal.set(false)
+    this.confirmSvc
+      .open({
+        title: this.isEditing() ? 'Descartar Cambios' : 'Cancelar Registro',
+        message: this.isEditing() ? 'Los cambios no guardados se perderán' : 'La información ingresada se perderá',
+        type: 'destructive',
+        confirmText: 'Sí, Descartar',
+        cancelText: 'No, Quedarme',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.paymentForm().reset()
+          this.close.emit()
+        }
+      })
   }
 
   onSave() {

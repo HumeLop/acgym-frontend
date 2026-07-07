@@ -51,7 +51,7 @@ export class MemberService {
       page: this.page(),
       pageSize: this.pageSize(),
       ...(search ? { search } : {}),
-      ...(status !== null ? { isActive: status } : {}),
+      ...(status !== null ? { is_active: status } : {}),
     }
   })
 
@@ -152,6 +152,7 @@ export class MemberService {
   })
 
   private readonly _cacheEffect = effect(() => {
+    if (this.membersResource.status() === 'error') return
     const results = this.membersResource.value()?.results
     if (results && !this.remoteSearchTerm()) {
       this.cachedMembers.update((prev) => {
@@ -164,6 +165,9 @@ export class MemberService {
   })
 
   readonly members = computed(() => {
+    if (this.membersResource.status() === 'error') {
+      return []
+    }
     const term = this.searchTerm().trim()
     if (!term) {
       return this.membersResource.value()?.results?.map(toMember) ?? []
@@ -178,14 +182,17 @@ export class MemberService {
 
   readonly inactiveMembers = computed(() => {
     if (!this.showInactiveResults()) return []
+    if (this.inactiveMembersResource.status() === 'error') return []
     return this.inactiveMembersResource.value()?.results?.map(toMember) ?? []
   })
 
   readonly expiringMembers = computed(() => {
+    if (this.expiringMembersResource.status() === 'error') return []
     return this.expiringMembersResource.value()?.results?.map(toMember) ?? []
   })
 
   readonly hasInactiveResults = computed(() => {
+    if (this.inactiveMembersResource.status() === 'error') return 0
     return this.inactiveMembersResource.value()?.count ?? 0
   })
 
@@ -193,6 +200,7 @@ export class MemberService {
   readonly inactiveSearchError = this.inactiveMembersResource.error
 
   readonly hasExpiringResults = computed(() => {
+    if (this.expiringMembersResource.status() === 'error') return 0
     return this.expiringMembersResource.value()?.count ?? 0
   })
 
@@ -203,6 +211,7 @@ export class MemberService {
   })
 
   readonly hasRemoteResults = computed(() => {
+    if (this.membersResource.status() === 'error') return false
     return (this.membersResource.value()?.results?.length ?? 0) > 0
   })
 
@@ -231,7 +240,10 @@ export class MemberService {
     this.remoteSearchTerm.set(trimmed)
   }
 
-  readonly totalCount = computed(() => this.membersResource.value()?.count ?? 0)
+  readonly totalCount = computed(() => {
+    if (this.membersResource.status() === 'error') return 0
+    return this.membersResource.value()?.count ?? 0
+  })
   readonly totalMembers = this.totalCount
   readonly isLoadingMembers = this.membersResource.isLoading
   readonly isLoading = this.isLoadingMembers
@@ -254,6 +266,7 @@ export class MemberService {
   })
 
   readonly memberDetail = computed(() => {
+    if (this.memberDetailResource.status() === 'error') return null
     const detail = this.memberDetailResource.value()
     return detail ? toMemberDetail(detail) : null
   })

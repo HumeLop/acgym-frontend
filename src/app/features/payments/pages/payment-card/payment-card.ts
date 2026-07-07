@@ -5,10 +5,11 @@ import { DateUtils } from '@shared/utils'
 import { TuiSwipe, type TuiSwipeEvent } from '@taiga-ui/cdk'
 import { TuiButton, TuiIcon } from '@taiga-ui/core'
 import { TuiSurface } from '@taiga-ui/layout'
+import { TuiRipple, TuiTouchable } from '@taiga-ui/addon-mobile'
 
 @Component({
   selector: 'app-payment-card',
-  imports: [RouterLink, TuiIcon, TuiButton, TuiSwipe, TuiSurface],
+  imports: [RouterLink, TuiIcon, TuiButton, TuiSwipe, TuiSurface, TuiTouchable, TuiRipple],
   templateUrl: './payment-card.html',
 })
 export class PaymentCard {
