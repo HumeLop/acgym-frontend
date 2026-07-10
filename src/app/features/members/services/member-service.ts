@@ -10,6 +10,7 @@ import type {
 } from '@app/features/members/models'
 import { environment } from '@environments/environment'
 import type { ApiValidationError, PaginatedResponse } from '@shared/models'
+import { hapticMedium } from '@shared/utils/haptic'
 import { TuiNotificationService } from '@taiga-ui/core'
 import { catchError, finalize, type Observable, tap, throwError } from 'rxjs'
 
@@ -278,12 +279,14 @@ export class MemberService {
   }
 
   openCreateModal() {
+    hapticMedium()
     this.mutationError.set(null)
     this.editingMemberId.set(null)
     this.isModalOpen.set(true)
   }
 
   openEditModal(id: number) {
+    hapticMedium()
     this.mutationError.set(null)
     this.editingMemberId.set(id)
     this.isModalOpen.set(true)

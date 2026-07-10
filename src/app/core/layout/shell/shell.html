@@ -28,6 +28,7 @@
         type="button"
         class="flex items-center justify-center rounded-xl p-2 transition-colors text-(--acgym-header-text-secondary) hover:bg-(--acgym-header-hover)"
         [attr.aria-label]="'Cerrar sesión'"
+        (click)="onLogout()"
       >
         <tui-icon icon="@tui.log-out" class="text-xl" tuiTooltip="Cerrar sesión" />
       </button>
@@ -38,12 +39,7 @@
   <header
     class="header-mobile items-center gap-3 px-4 py-3 border-b bg-(--acgym-header-bg) border-(--acgym-header-border)"
   >
-    <img
-      routerLink="/dashboard"
-      src="/assets/images/ACGYM_LOGO.webp"
-      alt="Ac Gym Logo"
-      class="h-12 brightness-0 dark:invert"
-    />
+    <h1 class="text-lg font-extrabold tracking-tight text-(--acgym-header-text)">{{ currentTabTitle() }}</h1>
 
     <span class="ml-auto flex items-center gap-1">
       <button
@@ -59,6 +55,7 @@
         type="button"
         class="flex items-center justify-center rounded-xl p-2 transition-colors text-(--tui-text-secondary) hover:bg-(--tui-clear-hover)"
         [attr.aria-label]="'Cerrar sesión'"
+        (click)="onLogout()"
       >
         <tui-icon icon="@tui.log-out" class="text-xl" tuiTooltip="Cerrar sesión" />
       </button>
@@ -93,6 +90,14 @@
       >
         Pagos
       </a>
+      <a
+        iconStart="@tui.cog"
+        tuiAsideItem
+        routerLink="/admin"
+        routerLinkActive="active-link"
+      >
+        Administración
+      </a>
 
       <hr />
 
@@ -113,11 +118,36 @@
       tuiTabBarItem
       routerLink="/dashboard"
       [routerLinkActiveOptions]="{ exact: true }"
+      (click)="onTabTap()"
     >
       Inicio
     </a>
-    <a icon="@tui.users" routerLinkActive tuiTabBarItem routerLink="/members"> Miembros </a>
-    <a icon="@tui.credit-card" routerLinkActive tuiTabBarItem routerLink="/payments"> Pagos </a>
-
+    <a
+      icon="@tui.users"
+      routerLinkActive
+      tuiTabBarItem
+      routerLink="/members"
+      (click)="onTabTap()"
+    >
+      Miembros
+    </a>
+    <a
+      icon="@tui.credit-card"
+      routerLinkActive
+      tuiTabBarItem
+      routerLink="/payments"
+      (click)="onTabTap()"
+    >
+      Pagos
+    </a>
+    <a
+      icon="@tui.cog"
+      routerLinkActive
+      tuiTabBarItem
+      routerLink="/admin"
+      (click)="onTabTap()"
+    >
+      Administración
+    </a>
   </nav>
 </div>

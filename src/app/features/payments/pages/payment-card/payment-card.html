@@ -109,21 +109,14 @@
       </div>
 
       <!-- Acciones -->
-      <div
-        class="flex items-center gap-2 px-4 py-3 border-t border-(--tui-border-normal) bg-(--tui-background-neutral-1)"
-      >
-        <button
-          appearance="secondary" size="m" tuiButton class="flex-1"
-          (click)="viewDetail.emit(p); $event.stopPropagation()"
+      @if (isAdmin()) {
+        <div
+          class="flex items-center gap-2 px-4 py-3 border-t border-(--tui-border-normal) bg-(--tui-background-neutral-1)"
         >
-          <tui-icon icon="@tui.eye" />
-          Ver
-        </button>
-        @if (isAdmin()) {
-          <button appearance="secondary" size="m" tuiIconButton iconStart="@tui.pencil" title="Editar" (click)="edit.emit(p); $event.stopPropagation()"></button>
+          <button appearance="secondary" size="m" tuiIconButton iconStart="@tui.pencil" title="Editar" class="flex-1" (click)="edit.emit(p); $event.stopPropagation()"></button>
           <button appearance="secondary-destructive" size="m" tuiIconButton iconStart="@tui.trash-2" title="Eliminar" [disabled]="isDeleting()" (click)="delete.emit(p); $event.stopPropagation()"></button>
-        }
-      </div>
+        </div>
+      }
     </a>
 
     <div class="flex shrink-0 lg:hidden" [style.width.px]="actionsWidth">

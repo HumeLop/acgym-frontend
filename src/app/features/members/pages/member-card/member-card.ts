@@ -3,14 +3,15 @@ import { RouterLink } from '@angular/router'
 import type { Member } from '@features/members/models'
 import type { TuiSwipeEvent } from '@taiga-ui/cdk'
 import { TuiSwipe } from '@taiga-ui/cdk'
-import { TuiButton, TuiIcon } from '@taiga-ui/core'
+import { TuiIcon } from '@taiga-ui/core'
 import { TuiProgress } from '@taiga-ui/kit'
 import { TuiSurface } from '@taiga-ui/layout'
+import { hapticLight } from '@shared/utils/haptic'
 import { TuiRipple, TuiTouchable } from '@taiga-ui/addon-mobile'
 
 @Component({
   selector: 'app-member-card',
-  imports: [RouterLink, TuiSwipe, TuiIcon, TuiSurface, TuiProgress, TuiButton, TuiTouchable, TuiRipple],
+  imports: [RouterLink, TuiSwipe, TuiIcon, TuiSurface, TuiProgress, TuiTouchable, TuiRipple],
   templateUrl: './member-card.html',
 })
 export class MemberCard {
@@ -32,6 +33,7 @@ export class MemberCard {
   protected onSwipe(event: TuiSwipeEvent) {
     if (event.direction === 'left') {
       this.swiped.set(true)
+      hapticLight()
     } else if (event.direction === 'right') {
       this.swiped.set(false)
     }

@@ -18,6 +18,10 @@ export const routes: Routes = [
         path: 'payments',
         loadChildren: () => import('@features/payments/payments.routes').then((m) => m.PAYMENTS_ROUTES),
       },
+      {
+        path: 'admin',
+        loadChildren: () => import('@features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
+      },
     ],
   },
 ]

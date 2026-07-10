@@ -1,0 +1,323 @@
+<tui-pull-to-refresh (pulled)="onPull()">
+  <div class="p-3 sm:p-4 max-w-4xl mx-auto space-y-3 sm:space-y-4">
+    <!-- LOADING SKELETON -->
+    @if (isLoading()) {
+      <div class="pb-8 space-y-4">
+        <div class="h-5 w-48 rounded bg-(--tui-skeleton-color)" [tuiSkeleton]="true"></div>
+        <div [tuiSkeleton]="true" class="p-5 rounded-2xl border border-(--tui-border-normal)">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-full bg-(--tui-skeleton-color) shrink-0"></div>
+            <div class="flex-1 space-y-2">
+              <div class="h-6 w-48 rounded bg-(--tui-skeleton-color)"></div>
+              <div class="h-4 w-32 rounded bg-(--tui-skeleton-color)"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-4 overflow-hidden">
+          @for (item of [1, 2, 3, 4]; track item) {
+            <div
+              [tuiSkeleton]="true"
+              class="shrink-0 w-[42vw] p-4 rounded-2xl border border-(--tui-border-normal)"
+            >
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-14 h-14 rounded-full bg-(--tui-skeleton-color)"></div>
+                <div class="h-3 w-16 rounded bg-(--tui-skeleton-color)"></div>
+                <div class="h-5 w-20 rounded bg-(--tui-skeleton-color)"></div>
+              </div>
+            </div>
+          }
+        </div>
+        <div
+          [tuiSkeleton]="true"
+          class="p-5 rounded-2xl border border-(--tui-border-normal) space-y-4"
+        >
+          @for (item of [1, 2]; track item) {
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-(--tui-skeleton-color) shrink-0"></div>
+              <div class="flex-1 space-y-1">
+                <div class="h-3 w-24 rounded bg-(--tui-skeleton-color)"></div>
+                <div class="h-4 w-40 rounded bg-(--tui-skeleton-color)"></div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+    <!-- ERROR -->
+    @else if (error() || !detail()) {
+      <div class="flex items-center justify-center min-h-[80vh]">
+        <div tuiBlockStatus>
+          <tui-icon icon="@tui.shield-off" class="text-6xl text-(--tui-status-negative)" />
+          <h2 class="mt-4 text-xl font-bold text-(--tui-status-negative)">
+            Tipo de Membresía no encontrado
+          </h2>
+          <p class="mt-2 text-sm text-(--tui-text-secondary)">
+            No se pudo encontrar la información del tipo de membresía solicitado
+          </p>
+          <button
+            tuiButton
+            appearance="primary"
+            size="m"
+            routerLink="/admin/membership-types"
+            class="mt-4"
+          >
+            <tui-icon icon="@tui.arrow-left" />
+            Volver a la lista
+          </button>
+        </div>
+      </div>
+    }
+    <!-- CONTENT -->
+    @else {
+      <div class="pb-8">
+        <!-- STICKY HEADER -->
+        <div
+          class="sticky top-0 z-30 -mx-3 sm:-mx-4 px-3 sm:px-4 pt-2 pb-3 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-(--tui-border-normal) mb-4"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <button
+                tuiButton
+                appearance="icon"
+                iconStart="@tui.chevron-left"
+                routerLink="/admin/membership-types"
+                class="text-(--tui-text-primary)"
+              ></button>
+              <h1 class="text-lg font-extrabold tracking-tight text-(--tui-text-primary) truncate">
+                {{ detail()!.name }}
+              </h1>
+            </div>
+            <button
+              tuiButton
+              appearance="icon"
+              iconStart="@tui.pencil"
+              class="text-(--tui-primary)"
+              (click)="onEdit()"
+            ></button>
+          </div>
+        </div>
+
+        <!-- HEADER CARD -->
+        <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
+          <div class="flex items-center gap-4">
+            <div
+              class="flex items-center justify-center rounded-full w-16 h-16 shrink-0 shadow-lg"
+              [class.bg-linear-to-br]="detail()!.isActive"
+              [class.from-(--tui-primary)]="detail()!.isActive"
+              [class.to-(--tui-primary-hover)]="detail()!.isActive"
+              [class.shadow-(--tui-primary)/25]="detail()!.isActive"
+              [class.bg-(--tui-text-tertiary)]="!detail()!.isActive"
+            >
+              <span class="text-3xl font-bold text-white">
+                {{ detail()!.name.charAt(0).toUpperCase() }}
+              </span>
+            </div>
+            <div class="flex-1">
+              <h1 class="text-2xl font-bold text-(--tui-text-primary)">{{ detail()!.name }}</h1>
+              <p class="text-sm text-(--tui-text-secondary)">
+                ID: #{{ detail()!.id }} • ${{ detail()!.amount }} / mes
+              </p>
+              <div
+                class="inline-flex items-center gap-1.5 px-3 py-1 mt-1 text-xs font-semibold rounded-full"
+                [class.bg-(--tui-status-positive-pale)]="detail()!.isActive"
+                [class.text-(--tui-status-positive)]="detail()!.isActive"
+                [class.bg-(--tui-background-neutral-1)]="!detail()!.isActive"
+                [class.text-(--tui-text-tertiary)]="!detail()!.isActive"
+              >
+                <tui-icon
+                  [icon]="detail()!.isActive ? '@tui.check-circle' : '@tui.x-circle'"
+                  class="text-sm!"
+                  [class.text-(--tui-status-positive)!]="detail()!.isActive"
+                  [class.text-(--tui-text-tertiary)!]="!detail()!.isActive"
+                />
+                {{ detail()!.isActive ? 'Activo' : 'Inactivo' }}
+              </div>
+            </div>
+          </div>
+          @if (detail()!.description) {
+            <p class="mt-4 text-sm text-(--tui-text-secondary) leading-relaxed">
+              {{ detail()!.description }}
+            </p>
+          }
+        </div>
+
+        <!-- STATS HORIZONTAL SCROLL -->
+        <div
+          class="flex gap-3 overflow-x-auto snap-x snap-mandatory sm:grid sm:grid-cols-4 sm:overflow-visible mb-4 -mx-3 sm:mx-0 px-3 sm:px-0"
+        >
+          <div
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+          >
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-info-pale) mb-2"
+            >
+              <tui-icon icon="@tui.calendar-days" class="text-(--tui-status-info) text-lg" />
+            </div>
+            <p class="text-xl font-bold text-(--tui-text-primary)">
+              {{ detail()!.durationDays }} días
+            </p>
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Duración</span
+            >
+          </div>
+          <div
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+          >
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-positive-pale) mb-2"
+            >
+              <tui-icon icon="@tui.receipt" class="text-(--tui-status-positive) text-lg" />
+            </div>
+            <p class="text-xl font-bold text-(--tui-text-primary)">
+              {{ stats()?.totalPayments ?? detail()!.paymentsCount }}
+            </p>
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Pagos Totales</span
+            >
+          </div>
+          <div
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+          >
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-warning-pale) mb-2"
+            >
+              <tui-icon icon="@tui.dollar-sign" class="text-(--tui-status-warning) text-lg" />
+            </div>
+            <p class="text-xl font-bold text-(--tui-text-primary)">
+              ${{ stats()?.totalRevenue ?? detail()!.totalRevenue }}
+            </p>
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Ingresos Totales</span
+            >
+          </div>
+          <div
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+          >
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-neutral-pale) mb-2"
+            >
+              <tui-icon icon="@tui.bar-chart-3" class="text-(--tui-text-tertiary) text-lg" />
+            </div>
+            <p class="text-xl font-bold text-(--tui-text-primary)">
+              ${{ stats()?.averagePayment ?? '—' }}
+            </p>
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Pago Promedio</span
+            >
+          </div>
+        </div>
+
+        <!-- INFORMACIÓN DEL TIPO -->
+        <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
+          <div class="flex items-center gap-3 mb-5">
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
+            >
+              <tui-icon icon="@tui.info" class="text-(--tui-link)" />
+            </div>
+            <h2 class="text-lg font-bold text-(--tui-text-primary)">Información del Tipo</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.tag" class="text-(--tui-link)" />
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Nombre</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary) truncate">
+                  {{ detail()!.name }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.dollar-sign" class="text-(--tui-link)" />
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Costo</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary) truncate">
+                  ${{ detail()!.amount }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.calendar-days" class="text-(--tui-link)" />
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Duración</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary) truncate">
+                  {{ detail()!.durationDays }} días
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon
+                  [icon]="detail()!.isActive ? '@tui.check-circle' : '@tui.x-circle'"
+                  [class.text-(--tui-status-positive)]="detail()!.isActive"
+                  [class.text-(--tui-text-tertiary)]="!detail()!.isActive"
+                />
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Estado</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary) truncate">
+                  {{ detail()!.isActive ? 'Activo' : 'Inactivo' }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.clock" class="text-(--tui-link)" />
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Creado</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary) truncate">
+                  {{ formatDate(detail()!.createdAt) }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.refresh-cw" class="text-(--tui-link)" />
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Actualizado</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary) truncate">
+                  {{ formatDate(detail()!.updatedAt) }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</tui-pull-to-refresh>
+
+<ng-template
+  [tuiResponsiveDialogOptions]="{ size: 'l' }"
+  [(tuiResponsiveDialog)]="service.isModalOpen"
+>
+  <app-admin-membership-type-form [typeId]="service.editingId()" (close)="service.closeModal()" />
+</ng-template>

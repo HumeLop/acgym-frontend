@@ -1,5 +1,5 @@
-import type { MembershipTypeEntity } from '../models/membership-type.entity'
-import type { MembershipType } from '../models/membership-type.model'
+import type { MembershipTypeEntity } from '../../admin/models/membership-type.entity'
+import type { MembershipType } from '../../admin/models/membership-type.model'
 
 export function toMembershipType(entity: MembershipTypeEntity): MembershipType {
   return {

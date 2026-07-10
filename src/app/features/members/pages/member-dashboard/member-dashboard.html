@@ -1,84 +1,107 @@
-<div class="min-h-screen pb-24 bg-(--tui-background-base)">
-  <header class="sticky top-0 z-30 backdrop-blur-xl bg-(--tui-background-base) border-b border-(--tui-border-normal)">
-    <div class="h-1 bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"></div>
+<tui-pull-to-refresh (pulled)="onPull()">
+  <div class="min-h-screen pb-24 bg-(--tui-background-base)">
+    <header class="sticky top-0 z-30 backdrop-blur-xl bg-(--tui-background-base) border-b border-(--tui-border-normal)">
+      <div class="h-1 bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"></div>
 
-    <div class="px-5 pt-4 pb-3 sm:px-6">
-      <div class="flex items-center gap-3">
-        <div class="flex items-center justify-center w-10 h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25">
-          <tui-icon icon="@tui.users" class="text-xl text-white" />
+      <div class="px-5 pt-4 pb-3 sm:px-6">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25">
+            <tui-icon icon="@tui.users" class="text-xl text-white" />
+          </div>
+          <div>
+            <h1 class="text-xl font-extrabold tracking-tight text-(--tui-text-primary)">Miembros</h1>
+            <p class="text-xs font-medium text-(--tui-text-tertiary)">
+              Centro de gesti&oacute;n de miembros
+            </p>
+          </div>
         </div>
-        <div>
-          <h1 class="text-xl font-extrabold tracking-tight text-(--tui-text-primary)">Miembros</h1>
-          <p class="text-xs font-medium text-(--tui-text-tertiary)">
-            Centro de gesti&oacute;n de miembros
-          </p>
+      </div>
+    </header>
+
+    <!-- STATS HORIZONTAL SCROLL -->
+    <div class="px-3 sm:px-6 mt-6 animate-fade-in-up">
+      <div class="flex gap-3 overflow-x-auto snap-x snap-mandatory sm:grid sm:grid-cols-2 sm:overflow-visible">
+        <div tuiSurface="elevated" class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)">
+          <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale) mb-2">
+            <tui-icon icon="@tui.users" class="text-(--tui-primary) text-lg" />
+          </div>
+          @if (loading()) {
+            <span tuiSkeleton class="h-7 w-12 rounded-lg"></span>
+          } @else {
+            <span class="text-xl font-extrabold text-(--tui-text-primary)">{{ statValues().totalMembers }}</span>
+          }
+          <span class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide">Total</span>
+        </div>
+
+        <div tuiSurface="elevated" class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)">
+          <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-warning-pale) mb-2">
+            <tui-icon icon="@tui.clock" class="text-(--tui-status-warning) text-lg" />
+          </div>
+          @if (loading()) {
+            <span tuiSkeleton class="h-7 w-12 rounded-lg"></span>
+          } @else {
+            <div class="relative">
+              <span class="text-xl font-extrabold text-(--tui-status-warning)">{{ statValues().expiringCount }}</span>
+              @if (statValues().expiringCount > 0) {
+                <span class="absolute -top-0.5 -right-2.5 w-2 h-2 rounded-full bg-(--tui-status-warning) animate-pulse"></span>
+              }
+            </div>
+          }
+          <span class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide">Por expirar</span>
         </div>
       </div>
     </div>
-  </header>
 
-  <div class="px-3 sm:px-6 mt-6 animate-fade-in-up">
-    <div tuiSurface="elevated" class="flex flex-col items-center py-6 px-4 rounded-2xl border border-(--tui-border-normal)">
-      <div class="flex items-center justify-center w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25 mb-3">
-        <tui-icon icon="@tui.users" class="text-white text-2xl" />
+    <!-- NAVEGACIÓN -->
+    <div class="px-3 sm:px-6 mt-5 animate-fade-in-up" style="animation-delay: 100ms">
+      <span class="text-[10px] font-bold uppercase tracking-[0.15em] text-(--tui-text-tertiary) mb-3 block px-1">
+        Navegaci&oacute;n
+      </span>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <a
+          routerLink="/members/members-list"
+          tuiSurface="elevated"
+          class="group flex items-center gap-4 p-4 rounded-2xl border border-(--tui-border-normal) transition-all duration-200 hover:border-(--tui-primary) hover:shadow-md"
+        >
+          <div class="shrink-0 w-11 h-11 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+            <tui-icon icon="@tui.users" class="text-white text-lg" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="text-sm font-bold text-(--tui-text-primary)">Lista de Miembros</h3>
+            <p class="text-xs text-(--tui-text-secondary) mt-0.5">Busca, filtra y administra todos los miembros.</p>
+          </div>
+          <tui-icon icon="@tui.chevron-right" class="text-(--tui-text-tertiary) group-hover:text-(--tui-primary) transition-colors shrink-0" />
+        </a>
+
+        <a
+          routerLink="/members/expiring-memberships"
+          tuiSurface="elevated"
+          class="group flex items-center gap-4 p-4 rounded-2xl border border-(--tui-border-normal) transition-all duration-200 hover:border-(--tui-primary) hover:shadow-md"
+        >
+          <div class="shrink-0 w-11 h-11 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+            <tui-icon icon="@tui.clock" class="text-white text-lg" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="text-sm font-bold text-(--tui-text-primary)">Membres&iacute;as por Expirar</h3>
+            <p class="text-xs text-(--tui-text-secondary) mt-0.5">Miembros con planes pr&oacute;ximos a vencer.</p>
+          </div>
+          <tui-icon icon="@tui.chevron-right" class="text-(--tui-text-tertiary) group-hover:text-(--tui-primary) transition-colors shrink-0" />
+        </a>
       </div>
-      @if (loading()) {
-        <span tuiSkeleton class="h-9 w-20 rounded-lg"></span>
-      } @else {
-        <p class="text-4xl font-extrabold tracking-tight text-(--tui-text-primary)">{{ total() }}</p>
-      }
-      <p class="text-sm font-semibold text-(--tui-text-tertiary) mt-1">Total de miembros</p>
     </div>
+
+    <button
+      tuiRipple
+      class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
+      title="Agregar Miembro"
+      (click)="memberService.openCreateModal()"
+    >
+      <tui-icon icon="@tui.plus" class="text-white text-2xl" />
+    </button>
   </div>
+</tui-pull-to-refresh>
 
-  <div class="px-3 sm:px-6 mt-5 animate-fade-in-up" style="animation-delay: 100ms">
-    <span class="text-[10px] font-bold uppercase tracking-[0.15em] text-(--tui-text-tertiary) mb-3 block px-1">
-      Navegaci&oacute;n
-    </span>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-      <a
-        routerLink="/members/members-list"
-        tuiSurface="elevated"
-        class="group flex items-center gap-4 p-4 rounded-2xl border border-(--tui-border-normal) transition-all duration-200 hover:border-(--tui-primary) hover:shadow-md"
-      >
-        <div class="shrink-0 w-11 h-11 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-          <tui-icon icon="@tui.users" class="text-white text-lg" />
-        </div>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-sm font-bold text-(--tui-text-primary)">Lista de Miembros</h3>
-          <p class="text-xs text-(--tui-text-secondary) mt-0.5">Busca, filtra y administra todos los miembros.</p>
-        </div>
-        <tui-icon icon="@tui.chevron-right" class="text-(--tui-text-tertiary) group-hover:text-(--tui-primary) transition-colors shrink-0" />
-      </a>
-
-      <a
-        routerLink="/members/expiring-memberships"
-        tuiSurface="elevated"
-        class="group flex items-center gap-4 p-4 rounded-2xl border border-(--tui-border-normal) transition-all duration-200 hover:border-(--tui-primary) hover:shadow-md"
-      >
-        <div class="shrink-0 w-11 h-11 rounded-2xl bg-linear-to-br from-(--acgym-section-amber) to-(--acgym-section-amber-hover) shadow-lg shadow-(--acgym-section-amber)/25 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-          <tui-icon icon="@tui.clock" class="text-white text-lg" />
-        </div>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-sm font-bold text-(--tui-text-primary)">Membres&iacute;as por Expirar</h3>
-          <p class="text-xs text-(--tui-text-secondary) mt-0.5">Miembros con planes pr&oacute;ximos a vencer.</p>
-        </div>
-        <tui-icon icon="@tui.chevron-right" class="text-(--tui-text-tertiary) group-hover:text-(--tui-primary) transition-colors shrink-0" />
-      </a>
-    </div>
-  </div>
-
-  <button
-    tuiRipple
-    class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
-    title="Agregar Miembro"
-    (click)="memberService.openCreateModal()"
-  >
-    <tui-icon icon="@tui.plus" class="text-white text-2xl" />
-  </button>
-</div>
-
-<ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">
-  <app-member-form [memberId]="isEditingMember()" (close)="memberService.closeModal()" />
+<ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="memberService.isModalOpen">
+  <app-member-form [memberId]="memberService.editingMemberId()" (close)="memberService.closeModal()" />
 </ng-template>

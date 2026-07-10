@@ -1,8 +1,10 @@
+// biome-ignore-all lint/correctness/noUnusedPrivateClassMembers: false positive
 import { HttpClient, type HttpErrorResponse, httpResource } from '@angular/common/http'
 import { computed, effect, inject, Service, signal } from '@angular/core'
+import type { MembershipTypeEntity } from '@app/features/admin/models'
+import { hapticMedium } from '@shared/utils/haptic'
 import { environment } from '@environments/environment'
-import { toMembershipType } from '@features/membership-type/adapters/membership-type.adapter'
-import type { MembershipTypeEntity } from '@features/membership-type/models'
+import { toMembershipType } from '@features/admin/adapters/membership-type.adapter'
 import { toPaymentDetail, toPaymentStats, toPayments } from '@features/payments/adapters/payment.adapter'
 import type {
   PaymentDetailEntity,
@@ -304,12 +306,14 @@ export class PaymentService {
   }
 
   openCreateModal() {
+    hapticMedium()
     this.mutationError.set(null)
     this.editingPaymentId.set(null)
     this.isModalOpen.set(true)
   }
 
   openEditModal(id: number) {
+    hapticMedium()
     this.mutationError.set(null)
     this.editingPaymentId.set(id)
     this.isModalOpen.set(true)

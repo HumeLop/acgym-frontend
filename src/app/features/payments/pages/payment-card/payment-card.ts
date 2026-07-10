@@ -5,6 +5,7 @@ import { DateUtils } from '@shared/utils'
 import { TuiSwipe, type TuiSwipeEvent } from '@taiga-ui/cdk'
 import { TuiButton, TuiIcon } from '@taiga-ui/core'
 import { TuiSurface } from '@taiga-ui/layout'
+import { hapticLight } from '@shared/utils/haptic'
 import { TuiRipple, TuiTouchable } from '@taiga-ui/addon-mobile'
 
 @Component({
@@ -27,6 +28,7 @@ export class PaymentCard {
   protected onSwipe(event: TuiSwipeEvent) {
     if (event.direction === 'left') {
       this.swiped.set(true)
+      hapticLight()
     } else if (event.direction === 'right') {
       this.swiped.set(false)
     }

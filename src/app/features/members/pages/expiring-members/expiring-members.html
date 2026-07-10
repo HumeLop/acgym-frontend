@@ -61,7 +61,7 @@
                 class="absolute inset-y-0 right-0 flex items-center px-3 text-(--tui-text-tertiary) hover:text-(--tui-text-secondary) dark:hover:text-(--tui-text-primary)"
                 (click)="onClearSearch()"
               >
-                <tui-icon icon="@tui.eraser" class="w-4! h-4! text-base!" />
+                <tui-icon icon="@tui.x" class="w-4! h-4!" />
               </button>
             }
           </div>
@@ -85,8 +85,10 @@
     <!-- GRID -->
     @if (hasMembers()) {
       <div class="px-3 sm:px-6 mt-4 grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
-        @for (member of members(); track member.id) {
+        @for (member of members(); track member.id; let i = $index) {
           <app-member-card
+            class="animate-fade-in-up"
+            [style.animation-delay.ms]="i * 50"
             [member]="member"
             (edit)="memberService.openEditModal($event)"
             (delete)="onDeleteMember($event)"
@@ -149,16 +151,14 @@
     }
 
     <!-- FAB -->
-    @if (hasMembers()) {
-      <button
-        tuiRipple
-        class="fixed z-50 flex items-center justify-center w-16 h-16 text-white transition-all duration-300 shadow-2xl shadow-(--tui-primary)/30 bottom-20 right-6 lg:bottom-6 bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) rounded-2xl hover:scale-110 hover:shadow-(--tui-primary)/50 active:scale-95"
-        title="Agregar Miembro"
-        (click)="memberService.openCreateModal()"
-      >
-        <tui-icon icon="@tui.user-plus" class="text-3xl" />
-      </button>
-    }
+    <button
+      tuiRipple
+      class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
+      title="Agregar Miembro"
+      (click)="memberService.openCreateModal()"
+    >
+      <tui-icon icon="@tui.plus" class="text-white text-2xl" />
+    </button>
   </div>
 </tui-pull-to-refresh>
 

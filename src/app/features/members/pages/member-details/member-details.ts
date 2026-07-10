@@ -1,30 +1,62 @@
-import { Component, computed, effect, inject, input } from '@angular/core'
+import { Component, computed, effect, inject, input, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { MemberService } from '@features/members/services/member-service'
-import { DateUtils } from '@shared/utils/date.utils'
-import { TuiItem } from '@taiga-ui/cdk'
-import { TuiButton, TuiIcon, TuiLink, TuiNotification } from '@taiga-ui/core'
-import { TuiBreadcrumbs, TuiSkeleton } from '@taiga-ui/kit'
+import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
+import {
+  TUI_ANDROID_LOADER,
+  TUI_PULL_TO_REFRESH_COMPONENT,
+  TUI_PULL_TO_REFRESH_LOADED,
+  TUI_PULL_TO_REFRESH_THRESHOLD,
+  TuiPullToRefresh,
+  TuiResponsiveDialog,
+} from '@taiga-ui/addon-mobile'
+import { TuiButton, TuiIcon } from '@taiga-ui/core'
+import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
+import { MemberForm } from '@features/members/pages/member-form/member-form'
+import { MemberService } from '@features/members/services/member-service'
+import { hapticMedium } from '@shared/utils/haptic'
+import { DateUtils } from '@shared/utils/date.utils'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-member-details',
   imports: [
     RouterLink,
+    TuiPullToRefresh,
+    TuiResponsiveDialog,
     TuiIcon,
-    TuiBreadcrumbs,
-    TuiLink,
-    TuiItem,
     TuiSurface,
     TuiSkeleton,
-    TuiNotification,
     TuiButton,
     TuiBlockStatus,
+    MemberForm,
+  ],
+  providers: [
+    {
+      provide: TUI_PULL_TO_REFRESH_LOADED,
+      useClass: Subject,
+    },
+    {
+      provide: TUI_PULL_TO_REFRESH_COMPONENT,
+      useValue: TUI_ANDROID_LOADER,
+    },
+    {
+      provide: WA_IS_ANDROID,
+      useValue: true,
+    },
+    {
+      provide: WA_IS_IOS,
+      useValue: true,
+    },
+    {
+      provide: TUI_PULL_TO_REFRESH_THRESHOLD,
+      useValue: 120,
+    },
   ],
   templateUrl: './member-details.html',
 })
 export class MemberDetails {
-  private memberService = inject(MemberService)
+  protected memberService = inject(MemberService)
 
   id = input.required<string>({ alias: 'id' })
 
@@ -84,5 +116,25 @@ export class MemberDetails {
     const date = DateUtils.parseDateString(dateStr)
     if (!date) return '—'
     return DateUtils.formatDateForDisplay(date)
+  }
+
+  private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
+  private readonly isPulling = signal(false)
+
+  private readonly pullEffect = effect(() => {
+    if (this.isPulling() && !this.isLoading()) {
+      this.loaded$.next()
+      this.isPulling.set(false)
+    }
+  })
+
+  protected onPull() {
+    this.memberService.memberDetailResource.reload()
+    this.isPulling.set(true)
+  }
+
+  protected onEdit() {
+    hapticMedium()
+    this.memberService.openEditModal(Number(this.id()))
   }
 }

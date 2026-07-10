@@ -173,22 +173,6 @@
           }
         </div>
       </div>
-
-      <!-- Acciones -->
-      <div
-        class="flex items-center gap-2 px-4 py-3 border-t border-(--tui-border-normal) bg-(--tui-background-neutral-1)"
-      >
-        <button
-          appearance="secondary"
-          size="m"
-          tuiButton
-          class="flex-1"
-          (click)="viewDetail.emit(member()); $event.stopPropagation()"
-        >
-          <tui-icon icon="@tui.eye" />
-          Ver
-        </button>
-      </div>
     </a>
 
     <div class="flex shrink-0 lg:hidden" [style.width.px]="actionsWidth">

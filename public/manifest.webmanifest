@@ -2,7 +2,7 @@
   "name": "AcGym - Gestión de Gimnasio",
   "short_name": "AcGym",
   "description": "Sistema de gestión integral para gimnasios. Administra miembros, pagos y membresías de forma eficiente.",
-  "theme_color": "#3b82f6",
+  "theme_color": "#f97316",
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "./",
@@ -11,16 +11,28 @@
   "categories": ["business", "fitness", "productivity"],
   "icons": [
     {
+      "src": "favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/apple-icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "icons/manifest-icon-192.maskable.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable any"
     },
     {
       "src": "icons/manifest-icon-512.maskable.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable any"
     }
   ],
   "screenshots": [
@@ -41,10 +53,22 @@
   ],
   "shortcuts": [
     {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Ir al panel principal",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "icons/manifest-icon-192.maskable.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
       "name": "Nuevo Miembro",
       "short_name": "Nuevo Miembro",
-      "description": "Registrar un nuevo miembro en el sistema",
-      "url": "/members/new",
+      "description": "Registrar un nuevo miembro",
+      "url": "/members",
       "icons": [
         {
           "src": "icons/manifest-icon-192.maskable.png",
@@ -55,8 +79,8 @@
     {
       "name": "Nuevo Pago",
       "short_name": "Nuevo Pago",
-      "description": "Registrar un nuevo pago de membresía",
-      "url": "/payments/new",
+      "description": "Registrar un nuevo pago",
+      "url": "/payments",
       "icons": [
         {
           "src": "icons/manifest-icon-192.maskable.png",

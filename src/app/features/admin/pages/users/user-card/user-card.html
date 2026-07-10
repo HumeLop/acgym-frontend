@@ -1,0 +1,91 @@
+<div
+  tuiSurface="elevated"
+  tuiTouchable
+  tuiRipple
+  class="relative overflow-hidden group rounded-3xl border transition-all duration-200 hover:-translate-y-1 hover:shadow-xl border-(--tui-border-normal) hover:border-(--tui-border-hover)"
+  tuiSwipe
+  (tuiSwipe)="onSwipe($event)"
+>
+  <div
+    class="h-1.5 rounded-t-3xl bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"
+  ></div>
+
+  <div
+    class="flex transition-transform duration-200 ease-out"
+    [style.transform]="swiped() ? 'translateX(-' + actionsWidth + 'px)' : 'translateX(0)'"
+  >
+    <a class="w-full shrink-0" [routerLink]="['/admin/users', user().id]" (click)="closeSwipe()">
+      @let u = user();
+
+      <div class="flex-1 p-5">
+        <!-- Header -->
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div class="flex items-center flex-1 min-w-0 gap-3">
+            <div
+              class="flex items-center justify-center shrink-0 text-xl font-bold text-white rounded-full shadow-md w-14 h-14 bg-(--tui-primary)"
+            >
+              {{ (u.firstName || u.username).charAt(0).toUpperCase() }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3
+                class="text-base font-bold truncate transition-colors text-(--tui-text-primary) group-hover:text-(--tui-primary)"
+              >
+                {{ displayName() }}
+              </h3>
+              <p class="text-sm truncate text-(--tui-text-secondary)">
+                {{ u.email || 'Sin email' }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full shrink-0"
+            [class.bg-(--tui-background-neutral-1)]="u.role !== 'admin'"
+            [class.text-(--tui-text-tertiary)]="u.role !== 'admin'"
+            [class.bg-(--acgym-section-orange-pale)]="u.role === 'admin'"
+            [class.text-(--tui-primary)]="u.role === 'admin'"
+          >
+            <span
+              class="w-2 h-2 rounded-full"
+              [class.bg-(--tui-primary)]="u.role === 'admin'"
+              [class.bg-(--tui-text-tertiary)]="u.role !== 'admin'"
+            ></span>
+            {{ roleLabel() }}
+          </div>
+        </div>
+
+        <!-- Details -->
+        <div class="pt-4 space-y-3 border-t border-(--tui-border-normal)">
+          <div class="flex items-center gap-3">
+            <div
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-(--acgym-section-orange-pale)"
+            >
+              <tui-icon icon="@tui.at-sign" class="text-(--tui-primary) text-base!" />
+            </div>
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Usuario</span>
+            <span class="text-sm font-bold text-(--tui-text-primary) font-mono">{{
+              u.username
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <div class="flex shrink-0 lg:hidden" [style.width.px]="actionsWidth">
+      <button
+        class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-primary) hover:bg-(--tui-primary-hover) text-white transition-colors"
+        (click)="$event.stopPropagation(); edit.emit(user().id); closeSwipe()"
+      >
+        <tui-icon icon="@tui.pencil" class="text-xl" />
+        <span class="text-xs font-semibold">Editar</span>
+      </button>
+      <button
+        class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-status-negative) hover:bg-red-700 text-white transition-colors"
+        (click)="$event.stopPropagation(); delete.emit(user().id); closeSwipe()"
+      >
+        <tui-icon icon="@tui.trash-2" class="text-xl" />
+        <span class="text-xs font-semibold">Eliminar</span>
+      </button>
+    </div>
+  </div>
+</div>
