@@ -19,7 +19,7 @@
       @let expirationDays = m.daysUntilExpiration ?? -1;
       @let hasExpiration = m.daysUntilExpiration !== null;
 
-      <div class="flex-1 p-5" (click)="viewDetail.emit(member())">
+      <div class="flex-1 p-5">
         <!-- Header -->
         <div class="flex items-start justify-between gap-4 mb-4">
           <div class="flex items-center flex-1 min-w-0 gap-3">
@@ -76,10 +76,7 @@
             <div
               class="flex items-center justify-center w-8 h-8 rounded-lg bg-(--tui-status-info-pale)"
             >
-              <tui-icon
-                icon="@tui.credit-card"
-                class="text-(--tui-status-info) text-base!"
-              />
+              <tui-icon icon="@tui.credit-card" class="text-(--tui-status-info) text-base!" />
             </div>
             <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Pagos</span>
             <span class="text-sm font-bold text-(--tui-text-primary)">{{
@@ -91,7 +88,9 @@
             <div
               class="flex items-center justify-center w-8 h-8 rounded-lg"
               [class.bg-(--tui-status-negative-pale)]="hasExpiration && expirationDays <= 0"
-              [class.bg-(--tui-status-warning-pale)]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
+              [class.bg-(--tui-status-warning-pale)]="
+                hasExpiration && expirationDays <= 7 && expirationDays > 0
+              "
               [class.bg-(--tui-status-positive-pale)]="hasExpiration && expirationDays > 7"
               [class.bg-(--tui-background-neutral-1)]="!hasExpiration"
             >
@@ -99,7 +98,9 @@
                 icon="@tui.check-circle"
                 class="text-base!"
                 [class.text-(--tui-status-negative)]="hasExpiration && expirationDays <= 0"
-                [class.text-(--tui-status-warning)]="hasExpiration && expirationDays <= 7 && expirationDays > 0"
+                [class.text-(--tui-status-warning)]="
+                  hasExpiration && expirationDays <= 7 && expirationDays > 0
+                "
                 [class.text-(--tui-status-positive)]="hasExpiration && expirationDays > 7"
                 [class.text-(--tui-text-tertiary)]="!hasExpiration"
               />
@@ -108,7 +109,9 @@
             <span
               class="text-sm font-bold"
               [class.text-(--tui-status-negative)]="hasExpiration && expirationDays <= 3"
-              [class.text-(--tui-status-warning)]="hasExpiration && expirationDays <= 7 && expirationDays > 3"
+              [class.text-(--tui-status-warning)]="
+                hasExpiration && expirationDays <= 7 && expirationDays > 3
+              "
               [class.text-(--tui-status-positive)]="hasExpiration && expirationDays > 7"
               [class.text-(--tui-text-secondary)]="!hasExpiration"
             >

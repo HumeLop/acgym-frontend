@@ -109,14 +109,22 @@ export class PaymentsList {
     return sum.toFixed(2)
   })
 
+  constructor() {
+    effect(() => {
+      if (this.isPulling() && !this.paymentService.isLoading()) {
+        this.loaded$.next()
+        this.isPulling.set(false)
+      }
+    })
+  }
   onSearch(value: string) {
     this.paymentService.search(value)
-    this.paymentService.page.set(1)
+    this.paymentService.resetPage()
   }
 
   onClearSearch() {
     this.paymentService.search('')
-    this.paymentService.page.set(1)
+    this.paymentService.resetPage()
   }
 
   onDeletePayment(id: number) {
@@ -141,25 +149,18 @@ export class PaymentsList {
 
   onTabChange(index: number) {
     this.activeTabIndex.set(index)
-    this.paymentService.page.set(1)
+    this.paymentService.resetPage()
 
     if (index === 1) {
-      this.paymentService.statusFilter.set('active')
+      this.paymentService.setStatusFilter('active')
     } else if (index === 2) {
-      this.paymentService.statusFilter.set('expired')
+      this.paymentService.setStatusFilter('expired')
     } else {
-      this.paymentService.statusFilter.set(null)
+      this.paymentService.setStatusFilter(null)
     }
 
     this.paymentService.reload()
   }
-
-  private readonly pullEffect = effect(() => {
-    if (this.isPulling() && !this.paymentService.isLoading()) {
-      this.loaded$.next()
-      this.isPulling.set(false)
-    }
-  })
 
   protected headerScale = signal(1)
 
@@ -171,7 +172,7 @@ export class PaymentsList {
     if (window.scrollY > 0) return
     if (!this.isTouchDevice) return
 
-    this.paymentService.page.set(1)
+    this.paymentService.resetPage()
     this.paymentService.reload()
     this.isPulling.set(true)
   }

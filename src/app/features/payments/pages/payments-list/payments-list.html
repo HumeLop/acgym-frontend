@@ -136,7 +136,6 @@
               [item]="payment"
               (edit)="paymentService.openEditModal($event.id)"
               (delete)="onDeletePayment($event.id)"
-              (viewDetail)="router.navigate(['/payments', $event.id])"
             />
           }
         </div>

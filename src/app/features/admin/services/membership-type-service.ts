@@ -18,9 +18,13 @@ export class MembershipTypeService {
   private apiURL = `${environment.apiURL}/payments/membership-types`
 
   isModalOpen = signal(false)
-  isCreating = signal(false)
-  isEditing = signal(false)
-  editingId = signal<number | null>(null)
+  private _isCreating = signal(false)
+  private _isEditing = signal(false)
+  private _editingId = signal<number | null>(null)
+
+  readonly isCreating = this._isCreating.asReadonly()
+  readonly isEditing = this._isEditing.asReadonly()
+  readonly editingId = this._editingId.asReadonly()
 
   private readonly typesResource = httpResource<PaginatedResponse<MembershipTypeEntity>>(() => ({
     url: `${this.apiURL}/`,
@@ -41,7 +45,7 @@ export class MembershipTypeService {
   readonly error = this.typesResource.error
 
   create(data: MembershipTypeRequestDto): Observable<MembershipType> {
-    this.isCreating.set(true)
+    this._isCreating.set(true)
     return this.http.post<MembershipType>(`${this.apiURL}/`, data).pipe(
       tap(() => {
         this.typesResource.reload()
@@ -57,12 +61,12 @@ export class MembershipTypeService {
           .subscribe()
         return throwError(() => err)
       }),
-      finalize(() => this.isCreating.set(false))
+      finalize(() => this._isCreating.set(false))
     )
   }
 
   update(id: number, data: MembershipTypeRequestDto): Observable<MembershipType> {
-    this.isEditing.set(true)
+    this._isEditing.set(true)
     return this.http.put<MembershipType>(`${this.apiURL}/${id}/`, data).pipe(
       tap(() => {
         this.typesResource.reload()
@@ -78,7 +82,7 @@ export class MembershipTypeService {
           .subscribe()
         return throwError(() => err)
       }),
-      finalize(() => this.isEditing.set(false))
+      finalize(() => this._isEditing.set(false))
     )
   }
 
@@ -102,19 +106,19 @@ export class MembershipTypeService {
 
   openCreateModal() {
     hapticMedium()
-    this.editingId.set(null)
+    this._editingId.set(null)
     this.isModalOpen.set(true)
   }
 
   openEditModal(id: number) {
     hapticMedium()
-    this.editingId.set(id)
+    this._editingId.set(id)
     this.isModalOpen.set(true)
   }
 
   closeModal() {
     this.isModalOpen.set(false)
-    this.editingId.set(null)
+    this._editingId.set(null)
   }
 
   private detailId = signal<number | null>(null)

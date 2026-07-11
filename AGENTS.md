@@ -57,6 +57,43 @@ pnpm lint           # Biome lint
 - **`httpResource`** for all GET requests — declarative, signal-based, no manual subscriptions. RxJS `Observable` used only for mutations (POST/PUT/DELETE).
 - **Signal-based state** throughout. No `BehaviorSubject` pattern. See `MemberService` for the canonical example.
 
+### Angular 22 signal rules (mandatory)
+
+These rules follow the official [Angular Signals guide](https://angular.dev/guide/signals) and must be enforced on every PR:
+
+| API | Use for | Anti-pattern |
+|---|---|---|
+| `computed()` | Derived read-only values from other signals | — |
+| `linkedSignal()` | Derived state that can be manually overridden (form data, selections) | Using `signal() + effect()` to copy data |
+| `effect()` | Imperative side-effects only (localStorage, FormControl sync, 3rd-party libs) | Copying one signal to another with `.set()` |
+
+1. **Effects MUST live in `constructor()`** — never as class properties (`readonly foo = effect(...)` is forbidden). This is the canonical pattern per Angular 22 docs.
+
+2. **`signal() + effect()` copying data is FORBIDDEN.** If an effect does `this.target.set(this.source())`, it must be refactored to `linkedSignal()` instead. Effects may only call imperative APIs (`.reload()`, `loadDetail(id)`, `localStorage.setItem()`, FormControl `.setValue()`).
+
+3. **Services MUST expose signals as `asReadonly()`.** Internal state uses `private _foo = signal(...)`; consumers get `readonly foo = this._foo.asReadonly()`. If external mutation is needed, add a dedicated method (`resetPage()`, `setStatusFilter(val)`) instead of exposing the writable signal. Exception: signals used for Taiga UI two-way binding (`[(tuiResponsiveDialog)]`) must remain writable.
+
+4. **`computed()` for all derived values.** If a value can be written as `const x = f(signalA(), signalB())`, it must be a `computed` — never a `signal` updated manually.
+
+5. **`inject()` over constructor injection.** All dependencies use class-property `inject()`.
+
+6. **`input()` / `output()` over decorators.** No `@Input()` or `@Output()` anywhere. Components use `input.required<T>()`, `output<T>()`.
+
+### Signal decision tree
+
+```
+Need state that depends on other signals?
+├── Read-only derivation → computed()
+├── Derivation + manual override → linkedSignal()
+└── Imperative side-effect (API, DOM, storage) → effect() in constructor
+
+Need local component state?
+└── signal()
+
+Need async data?
+└── httpResource() for GET, Observable for mutations
+```
+
 ### Directory layout
 
 ```

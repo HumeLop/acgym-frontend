@@ -18,7 +18,7 @@
       @let p = item();
       @let isActive = p.isActive;
 
-      <div class="flex-1 p-5" (click)="viewDetail.emit(p)">
+      <div class="flex-1 p-5">
         <!-- Header -->
         <div class="flex items-start justify-between gap-4 mb-4">
           <div class="flex items-center flex-1 min-w-0 gap-3">
@@ -75,8 +75,12 @@
             >
               <tui-icon icon="@tui.calendar" class="text-(--tui-status-info) text-base!" />
             </div>
-            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Fecha de pago</span>
-            <span class="text-sm font-bold text-(--tui-text-primary)">{{ formatDate(p.paymentDate) }}</span>
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)"
+              >Fecha de pago</span
+            >
+            <span class="text-sm font-bold text-(--tui-text-primary)">{{
+              formatDate(p.paymentDate)
+            }}</span>
           </div>
 
           <div class="flex items-center gap-3">
@@ -103,7 +107,9 @@
               />
             </div>
             <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Vence</span>
-            <span class="text-sm font-bold text-(--tui-text-primary)">{{ formatDate(p.endDate) }}</span>
+            <span class="text-sm font-bold text-(--tui-text-primary)">{{
+              formatDate(p.endDate)
+            }}</span>
           </div>
         </div>
       </div>
@@ -113,8 +119,24 @@
         <div
           class="flex items-center gap-2 px-4 py-3 border-t border-(--tui-border-normal) bg-(--tui-background-neutral-1)"
         >
-          <button appearance="secondary" size="m" tuiIconButton iconStart="@tui.pencil" title="Editar" class="flex-1" (click)="edit.emit(p); $event.stopPropagation()"></button>
-          <button appearance="secondary-destructive" size="m" tuiIconButton iconStart="@tui.trash-2" title="Eliminar" [disabled]="isDeleting()" (click)="delete.emit(p); $event.stopPropagation()"></button>
+          <button
+            appearance="secondary"
+            size="m"
+            tuiIconButton
+            iconStart="@tui.pencil"
+            title="Editar"
+            class="flex-1"
+            (click)="edit.emit(p); $event.stopPropagation()"
+          ></button>
+          <button
+            appearance="secondary-destructive"
+            size="m"
+            tuiIconButton
+            iconStart="@tui.trash-2"
+            title="Eliminar"
+            [disabled]="isDeleting()"
+            (click)="delete.emit(p); $event.stopPropagation()"
+          ></button>
         </div>
       }
     </a>

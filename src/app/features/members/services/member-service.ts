@@ -25,21 +25,32 @@ export class MemberService {
   readonly apiErrors = computed(() => this.mutationError()?.fieldErrors ?? {})
   readonly generalError = computed(() => this.mutationError()?.summary ?? null)
 
-  page = signal<number>(1)
-  pageSize = signal<number>(20)
-  searchTerm = signal('')
-  statusFilter = signal<boolean | null>(null)
-
   isModalOpen = signal(false)
-  isCreating = signal<boolean>(false)
-  isEditing = signal<boolean>(false)
-  isDeleting = signal<boolean>(false)
-  editingMemberId = signal<number | null>(null)
+  private _isCreating = signal<boolean>(false)
+  private _isEditing = signal<boolean>(false)
+  private _isDeleting = signal<boolean>(false)
+  private _editingMemberId = signal<number | null>(null)
   deletingMemberId = signal<number | null>(null)
 
-  showInactiveResults = signal(false)
-  inactiveDays = signal<number>(30)
-  daysUntilExpiration = signal<number>(7)
+  readonly isCreating = this._isCreating.asReadonly()
+  readonly isEditing = this._isEditing.asReadonly()
+  readonly isDeleting = this._isDeleting.asReadonly()
+  readonly editingMemberId = this._editingMemberId.asReadonly()
+
+  page = signal<number>(1)
+  private _searchTerm = signal('')
+  private _statusFilter = signal<boolean | null>(null)
+  private _showInactiveResults = signal(false)
+
+  readonly pageSize = signal<number>(20).asReadonly()
+  readonly searchTerm = this._searchTerm.asReadonly()
+  readonly statusFilter = this._statusFilter.asReadonly()
+  readonly showInactiveResults = this._showInactiveResults.asReadonly()
+  private _inactiveDays = signal<number>(30)
+  private _daysUntilExpiration = signal<number>(7)
+
+  readonly inactiveDays = this._inactiveDays.asReadonly()
+  readonly daysUntilExpiration = this._daysUntilExpiration.asReadonly()
 
   private cachedMembers = signal<MemberEntity[]>([])
 
@@ -85,7 +96,7 @@ export class MemberService {
   }))
 
   createMember(member: MemberWriteDto): Observable<MemberWriteResponseDto> {
-    this.isCreating.set(true)
+    this._isCreating.set(true)
     return this.http.post<MemberWriteResponseDto>(`${this.apiURL}/`, member).pipe(
       tap(() => {
         this.membersResource.reload()
@@ -97,13 +108,13 @@ export class MemberService {
         return throwError(() => err)
       }),
       finalize(() => {
-        this.isCreating.set(false)
+        this._isCreating.set(false)
       })
     )
   }
 
   updateMember(id: number, member: MemberWriteDto): Observable<MemberWriteResponseDto> {
-    this.isEditing.set(true)
+    this._isEditing.set(true)
     return this.http.put<MemberWriteResponseDto>(`${this.apiURL}/${id}/`, member).pipe(
       tap(() => {
         this.membersResource.reload()
@@ -116,13 +127,13 @@ export class MemberService {
         return throwError(() => err)
       }),
       finalize(() => {
-        this.isEditing.set(false)
+        this._isEditing.set(false)
       })
     )
   }
 
   deleteMember(id: number): Observable<void> {
-    this.isDeleting.set(true)
+    this._isDeleting.set(true)
     return this.http.delete<void>(`${this.apiURL}/${id}/`).pipe(
       tap(() => {
         this.membersResource.reload()
@@ -134,7 +145,7 @@ export class MemberService {
         return throwError(() => err)
       }),
       finalize(() => {
-        this.isDeleting.set(false)
+        this._isDeleting.set(false)
       })
     )
   }
@@ -152,18 +163,20 @@ export class MemberService {
     })
   })
 
-  private readonly _cacheEffect = effect(() => {
-    if (this.membersResource.status() === 'error') return
-    const results = this.membersResource.value()?.results
-    if (results && !this.remoteSearchTerm()) {
-      this.cachedMembers.update((prev) => {
-        if (this.page() === 1) return results
-        const existingIds = new Set(prev.map((m) => m.id))
-        const newMembers = results.filter((m) => !existingIds.has(m.id))
-        return [...prev, ...newMembers]
-      })
-    }
-  })
+  constructor() {
+    effect(() => {
+      if (this.membersResource.status() === 'error') return
+      const results = this.membersResource.value()?.results
+      if (results && !this.remoteSearchTerm()) {
+        this.cachedMembers.update((prev) => {
+          if (this.page() === 1) return results
+          const existingIds = new Set(prev.map((m) => m.id))
+          const newMembers = results.filter((m) => !existingIds.has(m.id))
+          return [...prev, ...newMembers]
+        })
+      }
+    })
+  }
 
   readonly members = computed(() => {
     if (this.membersResource.status() === 'error') {
@@ -217,17 +230,25 @@ export class MemberService {
   })
 
   searchInactive(days: number) {
-    this.inactiveDays.set(days)
+    this._inactiveDays.set(days)
     this.page.set(1)
-    this.showInactiveResults.set(true)
+    this._showInactiveResults.set(true)
   }
 
   clearInactiveMembers() {
-    this.showInactiveResults.set(false)
+    this._showInactiveResults.set(false)
+  }
+
+  resetPage() {
+    this.page.set(1)
+  }
+
+  setStatusFilter(filter: boolean | null) {
+    this._statusFilter.set(filter)
   }
 
   search(term: string) {
-    this.searchTerm.set(term)
+    this._searchTerm.set(term)
 
     const trimmed = term.trim()
 
@@ -281,20 +302,20 @@ export class MemberService {
   openCreateModal() {
     hapticMedium()
     this.mutationError.set(null)
-    this.editingMemberId.set(null)
+    this._editingMemberId.set(null)
     this.isModalOpen.set(true)
   }
 
   openEditModal(id: number) {
     hapticMedium()
     this.mutationError.set(null)
-    this.editingMemberId.set(id)
+    this._editingMemberId.set(id)
     this.isModalOpen.set(true)
   }
 
   closeModal() {
     this.isModalOpen.set(false)
-    this.editingMemberId.set(null)
+    this._editingMemberId.set(null)
     this.deletingMemberId.set(null)
     this.mutationError.set(null)
   }

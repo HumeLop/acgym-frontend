@@ -53,7 +53,13 @@
           <p class="mt-2 text-sm text-(--tui-text-secondary)">
             No se pudo encontrar la información del pago solicitado
           </p>
-          <button tuiButton appearance="primary" size="m" routerLink="/payments" class="mt-4">
+          <button
+            tuiButton
+            appearance="primary"
+            size="m"
+            routerLink="/payments/payments-list"
+            class="mt-4"
+          >
             <tui-icon icon="@tui.arrow-left" /> Volver a pagos
           </button>
         </div>
@@ -73,7 +79,7 @@
                 tuiButton
                 appearance="icon"
                 iconStart="@tui.chevron-left"
-                routerLink="/payments"
+                routerLink="/payments/payments-list"
                 class="text-(--tui-text-primary)"
               ></button>
               <h1 class="text-lg font-extrabold tracking-tight text-(--tui-text-primary) truncate">

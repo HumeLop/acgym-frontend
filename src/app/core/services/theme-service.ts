@@ -19,22 +19,26 @@ export class ThemeService {
     return this.osPrefersDark()
   })
 
-  private readonly _cacheEffect = effect(() => {
-    const mode = this.mode()
-    const isDark = this.isDark()
+  readonly modes: ThemeMode[] = ['light', 'dark', 'system']
 
-    if (mode === 'system') {
-      localStorage.removeItem('theme')
-    } else {
-      localStorage.setItem('theme', mode)
-    }
-
-    this.darkModeSvc.set(isDark)
-    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
-    document.documentElement.setAttribute('tuiTheme', isDark ? 'dark' : 'light')
-  })
+  readonly modeIndex = computed(() => this.modes.indexOf(this.mode()))
 
   constructor() {
+    effect(() => {
+      const mode = this.mode()
+      const isDark = this.isDark()
+
+      if (mode === 'system') {
+        localStorage.removeItem('theme')
+      } else {
+        localStorage.setItem('theme', mode)
+      }
+
+      this.darkModeSvc.set(isDark)
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+      document.documentElement.setAttribute('tuiTheme', isDark ? 'dark' : 'light')
+    })
+
     this.mediaQuery.addEventListener('change', (e: MediaQueryListEvent) => {
       this.osPrefersDark.set(e.matches)
     })
@@ -45,10 +49,6 @@ export class ThemeService {
     if (stored === 'dark' || stored === 'light') return stored
     return 'system'
   }
-
-  readonly modes: ThemeMode[] = ['light', 'dark', 'system']
-
-  readonly modeIndex = computed(() => this.modes.indexOf(this.mode()))
 
   nextMode(): void {
     const next = (this.modeIndex() + 1) % this.modes.length

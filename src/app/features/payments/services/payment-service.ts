@@ -1,8 +1,6 @@
-// biome-ignore-all lint/correctness/noUnusedPrivateClassMembers: false positive
 import { HttpClient, type HttpErrorResponse, httpResource } from '@angular/common/http'
 import { computed, effect, inject, Service, signal } from '@angular/core'
 import type { MembershipTypeEntity } from '@app/features/admin/models'
-import { hapticMedium } from '@shared/utils/haptic'
 import { environment } from '@environments/environment'
 import { toMembershipType } from '@features/admin/adapters/membership-type.adapter'
 import { toPaymentDetail, toPaymentStats, toPayments } from '@features/payments/adapters/payment.adapter'
@@ -14,6 +12,7 @@ import type {
   PaymentWriteDto,
 } from '@features/payments/models'
 import type { ApiValidationError, PaginatedResponse } from '@shared/models'
+import { hapticMedium } from '@shared/utils/haptic'
 import { TuiNotificationService } from '@taiga-ui/core'
 import { catchError, finalize, type Observable, tap, throwError } from 'rxjs'
 
@@ -31,16 +30,24 @@ export class PaymentService {
   readonly generalError = computed(() => this.mutationError()?.summary ?? null)
 
   page = signal<number>(1)
-  pageSize = signal<number>(20)
-  searchTerm = signal('')
-  statusFilter = signal<string | null>(null)
+  private _searchTerm = signal('')
+  private _statusFilter = signal<string | null>(null)
+
+  readonly pageSize = signal<number>(20).asReadonly()
+  readonly searchTerm = this._searchTerm.asReadonly()
+  readonly statusFilter = this._statusFilter.asReadonly()
 
   isModalOpen = signal(false)
-  isCreating = signal<boolean>(false)
-  isEditing = signal<boolean>(false)
-  isDeleting = signal<boolean>(false)
-  editingPaymentId = signal<number | null>(null)
+  private _isCreating = signal<boolean>(false)
+  private _isEditing = signal<boolean>(false)
+  private _isDeleting = signal<boolean>(false)
+  private _editingPaymentId = signal<number | null>(null)
   deletingPaymentId = signal<number | null>(null)
+
+  readonly isCreating = this._isCreating.asReadonly()
+  readonly isEditing = this._isEditing.asReadonly()
+  readonly isDeleting = this._isDeleting.asReadonly()
+  readonly editingPaymentId = this._editingPaymentId.asReadonly()
 
   private cachedPayments = signal<PaymentEntity[]>([])
 
@@ -109,18 +116,33 @@ export class PaymentService {
     return this.memberRemoteSearchResource.value()?.results ?? local
   })
 
-  private _memberCacheEffect = effect(() => {
-    if (this.memberOptionsResource.status() === 'error') return
-    const results = this.memberOptionsResource.value()?.results
-    if (results && !this.memberSearchTerm()) {
-      this.cachedMemberOptions.update((prev) => {
-        if (prev.length === 0) return results
-        const existingIds = new Set(prev.map((m) => m.id))
-        const newMembers = results.filter((m) => !existingIds.has(m.id))
-        return [...prev, ...newMembers]
-      })
-    }
-  })
+  constructor() {
+    effect(() => {
+      if (this.memberOptionsResource.status() === 'error') return
+      const results = this.memberOptionsResource.value()?.results
+      if (results && !this.memberSearchTerm()) {
+        this.cachedMemberOptions.update((prev) => {
+          if (prev.length === 0) return results
+          const existingIds = new Set(prev.map((m) => m.id))
+          const newMembers = results.filter((m) => !existingIds.has(m.id))
+          return [...prev, ...newMembers]
+        })
+      }
+    })
+
+    effect(() => {
+      if (this.paymentsResource.status() === 'error') return
+      const results = this.paymentsResource.value()?.results
+      if (results && !this.remoteSearchTerm()) {
+        this.cachedPayments.update((prev) => {
+          if (this.page() === 1) return results
+          const existingIds = new Set(prev.map((p) => p.id))
+          const newPayments = results.filter((p) => !existingIds.has(p.id))
+          return [...prev, ...newPayments]
+        })
+      }
+    })
+  }
 
   searchMembers(term: string) {
     const trimmed = term.trim()
@@ -147,7 +169,7 @@ export class PaymentService {
   })
 
   deletePayment(id: number): Observable<void> {
-    this.isDeleting.set(true)
+    this._isDeleting.set(true)
     return this.http.delete<void>(`${this.apiURL}/${id}/`).pipe(
       tap(() => {
         this.paymentsResource.reload()
@@ -160,13 +182,13 @@ export class PaymentService {
         return throwError(() => err)
       }),
       finalize(() => {
-        this.isDeleting.set(false)
+        this._isDeleting.set(false)
       })
     )
   }
 
   createPayment(payment: PaymentWriteDto): Observable<PaymentEntity> {
-    this.isCreating.set(true)
+    this._isCreating.set(true)
     return this.http.post<PaymentEntity>(`${this.apiURL}/`, payment).pipe(
       tap(() => {
         this.paymentsResource.reload()
@@ -178,13 +200,13 @@ export class PaymentService {
         return throwError(() => err)
       }),
       finalize(() => {
-        this.isCreating.set(false)
+        this._isCreating.set(false)
       })
     )
   }
 
   updatePayment(id: number, payment: PaymentWriteDto): Observable<PaymentEntity> {
-    this.isEditing.set(true)
+    this._isEditing.set(true)
     return this.http.put<PaymentEntity>(`${this.apiURL}/${id}/`, payment).pipe(
       tap(() => {
         this.paymentsResource.reload()
@@ -197,7 +219,7 @@ export class PaymentService {
         return throwError(() => err)
       }),
       finalize(() => {
-        this.isEditing.set(false)
+        this._isEditing.set(false)
       })
     )
   }
@@ -209,19 +231,6 @@ export class PaymentService {
     return this.cachedPayments().filter((p) => {
       return p.member_name.toLowerCase().includes(term) || (p.payment_method?.toLowerCase().includes(term) ?? false)
     })
-  })
-
-  private readonly _cacheEffect = effect(() => {
-    if (this.paymentsResource.status() === 'error') return
-    const results = this.paymentsResource.value()?.results
-    if (results && !this.remoteSearchTerm()) {
-      this.cachedPayments.update((prev) => {
-        if (this.page() === 1) return results
-        const existingIds = new Set(prev.map((p) => p.id))
-        const newPayments = results.filter((p) => !existingIds.has(p.id))
-        return [...prev, ...newPayments]
-      })
-    }
   })
 
   readonly payments = computed(() => {
@@ -258,8 +267,16 @@ export class PaymentService {
     return stats ? toPaymentStats(stats) : null
   })
 
+  resetPage() {
+    this.page.set(1)
+  }
+
+  setStatusFilter(filter: string | null) {
+    this._statusFilter.set(filter)
+  }
+
   search(term: string) {
-    this.searchTerm.set(term)
+    this._searchTerm.set(term)
 
     const trimmed = term.trim()
 
@@ -308,20 +325,20 @@ export class PaymentService {
   openCreateModal() {
     hapticMedium()
     this.mutationError.set(null)
-    this.editingPaymentId.set(null)
+    this._editingPaymentId.set(null)
     this.isModalOpen.set(true)
   }
 
   openEditModal(id: number) {
     hapticMedium()
     this.mutationError.set(null)
-    this.editingPaymentId.set(id)
+    this._editingPaymentId.set(id)
     this.isModalOpen.set(true)
   }
 
   closeModal() {
     this.isModalOpen.set(false)
-    this.editingPaymentId.set(null)
+    this._editingPaymentId.set(null)
     this.deletingPaymentId.set(null)
     this.mutationError.set(null)
   }

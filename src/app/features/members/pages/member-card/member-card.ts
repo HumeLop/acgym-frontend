@@ -1,13 +1,13 @@
 import { Component, computed, input, output, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import type { Member } from '@features/members/models'
+import { hapticLight } from '@shared/utils/haptic'
+import { TuiRipple, TuiTouchable } from '@taiga-ui/addon-mobile'
 import type { TuiSwipeEvent } from '@taiga-ui/cdk'
 import { TuiSwipe } from '@taiga-ui/cdk'
 import { TuiIcon } from '@taiga-ui/core'
 import { TuiProgress } from '@taiga-ui/kit'
 import { TuiSurface } from '@taiga-ui/layout'
-import { hapticLight } from '@shared/utils/haptic'
-import { TuiRipple, TuiTouchable } from '@taiga-ui/addon-mobile'
 
 @Component({
   selector: 'app-member-card',
@@ -19,7 +19,6 @@ export class MemberCard {
 
   edit = output<number>()
   delete = output<number>()
-  viewDetail = output<Member>()
 
   protected swiped = signal(false)
   protected readonly actionsWidth = 144

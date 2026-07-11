@@ -2,11 +2,11 @@ import { Component, computed, input, output, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import type { Payment } from '@features/payments/models'
 import { DateUtils } from '@shared/utils'
+import { hapticLight } from '@shared/utils/haptic'
+import { TuiRipple, TuiTouchable } from '@taiga-ui/addon-mobile'
 import { TuiSwipe, type TuiSwipeEvent } from '@taiga-ui/cdk'
 import { TuiButton, TuiIcon } from '@taiga-ui/core'
 import { TuiSurface } from '@taiga-ui/layout'
-import { hapticLight } from '@shared/utils/haptic'
-import { TuiRipple, TuiTouchable } from '@taiga-ui/addon-mobile'
 
 @Component({
   selector: 'app-payment-card',
@@ -18,7 +18,6 @@ export class PaymentCard {
   isDeleting = input(false)
   isAdmin = input(false)
 
-  viewDetail = output<Payment>()
   edit = output<Payment>()
   delete = output<Payment>()
 

@@ -82,14 +82,14 @@ export class MembersList {
 
   onTabChange(index: number) {
     this.activeTabIndex.set(index)
-    this.memberService.page.set(1)
+    this.memberService.resetPage()
 
     if (index === 1) {
-      this.memberService.statusFilter.set(true)
+      this.memberService.setStatusFilter(true)
     } else if (index === 2) {
-      this.memberService.statusFilter.set(false)
+      this.memberService.setStatusFilter(false)
     } else {
-      this.memberService.statusFilter.set(null)
+      this.memberService.setStatusFilter(null)
     }
 
     this.memberService.reload()
@@ -109,12 +109,12 @@ export class MembersList {
 
   onSearch(value: string) {
     this.memberService.search(value)
-    this.memberService.page.set(1)
+    this.memberService.resetPage()
   }
 
   onClearSearch() {
     this.memberService.search('')
-    this.memberService.page.set(1)
+    this.memberService.resetPage()
   }
 
   onDeleteMember(id: number) {
@@ -136,12 +136,14 @@ export class MembersList {
   private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
   private readonly isPulling = signal(false)
 
-  private readonly pullEffect = effect(() => {
-    if (this.isPulling() && !this.memberService.isLoading()) {
-      this.loaded$.next()
-      this.isPulling.set(false)
-    }
-  })
+  constructor() {
+    effect(() => {
+      if (this.isPulling() && !this.memberService.isLoading()) {
+        this.loaded$.next()
+        this.isPulling.set(false)
+      }
+    })
+  }
 
   closeModal() {
     this.memberService.closeModal()
@@ -158,7 +160,7 @@ export class MembersList {
     if (window.scrollY > 0) return
     if (!this.isTouchDevice) return
 
-    this.memberService.page.set(1)
+    this.memberService.resetPage()
     this.memberService.reload()
     this.isPulling.set(true)
   }

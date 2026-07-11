@@ -1,7 +1,7 @@
 import { KeyValuePipe } from '@angular/common'
-import { Component, computed, effect, inject, input, output, signal } from '@angular/core'
+import { Component, computed, effect, inject, input, linkedSignal, output, signal } from '@angular/core'
 import { FormField, form, maxLength, required } from '@angular/forms/signals'
-import type { MemberWriteDto } from '@app/features/members/models'
+import type { MemberDetail, MemberWriteDto } from '@app/features/members/models'
 import { DateUtils } from '@app/shared/utils'
 import { MemberService } from '@features/members/services/member-service'
 import { ConfirmService } from '@shared/services/confirm-service'
@@ -33,53 +33,62 @@ export class MemberForm {
 
   protected editMode = computed(() => this.memberId() !== null)
 
-  private syncFormWithMember = effect(() => {
-    const id = this.memberId()
-
-    if (id === null) {
-      this.memberData.set({
-        name: '',
-        phone: '',
-        email: '',
-        dateOfBirth: TuiDay.currentLocal(),
-        emergencyContact: '',
-        emergencyPhone: '',
-        notes: '',
-        notificationsEnabled: false,
-      })
-      return
-    }
-
-    this.memberService.loadMemberDetail(id)
-    const member = this.memberService.memberDetail()
-    if (member?.id !== id) return
-
-    this.memberData.set({
-      name: member.name,
-      phone: member.phone ?? '',
-      email: member.email ?? '',
-      dateOfBirth: DateUtils.toTuiDay(member.dateOfBirth),
-      emergencyContact: member.emergencyContact ?? '',
-      emergencyPhone: member.emergencyPhone ?? '',
-      notes: member.notes ?? '',
-      notificationsEnabled: member.notificationsEnabled,
+  constructor() {
+    effect(() => {
+      const id = this.memberId()
+      if (id !== null) {
+        this.memberService.loadMemberDetail(id)
+      }
     })
-  })
+  }
 
   protected formatDate(day: TuiDay): string {
     const date = new Date(day.year, day.month, day.day)
     return DateUtils.formatDateForDisplay(date)
   }
 
-  memberData = signal({
-    name: '',
-    phone: '',
-    email: '',
-    dateOfBirth: TuiDay.currentLocal(),
-    emergencyContact: '',
-    emergencyPhone: '',
-    notes: '',
-    notificationsEnabled: false,
+  memberData = linkedSignal<
+    MemberDetail | null,
+    {
+      name: string
+      phone: string
+      email: string
+      dateOfBirth: TuiDay
+      emergencyContact: string
+      emergencyPhone: string
+      notes: string
+      notificationsEnabled: boolean
+    }
+  >({
+    source: () => {
+      const id = this.memberId()
+      if (id === null) return null
+      return this.memberService.memberDetail()
+    },
+    computation: (member, previous) => {
+      if (!member || member.id !== this.memberId()) {
+        return previous?.value ?? {
+          name: '',
+          phone: '',
+          email: '',
+          dateOfBirth: TuiDay.currentLocal(),
+          emergencyContact: '',
+          emergencyPhone: '',
+          notes: '',
+          notificationsEnabled: false,
+        }
+      }
+      return {
+        name: member.name,
+        phone: member.phone ?? '',
+        email: member.email ?? '',
+        dateOfBirth: DateUtils.toTuiDay(member.dateOfBirth),
+        emergencyContact: member.emergencyContact ?? '',
+        emergencyPhone: member.emergencyPhone ?? '',
+        notes: member.notes ?? '',
+        notificationsEnabled: member.notificationsEnabled,
+      }
+    },
   })
 
   memberForm = form(this.memberData, (path) => {

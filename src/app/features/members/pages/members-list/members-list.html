@@ -126,7 +126,6 @@
             [member]="member"
             (edit)="memberService.openEditModal($event)"
             (delete)="onDeleteMember($event)"
-            (viewDetail)="router.navigate(['/members', $event.id])"
           />
         }
       </div>

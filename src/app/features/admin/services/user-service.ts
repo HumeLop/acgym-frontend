@@ -16,9 +16,13 @@ export class UserService {
   private apiURL = `${environment.apiURL}/users`
 
   isModalOpen = signal(false)
-  isCreating = signal(false)
-  isEditing = signal(false)
-  editingId = signal<number | null>(null)
+  private _isCreating = signal(false)
+  private _isEditing = signal(false)
+  private _editingId = signal<number | null>(null)
+
+  readonly isCreating = this._isCreating.asReadonly()
+  readonly isEditing = this._isEditing.asReadonly()
+  readonly editingId = this._editingId.asReadonly()
 
   private readonly usersResource = httpResource<PaginatedResponse<UserEntity>>(() => ({
     url: `${this.apiURL}/`,
@@ -55,7 +59,7 @@ export class UserService {
   readonly detailError = this.userDetailResource.error
 
   create(data: UserRequestDto): Observable<User> {
-    this.isCreating.set(true)
+    this._isCreating.set(true)
     return this.http.post<User>(`${this.apiURL}/`, data).pipe(
       tap(() => {
         this.usersResource.reload()
@@ -71,12 +75,12 @@ export class UserService {
           .subscribe()
         return throwError(() => err)
       }),
-      finalize(() => this.isCreating.set(false))
+      finalize(() => this._isCreating.set(false))
     )
   }
 
   update(id: number, data: UserRequestDto): Observable<User> {
-    this.isEditing.set(true)
+    this._isEditing.set(true)
     return this.http.put<User>(`${this.apiURL}/${id}/`, data).pipe(
       tap(() => {
         this.usersResource.reload()
@@ -93,7 +97,7 @@ export class UserService {
           .subscribe()
         return throwError(() => err)
       }),
-      finalize(() => this.isEditing.set(false))
+      finalize(() => this._isEditing.set(false))
     )
   }
 
@@ -121,19 +125,19 @@ export class UserService {
 
   openCreateModal() {
     hapticMedium()
-    this.editingId.set(null)
+    this._editingId.set(null)
     this.isModalOpen.set(true)
   }
 
   openEditModal(id: number) {
     hapticMedium()
-    this.editingId.set(id)
+    this._editingId.set(id)
     this.isModalOpen.set(true)
   }
 
   closeModal() {
     this.isModalOpen.set(false)
-    this.editingId.set(null)
+    this._editingId.set(null)
   }
 
   reload() {

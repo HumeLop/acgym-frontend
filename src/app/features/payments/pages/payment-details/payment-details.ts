@@ -65,10 +65,19 @@ export class PaymentDetails {
   protected isLoading = this.paymentService.isLoadingDetail
   protected error = this.paymentService.detailError
 
-  private _loadEffect = effect(() => {
-    const id = Number(this.id())
-    if (id) this.paymentService.loadPaymentDetail(id)
-  })
+  constructor() {
+    effect(() => {
+      const id = Number(this.id())
+      if (id) this.paymentService.loadPaymentDetail(id)
+    })
+
+    effect(() => {
+      if (this.isPulling() && !this.isLoading()) {
+        this.loaded$.next()
+        this.isPulling.set(false)
+      }
+    })
+  }
 
   protected statusLabel = computed(() => {
     const p = this.paymentDetail()
@@ -95,13 +104,6 @@ export class PaymentDetails {
 
   private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
   private readonly isPulling = signal(false)
-
-  private readonly pullEffect = effect(() => {
-    if (this.isPulling() && !this.isLoading()) {
-      this.loaded$.next()
-      this.isPulling.set(false)
-    }
-  })
 
   protected onPull() {
     this.paymentService.paymentDetailResource.reload()

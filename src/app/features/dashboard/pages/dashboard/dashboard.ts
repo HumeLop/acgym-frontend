@@ -11,6 +11,7 @@ import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
   TUI_PULL_TO_REFRESH_LOADED,
+  TUI_PULL_TO_REFRESH_THRESHOLD,
   TuiElasticSticky,
   TuiPullToRefresh,
 } from '@taiga-ui/addon-mobile'
@@ -59,6 +60,10 @@ import { Subject } from 'rxjs'
     {
       provide: WA_IS_IOS,
       useValue: false,
+    },
+    {
+      provide: TUI_PULL_TO_REFRESH_THRESHOLD,
+      useValue: 120,
     },
   ],
   templateUrl: './dashboard.html',
@@ -158,15 +163,20 @@ export class Dashboard {
 
   private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
   private readonly isPulling = signal(false)
+  private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
 
-  private readonly pullEffect = effect(() => {
-    if (this.isPulling() && !this.dashboardService.isLoading()) {
-      this.loaded$.next()
-      this.isPulling.set(false)
-    }
-  })
+  constructor() {
+    effect(() => {
+      if (this.isPulling() && !this.dashboardService.isLoading()) {
+        this.loaded$.next()
+        this.isPulling.set(false)
+      }
+    })
+  }
 
   protected onPull() {
+    if (window.scrollY > 0) return
+    if (!this.isTouchDevice) return
     this.dashboardService.reload()
     this.isPulling.set(true)
   }

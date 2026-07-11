@@ -1,6 +1,10 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
+import { MemberForm } from '@features/members/pages/member-form/member-form'
+import { MemberService } from '@features/members/services/member-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
+import { DateUtils } from '@shared/utils/date.utils'
+import { hapticMedium } from '@shared/utils/haptic'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
@@ -12,10 +16,6 @@ import {
 import { TuiButton, TuiIcon } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
-import { MemberForm } from '@features/members/pages/member-form/member-form'
-import { MemberService } from '@features/members/services/member-service'
-import { hapticMedium } from '@shared/utils/haptic'
-import { DateUtils } from '@shared/utils/date.utils'
 import { Subject } from 'rxjs'
 
 @Component({
@@ -64,10 +64,19 @@ export class MemberDetails {
   protected isLoading = this.memberService.isLoadingDetail
   protected error = this.memberService.detailError
 
-  private _loadEffect = effect(() => {
-    const id = Number(this.id())
-    if (id) this.memberService.loadMemberDetail(id)
-  })
+  constructor() {
+    effect(() => {
+      const id = Number(this.id())
+      if (id) this.memberService.loadMemberDetail(id)
+    })
+
+    effect(() => {
+      if (this.isPulling() && !this.isLoading()) {
+        this.loaded$.next()
+        this.isPulling.set(false)
+      }
+    })
+  }
 
   protected memberSince = computed(() => {
     const m = this.memberDetail()
@@ -120,13 +129,6 @@ export class MemberDetails {
 
   private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
   private readonly isPulling = signal(false)
-
-  private readonly pullEffect = effect(() => {
-    if (this.isPulling() && !this.isLoading()) {
-      this.loaded$.next()
-      this.isPulling.set(false)
-    }
-  })
 
   protected onPull() {
     this.memberService.memberDetailResource.reload()

@@ -2,8 +2,8 @@ import { Component, effect, inject, signal } from '@angular/core'
 import { MemberCard } from '@features/members/pages/member-card/member-card'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
-import { ConfirmService } from '@shared/services/confirm-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
+import { ConfirmService } from '@shared/services/confirm-service'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
@@ -81,6 +81,15 @@ export class ExpiringMembers {
     this.memberService.search('')
   }
 
+  constructor() {
+    effect(() => {
+      if (this.isPulling() && !this.memberService.isLoading()) {
+        this.loaded$.next()
+        this.isPulling.set(false)
+      }
+    })
+  }
+
   onDeleteMember(id: number) {
     this.confirmSvc
       .open({
@@ -111,17 +120,10 @@ export class ExpiringMembers {
   private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
   private readonly isPulling = signal(false)
 
-  private readonly pullEffect = effect(() => {
-    if (this.isPulling() && !this.memberService.isLoading()) {
-      this.loaded$.next()
-      this.isPulling.set(false)
-    }
-  })
-
   protected onPull() {
     if (window.scrollY > 0) return
     if (!this.isTouchDevice) return
-    this.memberService.page.set(1)
+    this.memberService.resetPage()
     this.memberService.reload()
     this.isPulling.set(true)
   }
