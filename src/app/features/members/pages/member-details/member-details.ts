@@ -1,5 +1,6 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
+import { AuthService } from '@features/auth/services/auth-service'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
@@ -56,7 +57,12 @@ import { Subject } from 'rxjs'
   templateUrl: './member-details.html',
 })
 export class MemberDetails {
-  protected memberService = inject(MemberService)
+  private memberService = inject(MemberService)
+  private authService = inject(AuthService)
+
+  protected isAdmin = this.authService.isAdmin
+  protected isModalOpen = this.memberService.isModalOpen
+  protected editingMemberId = this.memberService.editingMemberId
 
   id = input.required<string>({ alias: 'id' })
 
@@ -127,6 +133,13 @@ export class MemberDetails {
     return DateUtils.formatDateForDisplay(date)
   }
 
+  protected formatShortDate(dateStr: string | null): string {
+    if (!dateStr) return '—'
+    const date = DateUtils.parseDateString(dateStr)
+    if (!date) return '—'
+    return date.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  }
+
   private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
   private readonly isPulling = signal(false)
 
@@ -138,5 +151,9 @@ export class MemberDetails {
   protected onEdit() {
     hapticMedium()
     this.memberService.openEditModal(Number(this.id()))
+  }
+
+  protected closeModal() {
+    this.memberService.closeModal()
   }
 }

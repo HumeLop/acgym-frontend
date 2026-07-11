@@ -375,15 +375,16 @@
         </div>
 
         <!-- INFORMACIÓN DE REGISTRO -->
-        <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
-          <div class="flex items-center gap-3 mb-5">
-            <div
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
-            >
-              <tui-icon icon="@tui.clipboard-list" class="text-(--tui-link)" />
+        @if (isAdmin()) {
+          <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
+            <div class="flex items-center gap-3 mb-5">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
+              >
+                <tui-icon icon="@tui.clipboard-list" class="text-(--tui-link)" />
+              </div>
+              <h2 class="text-lg font-bold text-(--tui-text-primary)">Información de Registro</h2>
             </div>
-            <h2 class="text-lg font-bold text-(--tui-text-primary)">Información de Registro</h2>
-          </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
               <div
@@ -426,8 +427,9 @@
                 </p>
               </div>
             </div>
+            </div>
           </div>
-        </div>
+        }
       </div>
     }
   </div>
@@ -435,10 +437,10 @@
 
 <ng-template
   [tuiResponsiveDialogOptions]="{ size: 'l' }"
-  [(tuiResponsiveDialog)]="paymentService.isModalOpen"
+  [(tuiResponsiveDialog)]="isModalOpen"
 >
   <app-payment-form
-    [paymentId]="paymentService.editingPaymentId()"
-    (close)="paymentService.closeModal()"
+    [paymentId]="editingPaymentId()"
+    (close)="closeModal()"
   />
 </ng-template>

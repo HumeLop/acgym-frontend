@@ -56,13 +56,20 @@ import { Subject } from 'rxjs'
   templateUrl: './user-detail.html',
 })
 export class AdminUserDetail {
-  protected service = inject(UserService)
+  private service = inject(UserService)
 
   id = input.required<string>({ alias: 'id' })
 
   protected detail = this.service.detail
   protected isLoadingDetail = this.service.isLoadingDetail
   protected error = this.service.detailError
+
+  protected isModalOpen = this.service.isModalOpen
+  protected editingId = this.service.editingId
+
+  protected closeModal() {
+    this.service.closeModal()
+  }
 
   protected roleLabel = computed(() => {
     const user = this.detail()

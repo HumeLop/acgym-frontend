@@ -90,14 +90,16 @@
       >
         Pagos
       </a>
-      <a
-        iconStart="@tui.cog"
-        tuiAsideItem
-        routerLink="/admin"
-        routerLinkActive="active-link"
-      >
-        Administración
-      </a>
+      @if (isAdmin()) {
+        <a
+          iconStart="@tui.cog"
+          tuiAsideItem
+          routerLink="/admin"
+          routerLinkActive="active-link"
+        >
+          Administración
+        </a>
+      }
 
       <hr />
 
@@ -140,14 +142,16 @@
     >
       Pagos
     </a>
-    <a
-      icon="@tui.cog"
-      routerLinkActive
-      tuiTabBarItem
-      routerLink="/admin"
-      (click)="onTabTap()"
-    >
-      Administración
-    </a>
+    @if (isAdmin()) {
+      <a
+        icon="@tui.cog"
+        routerLinkActive
+        tuiTabBarItem
+        routerLink="/admin"
+        (click)="onTabTap()"
+      >
+        Administración
+      </a>
+    }
   </nav>
 </div>

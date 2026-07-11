@@ -61,7 +61,7 @@
                 placeholder="Buscar miembro..."
                 [formControl]="memberControl"
                 [matcher]="memberMatcher"
-                (input)="paymentService.searchMembers($any($event.target).value)"
+                (input)="searchMembers($any($event.target).value)"
               />
               <tui-data-list *tuiDropdown emptyContent="No se encontraron miembros">
                 @for (m of memberOptions(); track m.id) {

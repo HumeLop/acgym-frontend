@@ -34,7 +34,7 @@ import { TuiSurface } from '@taiga-ui/layout'
   templateUrl: './payment-form.html',
 })
 export class PaymentForm {
-  protected paymentService = inject(PaymentService)
+  private paymentService = inject(PaymentService)
   private confirmSvc = inject(ConfirmService)
 
   paymentId = input<number | null>(null)
@@ -182,6 +182,10 @@ export class PaymentForm {
           this.close.emit()
         }
       })
+  }
+
+  protected searchMembers(query: string) {
+    this.paymentService.searchMembers(query)
   }
 
   onSave() {

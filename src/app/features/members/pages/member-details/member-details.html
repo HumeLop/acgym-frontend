@@ -136,26 +136,30 @@
         </div>
 
         <!-- STATS HORIZONTAL SCROLL -->
-        <div
-          class="flex gap-3 overflow-x-auto snap-x snap-mandatory sm:grid sm:grid-cols-3 sm:overflow-visible mb-4 -mx-3 sm:mx-0 px-3 sm:px-0"
-        >
           <div
-            tuiSurface="elevated"
-            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+            class="flex gap-3 overflow-x-auto snap-x snap-mandatory sm:grid sm:overflow-visible mb-4 -mx-3 sm:mx-0 px-3 sm:px-0"
+            [class.sm:grid-cols-2]="!isAdmin()"
+            [class.sm:grid-cols-3]="isAdmin()"
           >
+          @if (isAdmin()) {
             <div
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-positive-pale) mb-2"
+              tuiSurface="elevated"
+              class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
             >
-              <tui-icon icon="@tui.weight" class="text-(--tui-status-positive) text-lg" />
-            </div>
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-positive-pale) mb-2"
+              >
+                <tui-icon icon="@tui.weight" class="text-(--tui-status-positive) text-lg" />
+              </div>
             <p class="text-xl font-extrabold text-(--tui-text-primary)">
-              ${{ memberDetail()!.totalPaid }}
-            </p>
-            <span
-              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
-              >Total Pagado</span
-            >
-          </div>
+                ${{ memberDetail()!.totalPaid }}
+              </p>
+              <span
+                class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+                >Total Pagado</span
+              >
+            </div>
+          }
           <div
             tuiSurface="elevated"
             class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
@@ -165,8 +169,8 @@
             >
               <tui-icon icon="@tui.calendar" class="text-(--tui-status-info) text-lg" />
             </div>
-            <p class="text-xl font-extrabold text-(--tui-text-primary)">
-              {{ formatDate(memberDetail()!.lastPaymentDate) }}
+            <p class="text-xl font-extrabold text-center text-(--tui-text-primary)">
+              {{ formatShortDate(memberDetail()!.lastPaymentDate) }}
             </p>
             <span
               class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
@@ -229,44 +233,49 @@
         </div>
 
         <!-- PAYMENT SUMMARY -->
-        <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
-          <div class="flex items-center gap-3 mb-5">
-            <div
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
-            >
-              <tui-icon icon="@tui.history" class="text-(--tui-link)" />
+        @if (isAdmin()) {
+          <div
+            tuiSurface="elevated"
+            class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)"
+          >
+            <div class="flex items-center gap-3 mb-5">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
+              >
+                <tui-icon icon="@tui.history" class="text-(--tui-link)" />
+              </div>
+              <h2 class="text-lg font-bold text-(--tui-text-primary)">Resumen de Pagos</h2>
             </div>
-            <h2 class="text-lg font-bold text-(--tui-text-primary)">Resumen de Pagos</h2>
+            @if (memberDetail()!.paymentSummary) {
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
+                  <p class="text-2xl font-bold text-(--tui-text-primary)">
+                    {{ getPaymentSummary('total_payments') }}
+                  </p>
+                  <p class="text-xs text-(--tui-text-secondary)">Total Pagos</p>
+                </div>
+                <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
+                  <p class="text-2xl font-bold text-(--tui-text-primary)">
+                    ${{ getPaymentSummary('total_spent') }}
+                  </p>
+                  <p class="text-xs text-(--tui-text-secondary)">Total Gastado</p>
+                </div>
+                <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
+                  <p class="text-2xl font-bold text-(--tui-text-primary)">
+                    ${{ getPaymentSummary('average_payment') }}
+                  </p>
+                  <p class="text-xs text-(--tui-text-secondary)">Promedio por Pago</p>
+                </div>
+                <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
+                  <p class="text-2xl font-bold text-(--tui-text-primary)">
+                    {{ getPaymentSummary('active_payments') }}
+                  </p>
+                  <p class="text-xs text-(--tui-text-secondary)">Pagos Activos</p>
+                </div>
+              </div>
+            }
           </div>
-          @if (memberDetail()!.paymentSummary) {
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
-                <p class="text-2xl font-bold text-(--tui-text-primary)">
-                  {{ getPaymentSummary('total_payments') }}
-                </p>
-                <p class="text-xs text-(--tui-text-secondary)">Total Pagos</p>
-              </div>
-              <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
-                <p class="text-2xl font-bold text-(--tui-text-primary)">
-                  ${{ getPaymentSummary('total_spent') }}
-                </p>
-                <p class="text-xs text-(--tui-text-secondary)">Total Gastado</p>
-              </div>
-              <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
-                <p class="text-2xl font-bold text-(--tui-text-primary)">
-                  ${{ getPaymentSummary('average_payment') }}
-                </p>
-                <p class="text-xs text-(--tui-text-secondary)">Promedio por Pago</p>
-              </div>
-              <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
-                <p class="text-2xl font-bold text-(--tui-text-primary)">
-                  {{ getPaymentSummary('active_payments') }}
-                </p>
-                <p class="text-xs text-(--tui-text-secondary)">Pagos Activos</p>
-              </div>
-            </div>
-          }
-        </div>
+        }
       </div>
     }
   </div>
@@ -274,10 +283,10 @@
 
 <ng-template
   [tuiResponsiveDialogOptions]="{ size: 'l' }"
-  [(tuiResponsiveDialog)]="memberService.isModalOpen"
+  [(tuiResponsiveDialog)]="isModalOpen"
 >
   <app-member-form
-    [memberId]="memberService.editingMemberId()"
-    (close)="memberService.closeModal()"
+    [memberId]="editingMemberId()"
+    (close)="closeModal()"
   />
 </ng-template>

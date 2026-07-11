@@ -64,7 +64,7 @@ import { Subject } from 'rxjs'
 })
 export class PaymentsList {
   protected router = inject(Router)
-  protected paymentService = inject(PaymentService)
+  private paymentService = inject(PaymentService)
   private readonly confirmSvc = inject(ConfirmService)
   private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
   protected payments = this.paymentService.payments
@@ -84,7 +84,7 @@ export class PaymentsList {
   statusFilter = this.paymentService.statusFilter
 
   isModalOpen = this.paymentService.isModalOpen
-  isEditingMember = this.paymentService.editingPaymentId
+  isEditingPayment = this.paymentService.editingPaymentId
 
   protected mutationError = this.paymentService.generalError
 
@@ -175,5 +175,17 @@ export class PaymentsList {
     this.paymentService.resetPage()
     this.paymentService.reload()
     this.isPulling.set(true)
+  }
+
+  protected reload() {
+    this.paymentService.reload()
+  }
+
+  protected openEditModal(id: number) {
+    this.paymentService.openEditModal(id)
+  }
+
+  protected openCreateModal() {
+    this.paymentService.openCreateModal()
   }
 }

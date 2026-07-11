@@ -1,28 +1,31 @@
-import { Component, computed, input, output, signal } from '@angular/core'
+import { Component, computed, inject, input, output, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
+import { AuthService } from '@features/auth/services/auth-service'
 import type { Payment } from '@features/payments/models'
 import { DateUtils } from '@shared/utils'
 import { hapticLight } from '@shared/utils/haptic'
 import { TuiRipple, TuiTouchable } from '@taiga-ui/addon-mobile'
 import { TuiSwipe, type TuiSwipeEvent } from '@taiga-ui/cdk'
-import { TuiButton, TuiIcon } from '@taiga-ui/core'
+import { TuiIcon } from '@taiga-ui/core'
 import { TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-payment-card',
-  imports: [RouterLink, TuiIcon, TuiButton, TuiSwipe, TuiSurface, TuiTouchable, TuiRipple],
+  imports: [RouterLink, TuiIcon, TuiSwipe, TuiSurface, TuiTouchable, TuiRipple],
   templateUrl: './payment-card.html',
 })
 export class PaymentCard {
   item = input.required<Payment>()
   isDeleting = input(false)
-  isAdmin = input(false)
 
   edit = output<Payment>()
   delete = output<Payment>()
 
+  private authService = inject(AuthService)
+  protected isAdmin = this.authService.isAdmin
+
   protected swiped = signal(false)
-  protected readonly actionsWidth = 144
+  protected readonly actionsWidth = computed(() => (this.isAdmin() ? 144 : 72))
 
   protected onSwipe(event: TuiSwipeEvent) {
     if (event.direction === 'left') {

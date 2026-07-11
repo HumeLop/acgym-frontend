@@ -56,7 +56,7 @@ import { Subject } from 'rxjs'
   templateUrl: './membership-type-detail.html',
 })
 export class AdminMembershipTypeDetail {
-  protected service = inject(MembershipTypeService)
+  private service = inject(MembershipTypeService)
 
   id = input.required<string>({ alias: 'id' })
 
@@ -65,6 +65,13 @@ export class AdminMembershipTypeDetail {
   protected isLoadingDetail = this.service.isLoadingDetail
   protected isLoadingStats = this.service.isLoadingStats
   protected error = this.service.detailError
+
+  protected isModalOpen = this.service.isModalOpen
+  protected editingId = this.service.editingId
+
+  protected closeModal() {
+    this.service.closeModal()
+  }
 
   protected isLoading = computed(() => this.isLoadingDetail() || this.isLoadingStats())
 

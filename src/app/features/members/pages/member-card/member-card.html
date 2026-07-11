@@ -12,7 +12,7 @@
 
   <div
     class="flex transition-transform duration-200 ease-out"
-    [style.transform]="swiped() ? 'translateX(-' + actionsWidth + 'px)' : 'translateX(0)'"
+    [style.transform]="swiped() ? 'translateX(-' + actionsWidth() + 'px)' : 'translateX(0)'"
   >
     <a class="w-full shrink-0" [routerLink]="['/members', member().id]" (click)="closeSwipe()">
       @let m = member();
@@ -176,9 +176,10 @@
           }
         </div>
       </div>
+      <div class="border-t-8 border-(--tui-border-normal)"></div>
     </a>
 
-    <div class="flex shrink-0 lg:hidden" [style.width.px]="actionsWidth">
+    <div class="flex shrink-0 lg:hidden" [style.width.px]="actionsWidth()">
       <button
         class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-primary) hover:bg-(--tui-primary-hover) text-white transition-colors"
         (click)="$event.stopPropagation(); edit.emit(member().id); closeSwipe()"
@@ -186,13 +187,15 @@
         <tui-icon icon="@tui.pencil" class="text-xl" />
         <span class="text-xs font-semibold">Editar</span>
       </button>
-      <button
-        class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-status-negative) hover:bg-red-700 text-white transition-colors"
-        (click)="$event.stopPropagation(); delete.emit(member().id); closeSwipe()"
-      >
-        <tui-icon icon="@tui.trash-2" class="text-xl" />
-        <span class="text-xs font-semibold">Eliminar</span>
-      </button>
+      @if (isAdmin()) {
+        <button
+          class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-status-negative) hover:bg-red-700 text-white transition-colors"
+          (click)="$event.stopPropagation(); delete.emit(member().id); closeSwipe()"
+        >
+          <tui-icon icon="@tui.trash-2" class="text-xl" />
+          <span class="text-xs font-semibold">Eliminar</span>
+        </button>
+      }
     </div>
   </div>
 </div>

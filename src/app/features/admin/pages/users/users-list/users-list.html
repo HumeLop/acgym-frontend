@@ -38,7 +38,7 @@
               appearance="flat"
               size="s"
               tuiButton
-              (click)="service.reload()"
+              (click)="reload()"
               class="shrink-0"
             >
               <tui-icon icon="@tui.refresh-ccw" class="mr-1" />
@@ -57,7 +57,7 @@
             class="animate-fade-in-up"
             [style.animation-delay.ms]="i * 50"
             [user]="user"
-            (edit)="service.openEditModal($event)"
+            (edit)="openEditModal($event)"
             (delete)="onDelete($event)"
             (viewDetail)="null"
           />
@@ -120,7 +120,7 @@
                 size="m"
                 tuiButton
                 class="mt-3"
-                (click)="service.openCreateModal()"
+(click)="openCreateModal()"
               >
                 <tui-icon icon="@tui.plus" />
                 Agregar Usuario
@@ -137,7 +137,7 @@
     tuiRipple
     class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
     title="Agregar usuario"
-    (click)="service.openCreateModal()"
+    (click)="openCreateModal()"
   >
     <tui-icon icon="@tui.plus" class="text-white text-2xl" />
   </button>
@@ -145,5 +145,5 @@
 
 <!-- MODAL -->
 <ng-template [tuiResponsiveDialogOptions]="{ size: 'm' }" [(tuiResponsiveDialog)]="isModalOpen">
-  <app-admin-user-form [userId]="editingId()" (close)="service.closeModal()" />
+  <app-admin-user-form [userId]="editingId()" (close)="closeModal()" />
 </ng-template>

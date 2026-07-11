@@ -2,9 +2,10 @@ import { CurrencyPipe } from '@angular/common'
 import { Component, computed, effect, inject, signal } from '@angular/core'
 import { FormField, form } from '@angular/forms/signals'
 import { Router, RouterLink } from '@angular/router'
-import { MemberService } from '@app/features/members/services/member-service'
+import { AuthService } from '@features/auth/services/auth-service'
 import { StatsCard } from '@features/dashboard/pages/stats-card/stats-card'
 import { DashboardService } from '@features/dashboard/services/dashboard-service'
+import { MemberService } from '@features/members/services/member-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
 import { TuiAxes, TuiBarChart, TuiChartHint, TuiLegendItem, TuiRingChart } from '@taiga-ui/addon-charts'
 import {
@@ -72,7 +73,10 @@ import { Subject } from 'rxjs'
 export class Dashboard {
   private dashboardService = inject(DashboardService)
   private memberService = inject(MemberService)
+  private authService = inject(AuthService)
   private router = inject(Router)
+
+  protected isAdmin = this.authService.isAdmin
 
   protected dashboardStats = this.dashboardService.dashboardStats
   protected paymentMethodsData = this.dashboardService.paymentMethodsList

@@ -27,56 +27,60 @@
     <!-- STATS -->
     <div class="px-3 sm:px-6 mt-6 animate-fade-in-up">
       <div
-        class="flex gap-3 overflow-x-auto snap-x snap-mandatory sm:grid sm:grid-cols-4 sm:overflow-visible"
+        class="flex gap-3 overflow-x-auto snap-x snap-mandatory sm:grid sm:overflow-visible"
+        [class.sm:grid-cols-2]="!isAdmin()"
+        [class.sm:grid-cols-4]="isAdmin()"
       >
-        <div
-          tuiSurface="elevated"
-          class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
-        >
+        @if (isAdmin()) {
           <div
-            class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-info-pale) mb-2"
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
           >
-            <tui-icon icon="@tui.credit-card" class="text-(--tui-status-info) text-lg" />
-          </div>
-          @if (stats(); as s) {
-            <span class="text-xl font-extrabold text-(--tui-text-primary)">{{
-              s.totalPayments
-            }}</span>
-            <div class="w-full h-1 rounded-full bg-(--tui-background-neutral-1) mt-2">
-              <div
-                class="h-full rounded-full bg-(--tui-primary) transition-all duration-500"
-                [style.width.%]="s.totalPayments ? (s.activePayments / s.totalPayments) * 100 : 0"
-              ></div>
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-info-pale) mb-2"
+            >
+              <tui-icon icon="@tui.credit-card" class="text-(--tui-status-info) text-lg" />
             </div>
-          } @else {
-            <span tuiSkeleton class="h-7 w-12 rounded-lg"></span>
-            <div class="w-full h-1 rounded-full bg-(--tui-background-neutral-1) mt-2"></div>
-          }
-          <span
-            class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
-            >Total</span
-          >
-        </div>
-
-        <div
-          tuiSurface="elevated"
-          class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
-        >
-          <div
-            class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-positive-pale) mb-2"
-          >
-            <tui-icon icon="@tui.dollar-sign" class="text-(--tui-status-positive) text-lg" />
+            @if (stats(); as s) {
+              <span class="text-xl font-extrabold text-(--tui-text-primary)">{{
+                s.totalPayments
+              }}</span>
+              <div class="w-full h-1 rounded-full bg-(--tui-background-neutral-1) mt-2">
+                <div
+                  class="h-full rounded-full bg-(--tui-primary) transition-all duration-500"
+                  [style.width.%]="s.totalPayments ? (s.activePayments / s.totalPayments) * 100 : 0"
+                ></div>
+              </div>
+            } @else {
+              <span tuiSkeleton class="h-7 w-12 rounded-lg"></span>
+              <div class="w-full h-1 rounded-full bg-(--tui-background-neutral-1) mt-2"></div>
+            }
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Total</span
+            >
           </div>
-          @if (stats(); as s) {
-            <span class="text-xl font-extrabold text-(--tui-primary)">${{ s.totalAmount }}</span>
-          } @else {
-            <span tuiSkeleton class="h-7 w-16 rounded-lg"></span>
-          }
-          <span
-            class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
-            >Monto</span
+
+          <div
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
           >
-        </div>
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-positive-pale) mb-2"
+            >
+              <tui-icon icon="@tui.dollar-sign" class="text-(--tui-status-positive) text-lg" />
+            </div>
+            @if (stats(); as s) {
+              <span class="text-xl font-extrabold text-(--tui-primary)">${{ s.totalAmount }}</span>
+            } @else {
+              <span tuiSkeleton class="h-7 w-16 rounded-lg"></span>
+            }
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Monto</span
+            >
+          </div>
+        }
 
         <div
           tuiSurface="elevated"
@@ -182,7 +186,7 @@
                 <span class="text-sm font-semibold text-(--tui-text-secondary)">{{
                   entry.value
                 }}</span>
-                @if (s.amountByMethod[entry.key]; as amt) {
+                @if (isAdmin() && s.amountByMethod[entry.key]; as amt) {
                   <span class="text-xs text-(--tui-text-tertiary)">${{ amt }}</span>
                 }
               </div>
@@ -196,7 +200,7 @@
       tuiRipple
       class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
       title="Registrar Pago"
-      (click)="paymentService.openCreateModal()"
+      (click)="openCreateModal()"
     >
       <tui-icon icon="@tui.plus" class="text-white text-2xl" />
     </button>
@@ -204,5 +208,5 @@
 </tui-pull-to-refresh>
 
 <ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">
-  <app-payment-form [paymentId]="isEditingPayment()" (close)="paymentService.closeModal()" />
+  <app-payment-form [paymentId]="isEditingPayment()" (close)="closeModal()" />
 </ng-template>

@@ -195,7 +195,7 @@
 
 <ng-template
   [tuiResponsiveDialogOptions]="{ size: 'l' }"
-  [(tuiResponsiveDialog)]="service.isModalOpen"
+  [(tuiResponsiveDialog)]="isModalOpen"
 >
-  <app-admin-user-form [userId]="service.editingId()" (close)="service.closeModal()" />
+  <app-admin-user-form [userId]="editingId()" (close)="closeModal()" />
 </ng-template>

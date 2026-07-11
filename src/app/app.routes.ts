@@ -1,9 +1,16 @@
 import type { Routes } from '@angular/router'
+import { adminGuard } from '@core/guards/admin-guard'
+import { authGuard } from '@core/guards/auth-guard'
 
 export const routes: Routes = [
   {
+    path: 'login',
+    loadChildren: () => import('@features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
+  },
+  {
     path: '',
     loadComponent: () => import('@core/layout/shell/shell').then((m) => m.Shell),
+    canMatch: [authGuard],
     children: [
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
       {
@@ -20,8 +27,10 @@ export const routes: Routes = [
       },
       {
         path: 'admin',
+        canMatch: [adminGuard],
         loadChildren: () => import('@features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
       },
     ],
   },
+  { path: '**', redirectTo: '/login' },
 ]

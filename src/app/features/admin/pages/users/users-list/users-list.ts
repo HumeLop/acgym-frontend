@@ -54,7 +54,7 @@ import { Subject } from 'rxjs'
   templateUrl: './users-list.html',
 })
 export class AdminUsersList {
-  protected service = inject(UserService)
+  private service = inject(UserService)
   private confirmSvc = inject(ConfirmService)
   private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
 
@@ -65,6 +65,22 @@ export class AdminUsersList {
 
   protected isModalOpen = this.service.isModalOpen
   protected editingId = this.service.editingId
+
+  protected reload() {
+    this.service.reload()
+  }
+
+  protected openEditModal(id: number) {
+    this.service.openEditModal(id)
+  }
+
+  protected openCreateModal() {
+    this.service.openCreateModal()
+  }
+
+  protected closeModal() {
+    this.service.closeModal()
+  }
 
   protected onDelete(id: number) {
     this.confirmSvc
@@ -85,6 +101,6 @@ export class AdminUsersList {
     if (window.scrollY > 0) return
     if (!this.isTouchDevice) return
 
-    this.service.reload()
+    this.reload()
   }
 }

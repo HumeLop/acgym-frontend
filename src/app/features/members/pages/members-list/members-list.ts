@@ -1,5 +1,6 @@
 import { Component, computed, effect, inject, signal } from '@angular/core'
 import { Router } from '@angular/router'
+import { AuthService } from '@features/auth/services/auth-service'
 import { MemberCard } from '@features/members/pages/member-card/member-card'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
@@ -62,8 +63,12 @@ import { Subject } from 'rxjs'
   templateUrl: './members-list.html',
 })
 export class MembersList {
+  private memberService = inject(MemberService)
+  private authService = inject(AuthService)
   protected router = inject(Router)
-  protected memberService = inject(MemberService)
+
+  protected isAdmin = this.authService.isAdmin
+
   private readonly confirmSvc = inject(ConfirmService)
   private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
   protected members = this.memberService.members
@@ -163,5 +168,17 @@ export class MembersList {
     this.memberService.resetPage()
     this.memberService.reload()
     this.isPulling.set(true)
+  }
+
+  protected reload() {
+    this.memberService.reload()
+  }
+
+  protected openEditModal(id: number) {
+    this.memberService.openEditModal(id)
+  }
+
+  protected openCreateModal() {
+    this.memberService.openCreateModal()
   }
 }

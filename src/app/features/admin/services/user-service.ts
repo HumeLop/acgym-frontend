@@ -60,7 +60,7 @@ export class UserService {
 
   create(data: UserRequestDto): Observable<User> {
     this._isCreating.set(true)
-    return this.http.post<User>(`${this.apiURL}/`, data).pipe(
+    return this.http.post<User>(`${this.apiURL}/register/`, data).pipe(
       tap(() => {
         this.usersResource.reload()
         this.isModalOpen.set(false)

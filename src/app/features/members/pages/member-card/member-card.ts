@@ -1,5 +1,6 @@
-import { Component, computed, input, output, signal } from '@angular/core'
+import { Component, computed, inject, input, output, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
+import { AuthService } from '@features/auth/services/auth-service'
 import type { Member } from '@features/members/models'
 import { hapticLight } from '@shared/utils/haptic'
 import { TuiRipple, TuiTouchable } from '@taiga-ui/addon-mobile'
@@ -16,12 +17,15 @@ import { TuiSurface } from '@taiga-ui/layout'
 })
 export class MemberCard {
   member = input.required<Member>()
+  private authService = inject(AuthService)
+
+  protected isAdmin = this.authService.isAdmin
 
   edit = output<number>()
   delete = output<number>()
 
   protected swiped = signal(false)
-  protected readonly actionsWidth = 144
+  protected readonly actionsWidth = computed(() => (this.isAdmin() ? 144 : 72))
 
   protected readonly progressValue = computed(() => {
     const days = this.member().daysUntilExpiration

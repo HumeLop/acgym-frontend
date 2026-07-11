@@ -1,6 +1,7 @@
 import { KeyValuePipe } from '@angular/common'
 import { Component, effect, inject, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
+import { AuthService } from '@features/auth/services/auth-service'
 import { PaymentForm } from '@features/payments/pages/payment-form/payment-form'
 import { PaymentService } from '@features/payments/services/payment-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
@@ -56,9 +57,11 @@ import { Subject } from 'rxjs'
   templateUrl: './payment-dashboard.html',
 })
 export class PaymentDashboard {
-  protected paymentService = inject(PaymentService)
+  private paymentService = inject(PaymentService)
+  private authService = inject(AuthService)
   private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
 
+  protected isAdmin = this.authService.isAdmin
   protected stats = this.paymentService.paymentStats
   protected loading = this.paymentService.isLoadingStats
   protected isModalOpen = this.paymentService.isModalOpen
@@ -81,5 +84,13 @@ export class PaymentDashboard {
     if (!this.isTouchDevice) return
     this.paymentService.reload()
     this.isPulling.set(true)
+  }
+
+  protected openCreateModal() {
+    this.paymentService.openCreateModal()
+  }
+
+  protected closeModal() {
+    this.paymentService.closeModal()
   }
 }

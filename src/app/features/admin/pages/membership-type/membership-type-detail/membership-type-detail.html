@@ -317,7 +317,7 @@
 
 <ng-template
   [tuiResponsiveDialogOptions]="{ size: 'l' }"
-  [(tuiResponsiveDialog)]="service.isModalOpen"
+  [(tuiResponsiveDialog)]="isModalOpen"
 >
-  <app-admin-membership-type-form [typeId]="service.editingId()" (close)="service.closeModal()" />
+  <app-admin-membership-type-form [typeId]="editingId()" (close)="closeModal()" />
 </ng-template>

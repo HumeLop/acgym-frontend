@@ -1,8 +1,12 @@
 import { httpResource } from '@angular/common/http'
 import { computed, Service } from '@angular/core'
 import { environment } from '@environments/environment'
-import { toDashboardStats, toMonthlyIncome, toPaymentMethodsStats } from '../adapters/dashboard.adapter'
-import type { DashboardStatsEntity, MonthlyIncomeEntity, PaymentMethodsStatsEntity } from '../models/dashboard.entity'
+import {
+  toDashboardStats,
+  toMonthlyIncome,
+  toPaymentMethodsStats,
+} from '@features/dashboard/adapters/dashboard.adapter'
+import type { DashboardStatsEntity, MonthlyIncomeEntity, PaymentMethodsStatsEntity } from '@features/dashboard/models'
 
 @Service()
 export class DashboardService {

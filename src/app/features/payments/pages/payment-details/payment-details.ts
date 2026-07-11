@@ -1,5 +1,6 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
+import { AuthService } from '@features/auth/services/auth-service'
 import { PaymentForm } from '@features/payments/pages/payment-form/payment-form'
 import { PaymentService } from '@features/payments/services/payment-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
@@ -57,7 +58,12 @@ import { Subject } from 'rxjs'
   templateUrl: './payment-details.html',
 })
 export class PaymentDetails {
-  protected paymentService = inject(PaymentService)
+  private paymentService = inject(PaymentService)
+  private authService = inject(AuthService)
+
+  protected isAdmin = this.authService.isAdmin
+  protected isModalOpen = this.paymentService.isModalOpen
+  protected editingPaymentId = this.paymentService.editingPaymentId
 
   id = input.required<string>({ alias: 'id' })
 
@@ -113,5 +119,9 @@ export class PaymentDetails {
   protected onEdit() {
     hapticMedium()
     this.paymentService.openEditModal(Number(this.id()))
+  }
+
+  protected closeModal() {
+    this.paymentService.closeModal()
   }
 }

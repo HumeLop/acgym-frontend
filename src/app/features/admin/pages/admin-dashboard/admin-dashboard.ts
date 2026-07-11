@@ -14,7 +14,7 @@ import { TuiSurface } from '@taiga-ui/layout'
   templateUrl: './admin-dashboard.html',
 })
 export class AdminDashboard {
-  protected userService = inject(UserService)
+  private userService = inject(UserService)
   private membershipTypeService = inject(MembershipTypeService)
 
   protected readonly loading = computed(() => this.userService.isLoading() || this.membershipTypeService.isLoading())
@@ -41,4 +41,15 @@ export class AdminDashboard {
       route: '/admin/membership-types',
     },
   ]
+
+  protected isModalOpen = this.userService.isModalOpen
+  protected editingId = this.userService.editingId
+
+  protected openCreateModal() {
+    this.userService.openCreateModal()
+  }
+
+  protected closeModal() {
+    this.userService.closeModal()
+  }
 }

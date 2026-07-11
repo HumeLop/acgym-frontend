@@ -101,13 +101,7 @@
               <tui-icon icon="@tui.alert-triangle" class="shrink-0 text-base" />
               <span class="text-sm font-semibold">Error al cargar los pagos</span>
             </div>
-            <button
-              appearance="flat"
-              size="s"
-              tuiButton
-              (click)="paymentService.reload()"
-              class="shrink-0"
-            >
+            <button appearance="flat" size="s" tuiButton (click)="reload()" class="shrink-0">
               <tui-icon icon="@tui.refresh-ccw" class="mr-1" />
               Reintentar
             </button>
@@ -134,8 +128,6 @@
               [style.animation-delay.ms]="i * 50"
               class="animate-fade-in-up"
               [item]="payment"
-              (edit)="paymentService.openEditModal($event.id)"
-              (delete)="onDeletePayment($event.id)"
             />
           }
         </div>
@@ -206,7 +198,7 @@
                     size="m"
                     tuiButton
                     class="mt-3"
-                    (click)="paymentService.openCreateModal()"
+                    (click)="openCreateModal()"
                   >
                     <tui-icon icon="@tui.dollar-sign" />
                     Registrar Pago
@@ -224,7 +216,7 @@
       tuiRipple
       class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
       title="Registrar pago"
-      (click)="paymentService.openCreateModal()"
+      (click)="openCreateModal()"
     >
       <tui-icon icon="@tui.plus" class="text-white text-2xl" />
     </button>
@@ -233,5 +225,5 @@
 
 <!-- MODAL -->
 <ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">
-  <app-payment-form [paymentId]="isEditingMember()" (close)="closeModal()" />
+  <app-payment-form [paymentId]="isEditingPayment()" (close)="closeModal()" />
 </ng-template>

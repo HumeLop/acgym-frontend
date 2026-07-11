@@ -2,12 +2,13 @@ import { Component, inject } from '@angular/core'
 import { toSignal } from '@angular/core/rxjs-interop'
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
 import { ThemeService } from '@core/services/theme-service'
+import { AuthService } from '@features/auth/services/auth-service'
+import { ConfirmService } from '@shared/services/confirm-service'
+import { hapticLight } from '@shared/utils/haptic'
 import { TuiTabBar } from '@taiga-ui/addon-mobile'
 import { TuiIcon } from '@taiga-ui/core'
 import { TuiTooltip } from '@taiga-ui/kit'
 import { TuiNavigation } from '@taiga-ui/layout'
-import { ConfirmService } from '@shared/services/confirm-service'
-import { hapticLight } from '@shared/utils/haptic'
 import { filter, map, startWith } from 'rxjs'
 
 @Component({
@@ -20,9 +21,11 @@ export class Shell {
   private readonly router = inject(Router)
   private readonly themeSvc = inject(ThemeService)
   private readonly confirmSvc = inject(ConfirmService)
+  private readonly authSvc = inject(AuthService)
 
   protected readonly isDark = this.themeSvc.isDark
   protected readonly mode = this.themeSvc.modeIndex
+  protected readonly isAdmin = this.authSvc.isAdmin
 
   protected readonly modeIcons = ['@tui.sun', '@tui.moon', '@tui.sun-moon']
   protected readonly modeLabels = ['Claro', 'Oscuro', 'Sistema']
@@ -38,9 +41,9 @@ export class Shell {
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
       map(() => this.getTabTitle(this.router.url.split('?')[0])),
-      startWith(this.getTabTitle(this.router.url.split('?')[0])),
+      startWith(this.getTabTitle(this.router.url.split('?')[0]))
     ),
-    { initialValue: 'Inicio' },
+    { initialValue: 'Inicio' }
   )
 
   private getTabTitle(path: string): string {
@@ -65,7 +68,7 @@ export class Shell {
       })
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.router.navigate(['/dashboard'])
+          this.authSvc.logout()
         }
       })
   }
