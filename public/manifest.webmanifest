@@ -10,6 +10,9 @@
   "scope": "./",
   "start_url": "./",
   "orientation": "portrait-primary",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
   "categories": ["business", "fitness", "productivity"],
   "icons": [
     {

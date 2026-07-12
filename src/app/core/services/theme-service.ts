@@ -1,6 +1,6 @@
 import { computed, effect, inject, Service, signal } from '@angular/core'
-import { TUI_DARK_MODE } from '@taiga-ui/core'
 import { TuiThemeColorService } from '@taiga-ui/addon-mobile'
+import { TUI_DARK_MODE } from '@taiga-ui/core'
 
 export type ThemeMode = 'light' | 'dark' | 'system'
 

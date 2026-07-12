@@ -1,0 +1,35 @@
+@if (isVisible) {
+  <div
+    class="fixed bottom-20 left-1/2 z-50 w-[90%] max-w-lg -translate-x-1/2 rounded-2xl border shadow-2xl bg-(--tui-background-elevation-1) border-(--tui-border-normal) p-5 animate-fade-in-up lg:bottom-6"
+  >
+    <div class="flex items-start gap-4">
+      <div
+        class="flex items-center justify-center shrink-0 w-12 h-12 rounded-full bg-(--acgym-section-orange-pale)"
+      >
+        <tui-icon icon="@tui.rocket" class="text-(--tui-primary)" />
+      </div>
+
+      <div class="flex-1 min-w-0">
+        <h3 class="text-sm font-bold text-(--tui-text-primary)">Actualizacion Disponible</h3>
+        <p class="mt-1 text-xs leading-relaxed text-(--tui-text-secondary)">
+          Hay una nueva version de la aplicacion lista para ser instalada.
+        </p>
+
+        <div class="flex gap-3 mt-4">
+          <button
+            tuiButton
+            size="s"
+            appearance="primary"
+            [loading]="isUpdating()"
+            (click)="onUpdate()"
+          >
+            Actualizar ahora
+          </button>
+          <button tuiButton size="s" appearance="outline-grayscale" (click)="onDismiss()">
+            Mas tarde
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
