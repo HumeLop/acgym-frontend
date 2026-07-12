@@ -5,8 +5,8 @@ import { MemberCard } from '@features/members/pages/member-card/member-card'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
-import { ConfirmService } from '@shared/services/confirm-service'
 import { Sentinel } from '@shared/directives/sentinel'
+import { ConfirmService } from '@shared/services/confirm-service'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
@@ -76,6 +76,7 @@ export class MembersList {
   protected members = this.memberService.members
   protected totalMembers = this.memberService.totalMembers
   protected hasMembers = computed(() => (this.members() ?? []).length > 0)
+  protected hasMorePages = computed(() => this.page() * this.pageSize() < this.totalMembers())
   protected page = this.memberService.page
   protected pageSize = this.memberService.pageSize
   protected nextPage = this.memberService.nextPage
@@ -84,6 +85,7 @@ export class MembersList {
   protected isDeleting = this.memberService.isDeleting
   protected error = this.memberService.error
   protected activeTabIndex = signal(0)
+  protected sentinelDisabled = computed(() => this.isLoading() || !this.hasMorePages())
   searchTerm = this.memberService.searchTerm
   statusFilter = this.memberService.statusFilter
 
@@ -184,7 +186,7 @@ export class MembersList {
   }
 
   protected onLoadMore() {
-    if (!this.isLoading()) {
+    if (!this.isLoading() && this.hasMorePages()) {
       this.memberService.nextPage()
     }
   }

@@ -101,13 +101,7 @@
               <tui-icon icon="@tui.alert-triangle" class="shrink-0 text-base" />
               <span class="text-sm font-semibold">Error al cargar los miembros</span>
             </div>
-            <button
-              appearance="flat"
-              size="s"
-              tuiButton
-              (click)="reload()"
-              class="shrink-0"
-            >
+            <button appearance="flat" size="s" tuiButton (click)="reload()" class="shrink-0">
               <tui-icon icon="@tui.refresh-ccw" class="mr-1" />
               Reintentar
             </button>
@@ -129,7 +123,11 @@
           />
         }
       </div>
-      <div appSentinel (sentinelVisible)="onLoadMore()"></div>
+      <div
+        appSentinel
+        [appSentinelDisabled]="sentinelDisabled()"
+        (sentinelVisible)="onLoadMore()"
+      ></div>
     }
 
     <!-- SKELETON -->

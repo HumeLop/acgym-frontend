@@ -4,8 +4,8 @@ import { PaymentCard } from '@features/payments/pages/payment-card/payment-card'
 import { PaymentForm } from '@features/payments/pages/payment-form/payment-form'
 import { PaymentService } from '@features/payments/services/payment-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
-import { ConfirmService } from '@shared/services/confirm-service'
 import { Sentinel } from '@shared/directives/sentinel'
+import { ConfirmService } from '@shared/services/confirm-service'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
@@ -72,6 +72,7 @@ export class PaymentsList {
   protected payments = this.paymentService.payments
   protected totalPayments = this.paymentService.totalPayments
   protected hasPayments = computed(() => (this.payments() ?? []).length > 0)
+  protected hasMorePages = computed(() => this.page() * this.pageSize() < this.totalPayments())
   protected page = this.paymentService.page
   protected pageSize = this.paymentService.pageSize
   protected nextPage = this.paymentService.nextPage
@@ -81,6 +82,7 @@ export class PaymentsList {
   protected isDeleting = this.paymentService.isDeleting
   protected error = this.paymentService.error
   protected activeTabIndex = signal(0)
+  protected sentinelDisabled = computed(() => this.isLoading() || !this.hasMorePages())
 
   searchTerm = this.paymentService.searchTerm
   statusFilter = this.paymentService.statusFilter
@@ -191,7 +193,7 @@ export class PaymentsList {
   }
 
   protected onLoadMore() {
-    if (!this.isLoading()) {
+    if (!this.isLoading() && this.hasMorePages()) {
       this.paymentService.nextPage()
     }
   }

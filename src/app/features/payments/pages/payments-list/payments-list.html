@@ -131,7 +131,11 @@
             />
           }
         </div>
-        <div appSentinel (sentinelVisible)="onLoadMore()"></div>
+        <div
+          appSentinel
+          [appSentinelDisabled]="sentinelDisabled()"
+          (sentinelVisible)="onLoadMore()"
+        ></div>
       }
 
       <!-- SKELETON -->
