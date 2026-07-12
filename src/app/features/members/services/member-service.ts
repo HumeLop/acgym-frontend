@@ -179,10 +179,12 @@ export class MemberService {
   }
 
   readonly members = computed(() => {
-    if (this.membersResource.status() === 'error') {
-      return []
-    }
     const term = this.searchTerm().trim()
+    if (this.membersResource.status() === 'error') {
+      if (!term) return this.cachedMembers().map(toMember)
+      const localTerm = this.localResults()
+      return localTerm.length > 0 ? localTerm.map(toMember) : this.cachedMembers().map(toMember)
+    }
     if (!term) {
       return this.membersResource.value()?.results?.map(toMember) ?? []
     }
@@ -326,5 +328,9 @@ export class MemberService {
 
   reload() {
     this.membersResource.reload()
+  }
+
+  reloadExpiring() {
+    this.expiringMembersResource.reload()
   }
 }

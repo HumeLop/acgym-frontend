@@ -174,9 +174,8 @@ export class PaymentsList {
     if (window.scrollY > 0) return
     if (!this.isTouchDevice) return
 
-    this.paymentService.resetPage()
-    this.paymentService.reload()
     this.isPulling.set(true)
+    this.paymentService.resetPage()
   }
 
   protected reload() {

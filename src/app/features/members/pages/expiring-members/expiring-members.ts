@@ -123,8 +123,8 @@ export class ExpiringMembers {
   protected onPull() {
     if (window.scrollY > 0) return
     if (!this.isTouchDevice) return
-    this.memberService.resetPage()
-    this.memberService.reload()
+
     this.isPulling.set(true)
+    this.memberService.reloadExpiring()
   }
 }

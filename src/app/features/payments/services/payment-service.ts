@@ -234,10 +234,11 @@ export class PaymentService {
   })
 
   readonly payments = computed(() => {
-    if (this.paymentsResource.status() === 'error') {
-      return []
-    }
     const term = this.searchTerm().trim()
+    if (this.paymentsResource.status() === 'error') {
+      if (!term) return toPayments(this.cachedPayments())
+      return this.localResults().length > 0 ? toPayments(this.localResults()) : toPayments(this.cachedPayments())
+    }
     if (!term) {
       const results = this.paymentsResource.value()?.results ?? []
       return toPayments(results)

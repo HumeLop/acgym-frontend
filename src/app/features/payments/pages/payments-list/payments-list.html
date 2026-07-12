@@ -94,7 +94,7 @@
       </div>
 
       <!-- ERROR -->
-      @if (error() || status() === 'error') {
+      @if (error() && !isLoading()) {
         <div tuiNotification appearance="error" size="m">
           <div class="flex items-center justify-between gap-3">
             <div class="flex items-center gap-2 min-w-0">
