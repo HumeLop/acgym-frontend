@@ -45,6 +45,7 @@ Thumbs.db
 
 # Generated at build time from template
 /public/_headers
+/public/splash-tags.html
 
 # Environment files (contienen información sensible)
 /src/environments/environment.ts

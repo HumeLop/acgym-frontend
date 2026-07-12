@@ -12,6 +12,7 @@
     <span class="ml-auto flex items-center gap-2 px-4">
       <button
         tuiHeaderCell
+        tuiTouchable="opacity"
         type="button"
         class="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-(--acgym-header-text-secondary) hover:bg-(--acgym-header-hover)"
         (click)="nextMode()"
@@ -26,6 +27,7 @@
 
       <button
         type="button"
+        tuiTouchable="opacity"
         class="flex items-center justify-center rounded-xl p-2 transition-colors text-(--acgym-header-text-secondary) hover:bg-(--acgym-header-hover)"
         [attr.aria-label]="'Cerrar sesión'"
         (click)="onLogout()"
@@ -44,6 +46,7 @@
     <span class="ml-auto flex items-center gap-1">
       <button
         type="button"
+        tuiTouchable="opacity"
         class="flex items-center justify-center rounded-xl p-2 text-(--tui-text-tertiary) transition-colors hover:bg-white/10"
         (click)="nextMode()"
         [attr.aria-label]="modeAriaLabels[mode()]"
@@ -53,6 +56,7 @@
 
       <button
         type="button"
+        tuiTouchable="opacity"
         class="flex items-center justify-center rounded-xl p-2 transition-colors text-(--tui-text-secondary) hover:bg-(--tui-clear-hover)"
         [attr.aria-label]="'Cerrar sesión'"
         (click)="onLogout()"
@@ -65,10 +69,11 @@
   <div class="flex flex-1 min-h-0">
     <aside [tuiNavigationAside]="true" class="aside-desktop">
       <header>
-        <a
-          iconStart="@tui.layout-dashboard"
-          tuiAsideItem
-          routerLink="/dashboard"
+      <a
+        tuiTouchable="opacity"
+        iconStart="@tui.layout-dashboard"
+        tuiAsideItem
+        routerLink="/dashboard"
           routerLinkActive="active-link"
           [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -78,11 +83,12 @@
 
       <span class="aside-label">MENÚ</span>
 
-      <a iconStart="@tui.users" tuiAsideItem routerLink="/members" routerLinkActive="active-link">
+      <a tuiTouchable="opacity" iconStart="@tui.users" tuiAsideItem routerLink="/members" routerLinkActive="active-link">
         Miembros
       </a>
 
       <a
+        tuiTouchable="opacity"
         iconStart="@tui.credit-card"
         tuiAsideItem
         routerLink="/payments"
@@ -92,6 +98,7 @@
       </a>
       @if (isAdmin()) {
         <a
+          tuiTouchable="opacity"
           iconStart="@tui.cog"
           tuiAsideItem
           routerLink="/admin"
@@ -115,6 +122,7 @@
 
   <nav tuiTabBar class="tab-bar-mobile">
     <a
+      tuiRipple
       icon="@tui.layout-dashboard"
       routerLinkActive
       tuiTabBarItem

@@ -1,11 +1,13 @@
 import { computed, effect, inject, Service, signal } from '@angular/core'
 import { TUI_DARK_MODE } from '@taiga-ui/core'
+import { TuiThemeColorService } from '@taiga-ui/addon-mobile'
 
 export type ThemeMode = 'light' | 'dark' | 'system'
 
 @Service()
 export class ThemeService {
   private readonly darkModeSvc = inject(TUI_DARK_MODE)
+  private readonly themeColorSvc = inject(TuiThemeColorService)
   private readonly mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
   readonly osPrefersDark = signal(this.mediaQuery.matches)
@@ -35,6 +37,7 @@ export class ThemeService {
       }
 
       this.darkModeSvc.set(isDark)
+      this.themeColorSvc.color = isDark ? '#0d1424' : '#f97316'
       document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
       document.documentElement.setAttribute('tuiTheme', isDark ? 'dark' : 'light')
     })
