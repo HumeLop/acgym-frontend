@@ -106,7 +106,7 @@ export class AuthService {
     this._accessToken.set(null)
     this._refreshToken.set(null)
     this._user.set(null)
-    this.router.navigate(['/login'])
+    location.replace('/login')
   }
 
   private restoreSession() {
