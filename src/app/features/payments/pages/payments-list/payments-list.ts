@@ -5,6 +5,7 @@ import { PaymentForm } from '@features/payments/pages/payment-form/payment-form'
 import { PaymentService } from '@features/payments/services/payment-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
 import { ConfirmService } from '@shared/services/confirm-service'
+import { Sentinel } from '@shared/directives/sentinel'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
@@ -37,6 +38,7 @@ import { Subject } from 'rxjs'
     TuiElasticSticky,
     TuiSkeleton,
     TuiCardLarge,
+    Sentinel,
   ],
   providers: [
     {
@@ -187,5 +189,11 @@ export class PaymentsList {
 
   protected openCreateModal() {
     this.paymentService.openCreateModal()
+  }
+
+  protected onLoadMore() {
+    if (!this.isLoading()) {
+      this.paymentService.nextPage()
+    }
   }
 }

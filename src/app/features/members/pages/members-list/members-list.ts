@@ -6,6 +6,7 @@ import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
 import { ConfirmService } from '@shared/services/confirm-service'
+import { Sentinel } from '@shared/directives/sentinel'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
@@ -37,6 +38,7 @@ import { Subject } from 'rxjs'
     TuiNotification,
     TuiElasticSticky,
     TuiSkeleton,
+    Sentinel,
   ],
   providers: [
     {
@@ -180,5 +182,11 @@ export class MembersList {
 
   protected openCreateModal() {
     this.memberService.openCreateModal()
+  }
+
+  protected onLoadMore() {
+    if (!this.isLoading()) {
+      this.memberService.nextPage()
+    }
   }
 }

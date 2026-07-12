@@ -5,15 +5,17 @@ import { ThemeService } from '@core/services/theme-service'
 import { AuthService } from '@features/auth/services/auth-service'
 import { ConfirmService } from '@shared/services/confirm-service'
 import { hapticLight } from '@shared/utils/haptic'
-import { TuiTabBar } from '@taiga-ui/addon-mobile'
+import { TuiRipple, TuiTabBar, TuiTouchable } from '@taiga-ui/addon-mobile'
 import { TuiIcon } from '@taiga-ui/core'
 import { TuiTooltip } from '@taiga-ui/kit'
 import { TuiNavigation } from '@taiga-ui/layout'
 import { filter, map, startWith } from 'rxjs'
 
+import { MobileInputScroll } from '@shared/directives/mobile-input-scroll'
+
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, TuiNavigation, TuiTabBar, TuiIcon, TuiTooltip],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, TuiNavigation, TuiTabBar, TuiIcon, TuiTooltip, TuiTouchable, TuiRipple, MobileInputScroll],
   templateUrl: './shell.html',
   styleUrl: './shell.css',
 })

@@ -5,9 +5,14 @@
   "theme_color": "#f97316",
   "background_color": "#ffffff",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "id": "/?app=acgym",
   "scope": "./",
   "start_url": "./",
   "orientation": "portrait-primary",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
   "categories": ["business", "fitness", "productivity"],
   "icons": [
     {

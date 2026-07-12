@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core'
+import type { TuiDialogContext } from '@taiga-ui/core'
 import { TuiButton } from '@taiga-ui/core'
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus'
-import type { TuiDialogContext } from '@taiga-ui/core'
 
 export interface ConfirmData {
   message: string

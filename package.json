@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "prebuild": "node -e \"const u=process.env.CF_API_URL||'http://127.0.0.1:8000/api';const o=new URL(u).origin;const fs=require('fs');fs.writeFileSync('public/_headers',fs.readFileSync('public/_headers.template','utf8').replace('__API_URL__',o));fs.writeFileSync('src/environments/environment.prod.ts',fs.readFileSync('src/environments/environment.template.ts','utf8').replace('__API_URL__',u))\"",
+    "prebuild": "node scripts/prebuild.mjs",
+    "generate-splash": "node scripts/generate-splash-tags.mjs",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",

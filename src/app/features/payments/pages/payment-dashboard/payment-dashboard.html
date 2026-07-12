@@ -168,6 +168,7 @@
 
     <!-- METODOS DE PAGO -->
     @if (stats(); as s) {
+      @defer (on viewport) {
       <div class="px-3 sm:px-6 mt-4 animate-fade-in-up" style="animation-delay: 150ms">
         <span
           class="text-[10px] font-bold uppercase tracking-[0.15em] text-(--tui-text-tertiary) mb-3 block px-1"
@@ -194,6 +195,11 @@
           }
         </div>
       </div>
+      } @placeholder {
+        <div class="px-3 sm:px-6 mt-4" [tuiSkeleton]="true">
+          <div class="h-40 rounded-2xl"></div>
+        </div>
+      }
     }
 
     <button

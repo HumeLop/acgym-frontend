@@ -9,9 +9,11 @@ import { AuthService } from '@features/auth/services/auth-service'
 import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
 import { TuiButtonLoading } from '@taiga-ui/kit'
 
+import { MobileInputScroll } from '@shared/directives/mobile-input-scroll'
+
 @Component({
   selector: 'app-login',
-  imports: [FormField, TuiAutoFocus, TuiButton, TuiButtonLoading, TuiIcon, TuiNotification, TuiRipple],
+  imports: [FormField, TuiAutoFocus, TuiButton, TuiButtonLoading, TuiIcon, TuiNotification, TuiRipple, MobileInputScroll],
   templateUrl: './login.html',
 })
 export class Login {
