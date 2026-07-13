@@ -130,9 +130,9 @@
           </div>
 
           @if (hasExpiration) {
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 min-w-0">
               <div
-                class="flex items-center justify-center w-8 h-8 rounded-lg"
+                class="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
                 [class.bg-(--tui-status-negative-pale)]="expirationDays <= 0"
                 [class.bg-(--tui-status-warning-pale)]="expirationDays <= 7 && expirationDays > 0"
                 [class.bg-(--tui-status-positive-pale)]="expirationDays > 7"
@@ -145,12 +145,12 @@
                   [class.text-(--tui-status-positive)]="expirationDays > 7"
                 />
               </div>
-              <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)"
+              <span class="flex-1 min-w-0 text-sm font-medium truncate text-(--tui-text-secondary)"
                 >Días restantes</span
               >
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-1.5 min-w-0">
                 <span
-                  class="text-sm font-bold"
+                  class="text-sm font-bold shrink-0"
                   [class.text-(--tui-status-negative)]="expirationDays <= 0"
                   [class.text-(--tui-status-warning)]="expirationDays <= 7 && expirationDays > 0"
                   [class.text-(--tui-status-positive)]="expirationDays > 7"
@@ -169,7 +169,7 @@
                         ? 'var(--tui-status-warning)'
                         : 'var(--tui-status-negative)'
                   "
-                  class="w-20"
+                  class="w-14 min-w-0"
                 ></progress>
               </div>
             </div>

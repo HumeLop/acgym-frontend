@@ -86,13 +86,6 @@
                 Pago #{{ paymentDetail()!.id }}
               </h1>
             </div>
-            <button
-              tuiButton
-              appearance="icon"
-              iconStart="@tui.pencil"
-              class="text-(--tui-primary)"
-              (click)="onEdit()"
-            ></button>
           </div>
         </div>
 
@@ -434,13 +427,3 @@
     }
   </div>
 </tui-pull-to-refresh>
-
-<ng-template
-  [tuiResponsiveDialogOptions]="{ size: 'l' }"
-  [(tuiResponsiveDialog)]="isModalOpen"
->
-  <app-payment-form
-    [paymentId]="editingPaymentId()"
-    (close)="closeModal()"
-  />
-</ng-template>

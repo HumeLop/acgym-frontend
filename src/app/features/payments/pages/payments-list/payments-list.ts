@@ -1,26 +1,14 @@
-import { Component, computed, effect, inject, signal } from '@angular/core'
+import { Component, computed, inject, signal } from '@angular/core'
 import { Router } from '@angular/router'
 import { PaymentCard } from '@features/payments/pages/payment-card/payment-card'
 import { PaymentForm } from '@features/payments/pages/payment-form/payment-form'
 import { PaymentService } from '@features/payments/services/payment-service'
-import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
 import { Sentinel } from '@shared/directives/sentinel'
-import { ConfirmService } from '@shared/services/confirm-service'
-import {
-  TUI_ANDROID_LOADER,
-  TUI_PULL_TO_REFRESH_COMPONENT,
-  TUI_PULL_TO_REFRESH_LOADED,
-  TUI_PULL_TO_REFRESH_THRESHOLD,
-  TuiElasticSticky,
-  TuiPullToRefresh,
-  TuiResponsiveDialog,
-  TuiRipple,
-} from '@taiga-ui/addon-mobile'
+import { TuiElasticSticky, TuiResponsiveDialog } from '@taiga-ui/addon-mobile'
 import { TuiAutoFocus, tuiClamp } from '@taiga-ui/cdk'
 import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
 import { TuiSegmented, TuiSkeleton } from '@taiga-ui/kit'
 import { TuiCardLarge } from '@taiga-ui/layout'
-import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-payments-list',
@@ -29,10 +17,8 @@ import { Subject } from 'rxjs'
     TuiButton,
     TuiNotification,
     TuiResponsiveDialog,
-    TuiPullToRefresh,
     TuiSegmented,
     TuiAutoFocus,
-    TuiRipple,
     PaymentCard,
     PaymentForm,
     TuiElasticSticky,
@@ -40,35 +26,11 @@ import { Subject } from 'rxjs'
     TuiCardLarge,
     Sentinel,
   ],
-  providers: [
-    {
-      provide: TUI_PULL_TO_REFRESH_LOADED,
-      useClass: Subject,
-    },
-    {
-      provide: TUI_PULL_TO_REFRESH_COMPONENT,
-      useValue: TUI_ANDROID_LOADER,
-    },
-    {
-      provide: WA_IS_ANDROID,
-      useValue: true,
-    },
-    {
-      provide: WA_IS_IOS,
-      useValue: true,
-    },
-    {
-      provide: TUI_PULL_TO_REFRESH_THRESHOLD,
-      useValue: 120,
-    },
-  ],
   templateUrl: './payments-list.html',
 })
 export class PaymentsList {
   protected router = inject(Router)
   private paymentService = inject(PaymentService)
-  private readonly confirmSvc = inject(ConfirmService)
-  private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
   protected payments = this.paymentService.payments
   protected totalPayments = this.paymentService.totalPayments
   protected hasPayments = computed(() => (this.payments() ?? []).length > 0)
@@ -79,7 +41,6 @@ export class PaymentsList {
   protected previousPage = this.paymentService.previousPage
   protected isLoading = this.paymentService.isLoading
   protected status = this.paymentService.status
-  protected isDeleting = this.paymentService.isDeleting
   protected error = this.paymentService.error
   protected activeTabIndex = signal(0)
   protected sentinelDisabled = computed(() => this.isLoading() || !this.hasMorePages())
@@ -90,22 +51,16 @@ export class PaymentsList {
   isModalOpen = this.paymentService.isModalOpen
   isEditingPayment = this.paymentService.editingPaymentId
 
-  protected mutationError = this.paymentService.generalError
-
-  private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
-  private readonly isPulling = signal(false)
-
-  startItem = computed(() => {
+  protected startItem = computed(() => {
     return this.totalPayments() === 0 ? 0 : (this.page() - 1) * this.pageSize() + 1
   })
 
-  endItem = computed(() => {
+  protected endItem = computed(() => {
     const end = this.page() * this.pageSize()
     return end > this.totalPayments() ? this.totalPayments() : end
   })
 
   protected activeCount = computed(() => this.payments().filter((p) => p.isActive).length)
-
   protected inactiveCount = computed(() => this.payments().filter((p) => !p.isActive).length)
 
   protected totalAmount = computed(() => {
@@ -113,14 +68,12 @@ export class PaymentsList {
     return sum.toFixed(2)
   })
 
-  constructor() {
-    effect(() => {
-      if (this.isPulling() && !this.paymentService.isLoading()) {
-        this.loaded$.next()
-        this.isPulling.set(false)
-      }
-    })
+  protected headerScale = signal(1)
+
+  protected onElastic(scale: number): void {
+    this.headerScale.set(tuiClamp(scale, 0.6, 1))
   }
+
   onSearch(value: string) {
     this.paymentService.search(value)
     this.paymentService.resetPage()
@@ -129,26 +82,6 @@ export class PaymentsList {
   onClearSearch() {
     this.paymentService.search('')
     this.paymentService.resetPage()
-  }
-
-  onDeletePayment(id: number) {
-    this.confirmSvc
-      .open({
-        title: 'Eliminar pago',
-        message: '¿Estás seguro de eliminar este pago?',
-        type: 'destructive',
-        confirmText: 'Eliminar',
-      })
-      .subscribe((confirmed) => {
-        if (confirmed) {
-          this.paymentService.deletingPaymentId.set(id)
-          this.paymentService.deletePayment(id).subscribe()
-        }
-      })
-  }
-
-  closeModal() {
-    this.paymentService.closeModal()
   }
 
   onTabChange(index: number) {
@@ -166,35 +99,21 @@ export class PaymentsList {
     this.paymentService.reload()
   }
 
-  protected headerScale = signal(1)
-
-  protected onElastic(scale: number): void {
-    this.headerScale.set(tuiClamp(scale, 0.6, 1))
+  closeModal() {
+    this.paymentService.closeModal()
   }
 
-  protected onPull() {
-    if (window.scrollY > 0) return
-    if (!this.isTouchDevice) return
-
-    this.isPulling.set(true)
-    this.paymentService.resetPage()
-  }
-
-  protected reload() {
-    this.paymentService.reload()
-  }
-
-  protected openEditModal(id: number) {
-    this.paymentService.openEditModal(id)
-  }
-
-  protected openCreateModal() {
+  openCreateModal() {
     this.paymentService.openCreateModal()
   }
 
-  protected onLoadMore() {
+  onLoadMore() {
     if (!this.isLoading() && this.hasMorePages()) {
       this.paymentService.nextPage()
     }
+  }
+
+  reload() {
+    this.paymentService.reload()
   }
 }

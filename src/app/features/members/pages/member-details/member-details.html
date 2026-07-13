@@ -256,13 +256,13 @@
                 </div>
                 <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
                   <p class="text-2xl font-bold text-(--tui-text-primary)">
-                    ${{ getPaymentSummary('total_spent') }}
+                    ${{ formatCurrency(getPaymentSummary('total_spent')) }}
                   </p>
                   <p class="text-xs text-(--tui-text-secondary)">Total Gastado</p>
                 </div>
                 <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
                   <p class="text-2xl font-bold text-(--tui-text-primary)">
-                    ${{ getPaymentSummary('average_payment') }}
+                    ${{ formatCurrency(getPaymentSummary('average_payment')) }}
                   </p>
                   <p class="text-xs text-(--tui-text-secondary)">Promedio por Pago</p>
                 </div>
