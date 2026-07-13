@@ -121,6 +121,10 @@ export class MemberDetails {
     ]
   })
 
+  protected formatCurrency(value: number): string {
+    return value.toFixed(2)
+  }
+
   protected getPaymentSummary(key: string): number {
     const summary = this.memberDetail()?.paymentSummary as Record<string, number> | undefined
     return summary?.[key] ?? 0

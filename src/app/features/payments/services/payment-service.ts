@@ -181,6 +181,7 @@ export class PaymentService {
     return this.http.delete<void>(`${this.apiURL}/${id}/`).pipe(
       tap(() => {
         this.paymentsResource.reload()
+        this.entityEvents.notify('member')
         this.deletingPaymentId.set(null)
         this.alerts.open('Pago eliminado').subscribe()
       }),
@@ -200,6 +201,7 @@ export class PaymentService {
     return this.http.post<PaymentEntity>(`${this.apiURL}/`, payment).pipe(
       tap(() => {
         this.paymentsResource.reload()
+        this.entityEvents.notify('member')
         this.isModalOpen.set(false)
         this.alerts.open('Pago registrado exitosamente').subscribe()
       }),
@@ -219,6 +221,7 @@ export class PaymentService {
       tap(() => {
         this.paymentsResource.reload()
         this.paymentDetailResource.reload()
+        this.entityEvents.notify('member')
         this.isModalOpen.set(false)
         this.alerts.open('Pago actualizado correctamente').subscribe()
       }),
@@ -335,13 +338,6 @@ export class PaymentService {
     hapticMedium()
     this.mutationError.set(null)
     this._editingPaymentId.set(null)
-    this.isModalOpen.set(true)
-  }
-
-  openEditModal(id: number) {
-    hapticMedium()
-    this.mutationError.set(null)
-    this._editingPaymentId.set(id)
     this.isModalOpen.set(true)
   }
 

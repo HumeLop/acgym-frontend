@@ -1,18 +1,15 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService } from '@features/auth/services/auth-service'
-import { PaymentForm } from '@features/payments/pages/payment-form/payment-form'
 import { PaymentService } from '@features/payments/services/payment-service'
 import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
 import { DateUtils } from '@shared/utils/date.utils'
-import { hapticMedium } from '@shared/utils/haptic'
 import {
   TUI_ANDROID_LOADER,
   TUI_PULL_TO_REFRESH_COMPONENT,
   TUI_PULL_TO_REFRESH_LOADED,
   TUI_PULL_TO_REFRESH_THRESHOLD,
   TuiPullToRefresh,
-  TuiResponsiveDialog,
 } from '@taiga-ui/addon-mobile'
 import { TuiButton, TuiIcon, TuiLink } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
@@ -24,14 +21,12 @@ import { Subject } from 'rxjs'
   imports: [
     RouterLink,
     TuiPullToRefresh,
-    TuiResponsiveDialog,
     TuiIcon,
     TuiLink,
     TuiSurface,
     TuiSkeleton,
     TuiBlockStatus,
     TuiButton,
-    PaymentForm,
   ],
   providers: [
     {
@@ -62,8 +57,6 @@ export class PaymentDetails {
   private authService = inject(AuthService)
 
   protected isAdmin = this.authService.isAdmin
-  protected isModalOpen = this.paymentService.isModalOpen
-  protected editingPaymentId = this.paymentService.editingPaymentId
 
   id = input.required<string>({ alias: 'id' })
 
@@ -114,14 +107,5 @@ export class PaymentDetails {
   protected onPull() {
     this.paymentService.paymentDetailResource.reload()
     this.isPulling.set(true)
-  }
-
-  protected onEdit() {
-    hapticMedium()
-    this.paymentService.openEditModal(Number(this.id()))
-  }
-
-  protected closeModal() {
-    this.paymentService.closeModal()
   }
 }
