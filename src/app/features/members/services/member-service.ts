@@ -1,5 +1,6 @@
 import { HttpClient, type HttpErrorResponse, httpResource } from '@angular/common/http'
 import { computed, effect, inject, Service, signal } from '@angular/core'
+import { EntityEventBusService } from '@app/core/services/entity-event-bus-service'
 import { toMember, toMemberDetail } from '@app/features/members/adapters/member.adapter'
 import type {
   MemberDetailEntity,
@@ -18,6 +19,7 @@ import { catchError, finalize, type Observable, tap, throwError } from 'rxjs'
 export class MemberService {
   private http = inject(HttpClient)
   private alerts = inject(TuiNotificationService)
+  private entityEvents = inject(EntityEventBusService)
   private apiURL = `${environment.apiURL}/members`
 
   private mutationError = signal<ApiValidationError | null>(null)
@@ -100,6 +102,7 @@ export class MemberService {
     return this.http.post<MemberWriteResponseDto>(`${this.apiURL}/`, member).pipe(
       tap(() => {
         this.membersResource.reload()
+        this.entityEvents.notify('member')
         this.isModalOpen.set(false)
         this.alerts.open('Miembro creado exitosamente').subscribe()
       }),
@@ -119,6 +122,7 @@ export class MemberService {
       tap(() => {
         this.membersResource.reload()
         this.memberDetailResource.reload()
+        this.entityEvents.notify('member')
         this.isModalOpen.set(false)
         this.alerts.open('Miembro actualizado correctamente').subscribe()
       }),
@@ -137,6 +141,7 @@ export class MemberService {
     return this.http.delete<void>(`${this.apiURL}/${id}/`).pipe(
       tap(() => {
         this.membersResource.reload()
+        this.entityEvents.notify('member')
         this.deletingMemberId.set(null)
         this.alerts.open('Miembro eliminado').subscribe()
       }),

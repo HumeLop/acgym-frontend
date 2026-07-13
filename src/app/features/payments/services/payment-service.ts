@@ -1,8 +1,9 @@
 import { HttpClient, type HttpErrorResponse, httpResource } from '@angular/common/http'
 import { computed, effect, inject, Service, signal } from '@angular/core'
-import type { MembershipTypeEntity } from '@app/features/admin/models'
+import { EntityEventBusService } from '@app/core/services/entity-event-bus-service'
 import { environment } from '@environments/environment'
 import { toMembershipType } from '@features/admin/adapters/membership-type.adapter'
+import type { MembershipTypeEntity } from '@features/admin/models'
 import { toPaymentDetail, toPaymentStats, toPayments } from '@features/payments/adapters/payment.adapter'
 import type {
   PaymentDetailEntity,
@@ -20,6 +21,7 @@ import { catchError, finalize, type Observable, tap, throwError } from 'rxjs'
 export class PaymentService {
   private http = inject(HttpClient)
   private alerts = inject(TuiNotificationService)
+  private entityEvents = inject(EntityEventBusService)
   private apiURL = `${environment.apiURL}/payments`
 
   private mutationError = signal<ApiValidationError | null>(null)
@@ -78,10 +80,13 @@ export class PaymentService {
     url: `${this.apiURL}/stats/`,
   }))
 
-  private memberOptionsResource = httpResource<PaginatedResponse<{ id: number; name: string }>>(() => ({
-    url: `${environment.apiURL}/members/options/`,
-    params: { page_size: '500' },
-  }))
+  private memberOptionsResource = httpResource<PaginatedResponse<{ id: number; name: string }>>(() => {
+    this.entityEvents.version('member')()
+    return {
+      url: `${environment.apiURL}/members/options/`,
+      params: { page_size: '200' },
+    }
+  })
 
   private cachedMemberOptions = signal<{ id: number; name: string }[]>([])
 
@@ -158,10 +163,13 @@ export class PaymentService {
     this.memberRemoteSearchTerm.set(trimmed)
   }
 
-  private membershipTypesResource = httpResource<PaginatedResponse<MembershipTypeEntity>>(() => ({
-    url: `${this.apiURL}/membership-types/`,
-    params: { page_size: '50' },
-  }))
+  private membershipTypesResource = httpResource<PaginatedResponse<MembershipTypeEntity>>(() => {
+    this.entityEvents.version('membership-type')()
+    return {
+      url: `${this.apiURL}/membership-types/`,
+      params: { page_size: '50' },
+    }
+  })
 
   readonly membershipTypes = computed(() => {
     if (this.membershipTypesResource.status() === 'error') return []

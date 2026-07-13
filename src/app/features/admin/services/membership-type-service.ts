@@ -1,5 +1,6 @@
 import { HttpClient, type HttpErrorResponse, httpResource } from '@angular/common/http'
 import { computed, inject, Service, signal } from '@angular/core'
+import { EntityEventBusService } from '@core/services/entity-event-bus-service'
 import { environment } from '@environments/environment'
 import { toMembershipType } from '@features/admin/adapters/membership-type.adapter'
 import { adaptMembershipTypeStats } from '@features/admin/adapters/membership-type-stats.adapter'
@@ -15,6 +16,7 @@ import { catchError, finalize, type Observable, tap, throwError } from 'rxjs'
 export class MembershipTypeService {
   private http = inject(HttpClient)
   private alerts = inject(TuiNotificationService)
+  private entityEvents = inject(EntityEventBusService)
   private apiURL = `${environment.apiURL}/payments/membership-types`
 
   isModalOpen = signal(false)
@@ -49,6 +51,7 @@ export class MembershipTypeService {
     return this.http.post<MembershipType>(`${this.apiURL}/`, data).pipe(
       tap(() => {
         this.typesResource.reload()
+        this.entityEvents.notify('membership-type')
         this.isModalOpen.set(false)
         this.alerts.open('Tipo de membresía creado exitosamente').subscribe()
       }),
