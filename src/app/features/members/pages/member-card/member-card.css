@@ -1,0 +1,4 @@
+/* biome-ignore lint/correctness/noUnknownPseudoElement: Taiga UI internal class override */
+:host ::ng-deep .t-actions {
+  padding-right: 0;
+}

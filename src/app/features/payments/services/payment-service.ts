@@ -9,6 +9,7 @@ import type {
   PaymentDetailEntity,
   PaymentEntity,
   PaymentFilterParams,
+  PaymentRenewalDto,
   PaymentStatsEntity,
   PaymentWriteDto,
 } from '@features/payments/models'
@@ -43,12 +44,14 @@ export class PaymentService {
   private _isCreating = signal<boolean>(false)
   private _isEditing = signal<boolean>(false)
   private _isDeleting = signal<boolean>(false)
+  private _isRenewing = signal<boolean>(false)
   private _editingPaymentId = signal<number | null>(null)
   deletingPaymentId = signal<number | null>(null)
 
   readonly isCreating = this._isCreating.asReadonly()
   readonly isEditing = this._isEditing.asReadonly()
   readonly isDeleting = this._isDeleting.asReadonly()
+  readonly isRenewing = this._isRenewing.asReadonly()
   readonly editingPaymentId = this._editingPaymentId.asReadonly()
 
   private cachedPayments = signal<PaymentEntity[]>([])
@@ -231,6 +234,27 @@ export class PaymentService {
       }),
       finalize(() => {
         this._isEditing.set(false)
+      })
+    )
+  }
+
+  renewPayment(dto: PaymentRenewalDto): Observable<PaymentEntity> {
+    this._isRenewing.set(true)
+    this.mutationError.set(null)
+    return this.http.post<PaymentEntity>(`${this.apiURL}/renew/`, dto).pipe(
+      tap(() => {
+        this.paymentsResource.reload()
+        this.paymentStatsResource.reload()
+        this.entityEvents.notify('member')
+        this.alerts.open('Membresía renovada exitosamente').subscribe()
+      }),
+      catchError((err: HttpErrorResponse) => {
+        this.mutationError.set(err.error as ApiValidationError)
+        this.alerts.open('Error al renovar la membresía', { appearance: 'error' }).subscribe()
+        return throwError(() => err)
+      }),
+      finalize(() => {
+        this._isRenewing.set(false)
       })
     )
   }

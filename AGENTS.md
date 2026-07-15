@@ -29,6 +29,9 @@ Types: `feat`, `fix`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `docs`
 - **No `npm install`, `ng build`, `ng version`** — use only `pnpm`-based commands listed here.
 - **Package installation requires human approval** — never add packages without user confirmation.
 - The `angular-developer` skill may suggest `ng build` or `npm install` as generic guidance; those are ignored in favor of local conventions.
+- **`routerLink` requires `RouterLink` import.** Standalone components must import
+  `RouterLink` from `@angular/router`; otherwise the attribute is inert and the
+  link/button does nothing.
 
 ## Quick commands
 
@@ -93,6 +96,32 @@ Need local component state?
 Need async data?
 └── httpResource() for GET, Observable for mutations
 ```
+
+### Cross-feature reloads
+
+Use `EntityEventBusService` to trigger reloads across feature boundaries.
+Each entity (`member`, `membership-type`) exposes a version signal.
+GET resources that depend on that entity must read `entityEvents.version(kind)()`
+inside their `httpResource` requester so they auto-reload on `notify()`.
+
+Example:
+
+```ts
+readonly membersResource = httpResource<PaginatedResponse<MemberEntity>>(() => {
+  this.entityEvents.version('member')()
+  return { url: `${this.apiURL}/`, params: ... }
+})
+```
+
+After a mutation, call `this.entityEvents.notify('member')` instead of manually
+reloading every dependent resource. Never inject another feature service just
+to call `.reload()` on its resources.
+
+### Programmatic navigation
+
+Prefer `RouterLink` for static navigation. Use `Router.navigate()` only when
+the click target contains interactive children (buttons inside cards) where
+a wrapping `<a>` would produce invalid nested buttons and break styling.
 
 ### Directory layout
 
@@ -159,6 +188,16 @@ src/
   Components must inherit the global theme. Adding `host: { '[attr.tuiTheme]': 'theme()' }` on any component
   overrides the global theme for all children, causing visual mismatches (e.g., calendar dark in light mode).
 - **Animations**: Use Tailwind's built-in `animate-fade-in-up`. Do **NOT** create custom `@keyframes` animations.
+- **`::ng-deep` for Taiga UI internal overrides** is allowed, but Biome flags it as an unknown pseudo-element.
+  Add a `biome-ignore` comment when needed:
+
+  ```css
+  /* biome-ignore lint/correctness/noUnknownPseudoElement: Taiga UI internal class override */
+  :host ::ng-deep .t-actions {
+    padding-right: 0;
+  }
+  ```
+
 - **Fonts**: Montserrat WOFF2 subset (Latin only) in `public/assets/fonts/`. Defined via `@font-face` in `styles.css`.
   Variable font with `font-weight: 100 900` for both normal and italic.
 
@@ -189,6 +228,17 @@ src/
 - `ng test` runs via `@angular/build:unit-test` builder with Vitest.
 - To add new tests, place `.spec.ts` files alongside the source (e.g., `members-list.spec.ts` next to `members-list.ts`).
 - Test setup: `TestBed.configureTestingModule({ imports: [ComponentUnderTest] })` for standalone components.
+
+## Changelog format (CHANGELOG.md)
+
+Follow [Keep a Changelog](https://keepachangelog.com/en/2.0.0/) v2 standard:
+
+- **User-facing only.** Internal refactors, renames, dependency updates, and implementation details (`min-w-0`, `size="m"`) do NOT go in the changelog. If a user wouldn't notice it, don't list it.
+- Types: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`.
+- Use unique section headings per version to avoid markdown linter warnings — e.g., `### Added (v1.1.0)`, `### Fixed (v1.0.1)`.
+- Reverse chronological order, ISO 8601 dates (`YYYY-MM-DD`).
+- The entry for each version should be directly copyable to a GitHub Release body.
+- Keep an `[Unreleased]` section at the top for changes accumulated between releases.
 
 ## Production budget
 

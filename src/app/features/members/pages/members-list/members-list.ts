@@ -1,8 +1,9 @@
 import { Component, computed, inject, signal } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, RouterLink } from '@angular/router'
 import { AuthService } from '@features/auth/services/auth-service'
 import { MemberCard } from '@features/members/pages/member-card/member-card'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
+import { PaymentRenew } from '@features/payments/pages/payment-renew/payment-renew'
 import { MemberService } from '@features/members/services/member-service'
 import { Sentinel } from '@shared/directives/sentinel'
 import { ConfirmService } from '@shared/services/confirm-service'
@@ -17,6 +18,7 @@ import { TuiCardLarge } from '@taiga-ui/layout'
     TuiIcon,
     MemberCard,
     MemberForm,
+    PaymentRenew,
     TuiResponsiveDialog,
     TuiCardLarge,
     TuiSegmented,
@@ -25,6 +27,7 @@ import { TuiCardLarge } from '@taiga-ui/layout'
     TuiNotification,
     TuiSkeleton,
     Sentinel,
+    RouterLink,
   ],
   templateUrl: './members-list.html',
 })
@@ -69,6 +72,10 @@ export class MembersList {
 
   isModalOpen = this.memberService.isModalOpen
   isEditingMember = this.memberService.editingMemberId
+
+  protected isRenewOpen = signal(false)
+  protected renewMemberId = signal<number | null>(null)
+  protected renewMemberName = signal('')
 
   startItem = computed(() => {
     return this.totalMembers() === 0 ? 0 : (this.page() - 1) * this.pageSize() + 1
@@ -119,6 +126,18 @@ export class MembersList {
 
   protected openCreateModal() {
     this.memberService.openCreateModal()
+  }
+
+  protected openRenewModal(member: { id: number; name: string }) {
+    this.renewMemberId.set(member.id)
+    this.renewMemberName.set(member.name)
+    this.isRenewOpen.set(true)
+  }
+
+  protected closeRenewModal() {
+    this.isRenewOpen.set(false)
+    this.renewMemberId.set(null)
+    this.renewMemberName.set('')
   }
 
   protected onLoadMore() {

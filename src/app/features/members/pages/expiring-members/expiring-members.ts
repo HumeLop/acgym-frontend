@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core'
+import { Component, inject, signal } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { MemberCard } from '@features/members/pages/member-card/member-card'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
+import { PaymentRenew } from '@features/payments/pages/payment-renew/payment-renew'
 import { MemberService } from '@features/members/services/member-service'
 import { ConfirmService } from '@shared/services/confirm-service'
 import { TuiResponsiveDialog, TuiRipple } from '@taiga-ui/addon-mobile'
-import { TuiIcon, TuiNotification } from '@taiga-ui/core'
+import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiCardLarge } from '@taiga-ui/layout'
 
@@ -14,11 +16,14 @@ import { TuiCardLarge } from '@taiga-ui/layout'
     TuiIcon,
     TuiNotification,
     TuiCardLarge,
+    TuiButton,
     MemberCard,
     MemberForm,
+    PaymentRenew,
     TuiResponsiveDialog,
     TuiRipple,
     TuiSkeleton,
+    RouterLink,
   ],
   templateUrl: './expiring-members.html',
 })
@@ -35,6 +40,10 @@ export class ExpiringMembers {
 
   isModalOpen = this.memberService.isModalOpen
   isEditingMember = this.memberService.editingMemberId
+
+  protected isRenewOpen = signal(false)
+  protected renewMemberId = signal<number | null>(null)
+  protected renewMemberName = signal('')
 
   protected onSearch(value: string) {
     this.memberService.search(value)
@@ -62,5 +71,17 @@ export class ExpiringMembers {
 
   closeModal() {
     this.memberService.closeModal()
+  }
+
+  protected openRenewModal(member: { id: number; name: string }) {
+    this.renewMemberId.set(member.id)
+    this.renewMemberName.set(member.name)
+    this.isRenewOpen.set(true)
+  }
+
+  protected closeRenewModal() {
+    this.isRenewOpen.set(false)
+    this.renewMemberId.set(null)
+    this.renewMemberName.set('')
   }
 }

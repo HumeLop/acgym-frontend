@@ -125,6 +125,8 @@
 
   --acgym-section-purple: #a855f7;
   --acgym-section-purple-hover: #9333ea;
+
+  --acgym-swipe-delete-to: #991b1b;
 }
 
 [tuiTheme='dark'] {
@@ -245,6 +247,8 @@
 
   --acgym-section-purple: #c084fc;
   --acgym-section-purple-hover: #a855f7;
+
+  --acgym-swipe-delete-to: #dc2626;
 }
 
 @theme {
