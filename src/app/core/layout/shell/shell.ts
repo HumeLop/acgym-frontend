@@ -36,7 +36,6 @@ export class Shell {
   private readonly confirmSvc = inject(ConfirmService)
   private readonly authSvc = inject(AuthService)
 
-  protected readonly isDark = this.themeSvc.isDark
   protected readonly mode = this.themeSvc.modeIndex
   protected readonly isAdmin = this.authSvc.isAdmin
 

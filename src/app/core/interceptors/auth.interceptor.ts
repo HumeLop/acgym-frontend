@@ -2,7 +2,10 @@ import { isPlatformBrowser } from '@angular/common'
 import type { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http'
 import { inject, PLATFORM_ID } from '@angular/core'
 import { AuthService } from '@features/auth/services/auth-service'
-import { catchError, switchMap, throwError } from 'rxjs'
+import { catchError, from, switchMap, throwError } from 'rxjs'
+
+let isRefreshing = false
+let pendingRequests: Array<() => void> = []
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService)
@@ -26,22 +29,51 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 && !skipAuth) {
-        return authService.refreshAccessToken().pipe(
+      if (error.status !== 401 || skipAuth) {
+        return throwError(() => error)
+      }
+
+      if (isRefreshing) {
+        return from(
+          new Promise<void>((resolve) => {
+            pendingRequests.push(resolve)
+          }),
+        ).pipe(
           switchMap(() => {
             const newToken = authService.accessToken()
-            const newRequest = req.clone({
-              setHeaders: { Authorization: `Bearer ${newToken}` },
-            })
-            return next(newRequest)
+            return next(
+              req.clone({
+                setHeaders: { Authorization: `Bearer ${newToken}` },
+              }),
+            )
           }),
-          catchError(() => {
-            authService.logout()
-            return throwError(() => error)
-          })
         )
       }
-      return throwError(() => error)
-    })
+
+      isRefreshing = true
+
+      return authService.refreshAccessToken().pipe(
+        switchMap(() => {
+          isRefreshing = false
+          const queue = pendingRequests
+          pendingRequests = []
+
+          queue.forEach((resolve) => void resolve())
+
+          const newToken = authService.accessToken()
+          return next(
+            req.clone({
+              setHeaders: { Authorization: `Bearer ${newToken}` },
+            }),
+          )
+        }),
+        catchError((_refreshError) => {
+          isRefreshing = false
+          pendingRequests = []
+          authService.logout()
+          return throwError(() => error)
+        }),
+      )
+    }),
   )
 }

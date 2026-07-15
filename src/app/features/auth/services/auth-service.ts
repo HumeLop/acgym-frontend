@@ -92,6 +92,7 @@ export class AuthService {
     return this.http.post<TokenEntity>(`${this.apiURL}/refresh/`, body).pipe(
       tap((tokens) => {
         this._accessToken.set(tokens.access)
+        this._refreshToken.set(tokens.refresh)
       }),
       catchError((err) => {
         this.logout()

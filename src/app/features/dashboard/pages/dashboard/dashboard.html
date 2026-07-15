@@ -120,7 +120,7 @@
     @defer (on viewport) {
       <div class="grid gap-5 lg:grid-cols-2">
         <!-- LEFT: Inactive Search -->
-        <div class="animate-fade-in-up" style="animation-delay: 100ms">
+        <div class="animate-fade-in-up min-w-0" style="animation-delay: 100ms">
           <div tuiSurface tuiAppearance="floating" class="p-5 rounded-2xl">
             <div class="flex items-center gap-3 mb-4">
               <div
@@ -140,7 +140,7 @@
 
             <div class="flex items-center gap-3 mb-3">
               <div
-                class="flex items-center flex-1 gap-2 h-9 pl-3 pr-4 rounded-xl ring-1 ring-(--tui-border-normal) bg-(--tui-background-neutral-1) focus-within:ring-2 focus-within:ring-(--tui-primary)/40 transition-all duration-200"
+                class="flex items-center flex-1 min-w-0 gap-2 h-9 pl-3 pr-4 rounded-xl ring-1 ring-(--tui-border-normal) bg-(--tui-background-neutral-1) focus-within:ring-2 focus-within:ring-(--tui-primary)/40 transition-all duration-200"
               >
                 <tui-icon
                   icon="@tui.clock"
@@ -151,13 +151,15 @@
                   inputmode="numeric"
                   [formField]="searchForm.days"
                   placeholder="Días de inactividad"
-                  class="flex-1 h-full text-sm font-medium bg-transparent border-none outline-none text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary)"
+                  class="flex-1 min-w-0 h-full text-sm font-medium bg-transparent border-none outline-none text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary)"
                 />
               </div>
               <button
+                type="button"
                 appearance="primary"
                 size="m"
                 tuiButton
+                class="shrink-0"
                 (click)="searchInactive()"
                 [disabled]="inactiveDaysSearchLoading()"
               >
@@ -247,7 +249,7 @@
 
         <!-- RIGHT: Charts -->
         @if (isAdmin()) {
-          <div class="flex flex-col gap-5">
+          <div class="flex flex-col gap-5 min-w-0">
             <div class="animate-fade-in-up" style="animation-delay: 150ms">
               <div tuiSurface tuiAppearance="floating" class="p-5 rounded-2xl">
                 <div class="flex items-center gap-3 mb-4">
@@ -265,19 +267,21 @@
                 </div>
                 @defer {
                   @if (incomeValues().length > 0) {
-                    <div class="h-56 chart-axes" [tuiSkeleton]="isInitialLoading()">
-                      <tui-axes
-                        class="block h-full w-full"
-                        [axisXLabels]="incomeLabels()"
-                        [axisYLabels]="incomeYLabels()"
-                      >
-                        <tui-bar-chart
-                          [value]="[incomeValues()]"
-                          [max]="incomeMax()"
-                          [tuiHintContent]="incomeHint"
-                          size="l"
-                        />
-                      </tui-axes>
+                    <div class="overflow-x-auto">
+                      <div class="h-56 chart-axes w-full" [tuiSkeleton]="isInitialLoading()">
+                        <tui-axes
+                          class="block h-full w-full"
+                          [axisXLabels]="incomeLabels()"
+                          [axisYLabels]="incomeYLabels()"
+                        >
+                          <tui-bar-chart
+                            [value]="[incomeValues()]"
+                            [max]="incomeMax()"
+                            [tuiHintContent]="incomeHint"
+                            size="m"
+                          />
+                        </tui-axes>
+                      </div>
                     </div>
                   } @else if (!isInitialLoading()) {
                     <div class="flex items-center justify-center h-56">
@@ -328,7 +332,8 @@
                       <tui-ring-chart
                         [value]="ringChartValues()"
                         [(activeItemIndex)]="activeRingIndex"
-                        class="shrink-0"
+                        class="max-w-full"
+                        size="m"
                       >
                         <span class="text-lg font-extrabold text-(--tui-text-primary) tabular-nums">
                           ${{ ringChartTotal().toLocaleString('es-MX') }}
