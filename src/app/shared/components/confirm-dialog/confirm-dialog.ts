@@ -16,7 +16,7 @@ export interface ConfirmData {
   template: `
     <div class="flex flex-col gap-4 p-2">
       <p class="text-sm text-(--tui-text-secondary)">{{ context.data.message }}</p>
-      <div class="flex gap-3 justify-end">
+      <div class="flex flex-col gap-3">
         <button
           tuiButton
           appearance="secondary"

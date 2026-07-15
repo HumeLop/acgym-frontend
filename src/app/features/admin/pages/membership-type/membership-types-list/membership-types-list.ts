@@ -3,10 +3,7 @@ import { AdminMembershipTypeCard } from '@app/features/admin/pages/membership-ty
 import { AdminMembershipTypeForm } from '@app/features/admin/pages/membership-type/membership-type-form/membership-type-form'
 import { MembershipTypeService } from '@features/admin/services/membership-type-service'
 import { ConfirmService } from '@shared/services/confirm-service'
-import {
-  TuiResponsiveDialog,
-  TuiRipple,
-} from '@taiga-ui/addon-mobile'
+import { TuiResponsiveDialog, TuiRipple } from '@taiga-ui/addon-mobile'
 import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 

@@ -67,16 +67,18 @@ export class MemberForm {
     },
     computation: (member, previous) => {
       if (!member || member.id !== this.memberId()) {
-        return previous?.value ?? {
-          name: '',
-          phone: '',
-          email: '',
-          dateOfBirth: TuiDay.currentLocal(),
-          emergencyContact: '',
-          emergencyPhone: '',
-          notes: '',
-          notificationsEnabled: false,
-        }
+        return (
+          previous?.value ?? {
+            name: '',
+            phone: '',
+            email: '',
+            dateOfBirth: TuiDay.currentLocal(),
+            emergencyContact: '',
+            emergencyPhone: '',
+            notes: '',
+            notificationsEnabled: false,
+          }
+        )
       }
       return {
         name: member.name,

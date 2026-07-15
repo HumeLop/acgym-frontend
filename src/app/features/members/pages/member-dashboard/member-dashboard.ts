@@ -2,9 +2,7 @@ import { Component, computed, inject } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
-import {
-  TuiResponsiveDialog,
-} from '@taiga-ui/addon-mobile'
+import { TuiResponsiveDialog } from '@taiga-ui/addon-mobile'
 import { TuiIcon } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiSurface } from '@taiga-ui/layout'

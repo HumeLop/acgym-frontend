@@ -1,290 +1,281 @@
 <div class="p-3 sm:p-4 max-w-4xl mx-auto space-y-3 sm:space-y-4">
-    <!-- LOADING SKELETON -->
-    @if (isLoading()) {
-      <div class="pb-8 space-y-4">
-        <div class="h-5 w-48 rounded bg-(--tui-skeleton-color)" [tuiSkeleton]="true"></div>
-        <div [tuiSkeleton]="true" class="p-5 rounded-2xl border border-(--tui-border-normal)">
-          <div class="flex items-center gap-4">
-            <div class="w-16 h-16 rounded-full bg-(--tui-skeleton-color) shrink-0"></div>
-            <div class="flex-1 space-y-2">
-              <div class="h-6 w-48 rounded bg-(--tui-skeleton-color)"></div>
-              <div class="h-4 w-32 rounded bg-(--tui-skeleton-color)"></div>
-            </div>
+  <!-- LOADING SKELETON -->
+  @if (isLoading()) {
+    <div class="pb-8 space-y-4">
+      <div class="h-5 w-48 rounded bg-(--tui-skeleton-color)" [tuiSkeleton]="true"></div>
+      <div [tuiSkeleton]="true" class="p-5 rounded-2xl border border-(--tui-border-normal)">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-full bg-(--tui-skeleton-color) shrink-0"></div>
+          <div class="flex-1 space-y-2">
+            <div class="h-6 w-48 rounded bg-(--tui-skeleton-color)"></div>
+            <div class="h-4 w-32 rounded bg-(--tui-skeleton-color)"></div>
           </div>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          @for (item of [1, 2, 3]; track item) {
-            <div [tuiSkeleton]="true" class="p-4 rounded-2xl border border-(--tui-border-normal)">
-              <div class="flex flex-col items-center gap-2">
-                <div class="w-14 h-14 rounded-full bg-(--tui-skeleton-color)"></div>
-                <div class="h-3 w-16 rounded bg-(--tui-skeleton-color)"></div>
-                <div class="h-5 w-20 rounded bg-(--tui-skeleton-color)"></div>
-              </div>
-            </div>
-          }
-        </div>
-        <div
-          [tuiSkeleton]="true"
-          class="p-5 rounded-2xl border border-(--tui-border-normal) space-y-4"
-        >
-          @for (item of [1, 2, 3, 4]; track item) {
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-(--tui-skeleton-color) shrink-0"></div>
-              <div class="flex-1 space-y-1">
-                <div class="h-3 w-24 rounded bg-(--tui-skeleton-color)"></div>
-                <div class="h-4 w-40 rounded bg-(--tui-skeleton-color)"></div>
-              </div>
-            </div>
-          }
-        </div>
       </div>
-    }
-
-    <!-- ERROR -->
-    @else if (error() || !memberDetail()) {
-      <div class="flex items-center justify-center min-h-[80vh]">
-        <div tuiBlockStatus>
-          <tui-icon icon="@tui.user-round-x" class="text-6xl text-(--tui-status-negative)" />
-          <h2 class="mt-4 text-xl font-bold text-(--tui-status-negative)">Miembro no encontrado</h2>
-          <p class="mt-2 text-sm text-(--tui-text-secondary)">
-            No se pudo encontrar la información del miembro solicitado
-          </p>
-          <button
-            tuiButton
-            appearance="primary"
-            size="m"
-            routerLink="/members/members-list"
-            class="mt-4"
-          >
-            <tui-icon icon="@tui.arrow-left" />
-            Volver a la lista
-          </button>
-        </div>
-      </div>
-    }
-
-    <!-- CONTENT -->
-    @else {
-      <div class="pb-8">
-        <!-- STICKY HEADER -->
-        <div
-          class="sticky top-0 z-30 -mx-3 sm:-mx-4 px-3 sm:px-4 pt-2 pb-3 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-(--tui-border-normal) mb-4"
-        >
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <button
-                tuiButton
-                appearance="icon"
-                iconStart="@tui.chevron-left"
-                routerLink="/members/members-list"
-                class="text-(--tui-text-primary)"
-              ></button>
-              <h1 class="text-lg font-extrabold tracking-tight text-(--tui-text-primary) truncate">
-                {{ memberDetail()!.name }}
-              </h1>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        @for (item of [1, 2, 3]; track item) {
+          <div [tuiSkeleton]="true" class="p-4 rounded-2xl border border-(--tui-border-normal)">
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-14 h-14 rounded-full bg-(--tui-skeleton-color)"></div>
+              <div class="h-3 w-16 rounded bg-(--tui-skeleton-color)"></div>
+              <div class="h-5 w-20 rounded bg-(--tui-skeleton-color)"></div>
             </div>
+          </div>
+        }
+      </div>
+      <div
+        [tuiSkeleton]="true"
+        class="p-5 rounded-2xl border border-(--tui-border-normal) space-y-4"
+      >
+        @for (item of [1, 2, 3, 4]; track item) {
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-(--tui-skeleton-color) shrink-0"></div>
+            <div class="flex-1 space-y-1">
+              <div class="h-3 w-24 rounded bg-(--tui-skeleton-color)"></div>
+              <div class="h-4 w-40 rounded bg-(--tui-skeleton-color)"></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ERROR -->
+  @else if (error() || !memberDetail()) {
+    <div class="flex items-center justify-center min-h-[80vh]">
+      <div tuiBlockStatus>
+        <tui-icon icon="@tui.user-round-x" class="text-6xl text-(--tui-status-negative)" />
+        <h2 class="mt-4 text-xl font-bold text-(--tui-status-negative)">Miembro no encontrado</h2>
+        <p class="mt-2 text-sm text-(--tui-text-secondary)">
+          No se pudo encontrar la información del miembro solicitado
+        </p>
+        <button
+          tuiButton
+          appearance="primary"
+          size="m"
+          routerLink="/members/members-list"
+          class="mt-4"
+        >
+          <tui-icon icon="@tui.arrow-left" />
+          Volver a la lista
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- CONTENT -->
+  @else {
+    <div class="pb-8">
+      <!-- STICKY HEADER -->
+      <div
+        class="sticky top-0 z-30 -mx-3 sm:-mx-4 px-3 sm:px-4 pt-2 pb-3 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-(--tui-border-normal) mb-4"
+      >
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
             <button
               tuiButton
               appearance="icon"
-              iconStart="@tui.pencil"
-              class="text-(--tui-primary)"
-              (click)="onEdit()"
+              iconStart="@tui.chevron-left"
+              routerLink="/members/members-list"
+              class="text-(--tui-text-primary)"
             ></button>
+            <h1 class="text-lg font-extrabold tracking-tight text-(--tui-text-primary) truncate">
+              {{ memberDetail()!.name }}
+            </h1>
           </div>
+          <button
+            tuiButton
+            appearance="icon"
+            iconStart="@tui.pencil"
+            class="text-(--tui-primary)"
+            (click)="onEdit()"
+          ></button>
         </div>
+      </div>
 
-        <!-- HEADER CARD -->
-        <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
-          <div class="flex items-center gap-4">
-            <div
-              class="flex items-center justify-center rounded-full w-16 h-16 shrink-0 shadow-lg"
-              [class.bg-linear-to-br]="memberDetail()!.isActive"
-              [class.from-(--tui-primary)]="memberDetail()!.isActive"
-              [class.to-(--tui-primary-hover)]="memberDetail()!.isActive"
-              [class.shadow-(--tui-primary)/25]="memberDetail()!.isActive"
-              [class.bg-(--tui-text-tertiary)]="!memberDetail()!.isActive"
-            >
-              <span class="text-3xl font-bold text-white">
-                {{ memberDetail()!.name.charAt(0).toUpperCase() }}
-              </span>
-            </div>
-            <div class="flex-1">
-              <h2 class="text-2xl font-bold text-(--tui-text-primary)">
-                {{ memberDetail()!.name }}
-              </h2>
-              <p class="text-sm text-(--tui-text-secondary)">
-                ID: #{{ memberDetail()!.id }} &bull; Miembro desde {{ memberSince() }}
-              </p>
-              <div
-                class="inline-flex items-center gap-1.5 px-3 py-1 mt-1 text-xs font-semibold rounded-full"
-                [class.bg-(--tui-status-positive-pale)]="memberDetail()!.isActive"
-                [class.text-(--tui-status-positive)]="memberDetail()!.isActive"
-                [class.bg-(--tui-background-neutral-1)]="!memberDetail()!.isActive"
-                [class.text-(--tui-text-tertiary)]="!memberDetail()!.isActive"
-              >
-                <tui-icon
-                  [icon]="memberDetail()!.isActive ? '@tui.check-circle' : '@tui.x-circle'"
-                  class="text-sm!"
-                  [class.text-(--tui-status-positive)!]="memberDetail()!.isActive"
-                  [class.text-(--tui-text-tertiary)!]="!memberDetail()!.isActive"
-                />
-                {{ memberDetail()!.isActive ? 'Activo' : 'Inactivo' }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- STATS HORIZONTAL SCROLL -->
+      <!-- HEADER CARD -->
+      <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
+        <div class="flex items-center gap-4">
           <div
-            class="flex gap-3 overflow-x-auto snap-x snap-mandatory sm:grid sm:overflow-visible mb-4 -mx-3 sm:mx-0 px-3 sm:px-0"
-            [class.sm:grid-cols-2]="!isAdmin()"
-            [class.sm:grid-cols-3]="isAdmin()"
+            class="flex items-center justify-center rounded-full w-16 h-16 shrink-0 shadow-lg"
+            [class.bg-linear-to-br]="memberDetail()!.isActive"
+            [class.from-(--tui-primary)]="memberDetail()!.isActive"
+            [class.to-(--tui-primary-hover)]="memberDetail()!.isActive"
+            [class.shadow-(--tui-primary)/25]="memberDetail()!.isActive"
+            [class.bg-(--tui-text-tertiary)]="!memberDetail()!.isActive"
           >
-          @if (isAdmin()) {
+            <span class="text-3xl font-bold text-white">
+              {{ memberDetail()!.name.charAt(0).toUpperCase() }}
+            </span>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-2xl font-bold text-(--tui-text-primary)">
+              {{ memberDetail()!.name }}
+            </h2>
+            <p class="text-sm text-(--tui-text-secondary)">
+              ID: #{{ memberDetail()!.id }} &bull; Miembro desde {{ memberSince() }}
+            </p>
             <div
-              tuiSurface="elevated"
-              class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+              class="inline-flex items-center gap-1.5 px-3 py-1 mt-1 text-xs font-semibold rounded-full"
+              [class.bg-(--tui-status-positive-pale)]="memberDetail()!.isActive"
+              [class.text-(--tui-status-positive)]="memberDetail()!.isActive"
+              [class.bg-(--tui-background-neutral-1)]="!memberDetail()!.isActive"
+              [class.text-(--tui-text-tertiary)]="!memberDetail()!.isActive"
             >
-              <div
-                class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-positive-pale) mb-2"
-              >
-                <tui-icon icon="@tui.weight" class="text-(--tui-status-positive) text-lg" />
-              </div>
+              <tui-icon
+                [icon]="memberDetail()!.isActive ? '@tui.check-circle' : '@tui.x-circle'"
+                class="text-sm!"
+                [class.text-(--tui-status-positive)!]="memberDetail()!.isActive"
+                [class.text-(--tui-text-tertiary)!]="!memberDetail()!.isActive"
+              />
+              {{ memberDetail()!.isActive ? 'Activo' : 'Inactivo' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS HORIZONTAL SCROLL -->
+      <div
+        class="flex gap-3 overflow-x-auto snap-x snap-mandatory sm:grid sm:overflow-visible mb-4 -mx-3 sm:mx-0 px-3 sm:px-0"
+        [class.sm:grid-cols-2]="!isAdmin()"
+        [class.sm:grid-cols-3]="isAdmin()"
+      >
+        @if (isAdmin()) {
+          <div
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+          >
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-positive-pale) mb-2"
+            >
+              <tui-icon icon="@tui.weight" class="text-(--tui-status-positive) text-lg" />
+            </div>
             <p class="text-xl font-extrabold text-(--tui-text-primary)">
-                ${{ memberDetail()!.totalPaid }}
-              </p>
-              <span
-                class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
-                >Total Pagado</span
+              ${{ memberDetail()!.totalPaid }}
+            </p>
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Total Pagado</span
+            >
+          </div>
+        }
+        <div
+          tuiSurface="elevated"
+          class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+        >
+          <div
+            class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-info-pale) mb-2"
+          >
+            <tui-icon icon="@tui.calendar" class="text-(--tui-status-info) text-lg" />
+          </div>
+          <p class="text-xl font-extrabold text-center text-(--tui-text-primary)">
+            {{ formatShortDate(memberDetail()!.lastPaymentDate) }}
+          </p>
+          <span
+            class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+            >Último Pago</span
+          >
+        </div>
+        <div
+          tuiSurface="elevated"
+          class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+        >
+          <div
+            class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-warning-pale) mb-2"
+          >
+            <tui-icon icon="@tui.hourglass" class="text-(--tui-status-warning) text-lg" />
+          </div>
+          <p
+            class="text-xl font-extrabold"
+            [class.text-(--tui-status-positive)]="(expirationDays() ?? 0) > 7"
+            [class.text-(--tui-status-warning)]="
+              (expirationDays() ?? 0) > 0 && (expirationDays() ?? 0) <= 7
+            "
+            [class.text-(--tui-status-negative)]="(expirationDays() ?? 0) <= 0"
+          >
+            {{ expirationDays() ?? '—' }}
+          </p>
+          <span
+            class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+            >Días Restantes</span
+          >
+        </div>
+      </div>
+
+      <!-- PERSONAL INFO -->
+      <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
+        <div class="flex items-center gap-3 mb-5">
+          <div
+            class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
+          >
+            <tui-icon icon="@tui.user" class="text-(--tui-link)" />
+          </div>
+          <h2 class="text-lg font-bold text-(--tui-text-primary)">Información Personal</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          @for (info of personalInfo(); track info.label) {
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
               >
+                <tui-icon [icon]="info.icon" class="text-(--tui-link)" />
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-medium text-(--tui-text-secondary)">{{ info.label }}</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary) truncate">
+                  {{ info.value }}
+                </p>
+              </div>
             </div>
           }
-          <div
-            tuiSurface="elevated"
-            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
-          >
-            <div
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-info-pale) mb-2"
-            >
-              <tui-icon icon="@tui.calendar" class="text-(--tui-status-info) text-lg" />
-            </div>
-            <p class="text-xl font-extrabold text-center text-(--tui-text-primary)">
-              {{ formatShortDate(memberDetail()!.lastPaymentDate) }}
-            </p>
-            <span
-              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
-              >Último Pago</span
-            >
-          </div>
-          <div
-            tuiSurface="elevated"
-            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
-          >
-            <div
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-warning-pale) mb-2"
-            >
-              <tui-icon icon="@tui.hourglass" class="text-(--tui-status-warning) text-lg" />
-            </div>
-            <p
-              class="text-xl font-extrabold"
-              [class.text-(--tui-status-positive)]="(expirationDays() ?? 0) > 7"
-              [class.text-(--tui-status-warning)]="
-                (expirationDays() ?? 0) > 0 && (expirationDays() ?? 0) <= 7
-              "
-              [class.text-(--tui-status-negative)]="(expirationDays() ?? 0) <= 0"
-            >
-              {{ expirationDays() ?? '—' }}
-            </p>
-            <span
-              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
-              >Días Restantes</span
-            >
-          </div>
         </div>
+      </div>
 
-        <!-- PERSONAL INFO -->
+      <!-- PAYMENT SUMMARY -->
+      @if (isAdmin()) {
         <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
           <div class="flex items-center gap-3 mb-5">
             <div
               class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
             >
-              <tui-icon icon="@tui.user" class="text-(--tui-link)" />
+              <tui-icon icon="@tui.history" class="text-(--tui-link)" />
             </div>
-            <h2 class="text-lg font-bold text-(--tui-text-primary)">Información Personal</h2>
+            <h2 class="text-lg font-bold text-(--tui-text-primary)">Resumen de Pagos</h2>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            @for (info of personalInfo(); track info.label) {
-              <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
-                <div
-                  class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
-                >
-                  <tui-icon [icon]="info.icon" class="text-(--tui-link)" />
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-xs font-medium text-(--tui-text-secondary)">{{ info.label }}</p>
-                  <p class="text-sm font-semibold text-(--tui-text-primary) truncate">
-                    {{ info.value }}
-                  </p>
-                </div>
+          @if (memberDetail()!.paymentSummary) {
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
+                <p class="text-2xl font-bold text-(--tui-text-primary)">
+                  {{ getPaymentSummary('total_payments') }}
+                </p>
+                <p class="text-xs text-(--tui-text-secondary)">Total Pagos</p>
               </div>
-            }
-          </div>
+              <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
+                <p class="text-2xl font-bold text-(--tui-text-primary)">
+                  ${{ formatCurrency(getPaymentSummary('total_spent')) }}
+                </p>
+                <p class="text-xs text-(--tui-text-secondary)">Total Gastado</p>
+              </div>
+              <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
+                <p class="text-2xl font-bold text-(--tui-text-primary)">
+                  ${{ formatCurrency(getPaymentSummary('average_payment')) }}
+                </p>
+                <p class="text-xs text-(--tui-text-secondary)">Promedio por Pago</p>
+              </div>
+              <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
+                <p class="text-2xl font-bold text-(--tui-text-primary)">
+                  {{ getPaymentSummary('active_payments') }}
+                </p>
+                <p class="text-xs text-(--tui-text-secondary)">Pagos Activos</p>
+              </div>
+            </div>
+          }
         </div>
+      }
+    </div>
+  }
+</div>
 
-        <!-- PAYMENT SUMMARY -->
-        @if (isAdmin()) {
-          <div
-            tuiSurface="elevated"
-            class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)"
-          >
-            <div class="flex items-center gap-3 mb-5">
-              <div
-                class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
-              >
-                <tui-icon icon="@tui.history" class="text-(--tui-link)" />
-              </div>
-              <h2 class="text-lg font-bold text-(--tui-text-primary)">Resumen de Pagos</h2>
-            </div>
-            @if (memberDetail()!.paymentSummary) {
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
-                  <p class="text-2xl font-bold text-(--tui-text-primary)">
-                    {{ getPaymentSummary('total_payments') }}
-                  </p>
-                  <p class="text-xs text-(--tui-text-secondary)">Total Pagos</p>
-                </div>
-                <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
-                  <p class="text-2xl font-bold text-(--tui-text-primary)">
-                    ${{ formatCurrency(getPaymentSummary('total_spent')) }}
-                  </p>
-                  <p class="text-xs text-(--tui-text-secondary)">Total Gastado</p>
-                </div>
-                <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
-                  <p class="text-2xl font-bold text-(--tui-text-primary)">
-                    ${{ formatCurrency(getPaymentSummary('average_payment')) }}
-                  </p>
-                  <p class="text-xs text-(--tui-text-secondary)">Promedio por Pago</p>
-                </div>
-                <div class="p-3 text-center rounded-xl bg-(--tui-background-neutral-1)">
-                  <p class="text-2xl font-bold text-(--tui-text-primary)">
-                    {{ getPaymentSummary('active_payments') }}
-                  </p>
-                  <p class="text-xs text-(--tui-text-secondary)">Pagos Activos</p>
-                </div>
-              </div>
-            }
-          </div>
-        }
-      </div>
-    }
-  </div>
-
-<ng-template
-  [tuiResponsiveDialogOptions]="{ size: 'l' }"
-  [(tuiResponsiveDialog)]="isModalOpen"
->
-  <app-member-form
-    [memberId]="editingMemberId()"
-    (close)="closeModal()"
-  />
+<ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">
+  <app-member-form [memberId]="editingMemberId()" (close)="closeModal()" />
 </ng-template>

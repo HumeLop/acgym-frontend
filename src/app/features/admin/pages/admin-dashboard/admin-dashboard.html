@@ -1,4 +1,4 @@
-<div class="min-h-screen pb-24 bg-(--tui-background-base)">
+<div class="min-h-dvh pb-24 bg-(--tui-background-base)">
   <header
     class="sticky top-0 z-30 backdrop-blur-xl bg-(--tui-background-base) border-b border-(--tui-border-normal)"
   >
@@ -101,19 +101,18 @@
     }
   </div>
 
+<div class="fixed z-50 bottom-20 right-6 lg:bottom-6">
   <button
     tuiRipple
-    class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
+    class="w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
     title="Crear Usuario"
     (click)="openCreateModal()"
   >
     <tui-icon icon="@tui.plus" class="text-white text-2xl" />
   </button>
 </div>
+</div>
 
-<ng-template
-  [tuiResponsiveDialogOptions]="{ size: 'l' }"
-  [(tuiResponsiveDialog)]="isModalOpen"
->
+<ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">
   <app-admin-user-form [userId]="editingId()" (close)="closeModal()" />
 </ng-template>

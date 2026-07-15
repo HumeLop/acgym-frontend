@@ -15,7 +15,18 @@ import { MobileInputScroll } from '@shared/directives/mobile-input-scroll'
 
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, TuiNavigation, TuiTabBar, TuiIcon, TuiTooltip, TuiTouchable, TuiRipple, MobileInputScroll],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    TuiNavigation,
+    TuiTabBar,
+    TuiIcon,
+    TuiTooltip,
+    TuiTouchable,
+    TuiRipple,
+    MobileInputScroll,
+  ],
   templateUrl: './shell.html',
   styleUrl: './shell.css',
 })

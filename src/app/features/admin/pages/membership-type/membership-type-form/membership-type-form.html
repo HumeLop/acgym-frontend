@@ -1,4 +1,4 @@
-<div class="p-4 pb-28 space-y-5">
+<div class="p-4 pb-28 space-y-5 safe-area-bottom">
   <!-- HEADER -->
   <div tuiSurface="elevated" class="p-4 rounded-2xl border border-(--tui-border-normal)">
     <div class="flex items-center gap-3">
@@ -63,6 +63,7 @@
           <input
             [formField]="membershipTypeForm.amount"
             type="number"
+            inputmode="decimal"
             step="0.01"
             placeholder="Ej. 500.00"
             class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
@@ -99,6 +100,7 @@
           <input
             [formField]="membershipTypeForm.durationDays"
             type="number"
+            inputmode="numeric"
             placeholder="Ej. 30"
             class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
             [class.border-(--tui-status-negative)!]="

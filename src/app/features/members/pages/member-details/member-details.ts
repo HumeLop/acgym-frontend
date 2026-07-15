@@ -5,25 +5,14 @@ import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
 import { DateUtils } from '@shared/utils/date.utils'
 import { hapticMedium } from '@shared/utils/haptic'
-import {
-  TuiResponsiveDialog,
-} from '@taiga-ui/addon-mobile'
+import { TuiResponsiveDialog } from '@taiga-ui/addon-mobile'
 import { TuiButton, TuiIcon } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-member-details',
-  imports: [
-    RouterLink,
-    TuiResponsiveDialog,
-    TuiIcon,
-    TuiSurface,
-    TuiSkeleton,
-    TuiButton,
-    TuiBlockStatus,
-    MemberForm,
-  ],
+  imports: [RouterLink, TuiResponsiveDialog, TuiIcon, TuiSurface, TuiSkeleton, TuiButton, TuiBlockStatus, MemberForm],
   templateUrl: './member-details.html',
 })
 export class MemberDetails {
