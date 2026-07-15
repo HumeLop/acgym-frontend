@@ -1,6 +1,7 @@
-import { Component, inject, signal } from '@angular/core'
+import { Component, computed, inject, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { MemberCard } from '@app/features/members/pages/member-card/member-card'
+import { Sentinel } from '@app/shared/directives/sentinel'
 import { MemberService } from '@features/members/services/member-service'
 import { PaymentRenew } from '@features/payments/pages/payment-renew/payment-renew'
 import { TuiResponsiveDialog, TuiRipple } from '@taiga-ui/addon-mobile'
@@ -23,6 +24,7 @@ import { MemberForm } from '../member-form/member-form'
     TuiRipple,
     TuiSkeleton,
     RouterLink,
+    Sentinel,
   ],
   templateUrl: './inactive-members-list.html',
   styleUrl: './inactive-members-list.css',
@@ -36,6 +38,13 @@ export class InactiveMembersList {
   protected totalCount = this.memberService.inactiveMembersCount
   protected searchTerm = this.memberService.inactiveSearchTerm
   protected hasMembers = this.totalCount
+  protected page = this.memberService.page
+  protected pageSize = this.memberService.pageSize
+  protected nextPage = this.memberService.nextPage
+  protected previousPage = this.memberService.previousPage
+  protected hasMorePages = computed(() => this.page() * this.pageSize() < this.totalCount())
+
+  protected sentinelDisabled = computed(() => this.isLoading() || !this.hasMorePages())
 
   isModalOpen = this.memberService.isModalOpen
   isEditingMember = this.memberService.editingMemberId
@@ -77,5 +86,11 @@ export class InactiveMembersList {
     this.isRenewOpen.set(false)
     this.renewMemberId.set(null)
     this.renewMemberName.set('')
+  }
+
+  protected onLoadMore() {
+    if (!this.isLoading() && this.hasMorePages()) {
+      this.memberService.nextPage()
+    }
   }
 }

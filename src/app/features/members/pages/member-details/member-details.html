@@ -70,37 +70,39 @@
       <div
         class="sticky top-0 z-30 -mx-3 sm:-mx-4 px-3 sm:px-4 pt-2 pb-3 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-(--tui-border-normal) mb-4"
       >
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-3 min-w-0">
             <button
               tuiButton
               appearance="icon"
               iconStart="@tui.chevron-left"
               routerLink="/members/members-list"
-              class="text-(--tui-text-primary)"
+              class="text-(--tui-text-primary) shrink-0"
             ></button>
-            <h1 class="text-lg font-extrabold tracking-tight text-(--tui-text-primary) truncate">
+            <h1 class="text-lg font-extrabold leading-tight tracking-tight text-(--tui-text-primary) line-clamp-2">
               {{ memberDetail()!.name }}
             </h1>
           </div>
-          @if (!memberDetail()!.isActive || (expirationDays() ?? 0) <= 7) {
+          <div class="flex items-center gap-2 shrink-0">
+            @if (!memberDetail()!.isActive || (expirationDays() ?? 0) <= 7) {
+              <button
+                tuiButton
+                appearance="primary"
+                size="s"
+                iconStart="@tui.refresh-cw"
+                (click)="onRenew()"
+              >
+                Renovar
+              </button>
+            }
             <button
               tuiButton
-              appearance="primary"
-              size="s"
-              iconStart="@tui.refresh-cw"
-              (click)="onRenew()"
-            >
-              Renovar
-            </button>
-          }
-          <button
-            tuiButton
-            appearance="icon"
-            iconStart="@tui.pencil"
-            class="text-(--tui-primary)"
-            (click)="onEdit()"
-          ></button>
+              appearance="icon"
+              iconStart="@tui.pencil"
+              class="text-(--tui-primary)"
+              (click)="onEdit()"
+            ></button>
+          </div>
         </div>
       </div>
 
@@ -119,8 +121,8 @@
               {{ memberDetail()!.name.charAt(0).toUpperCase() }}
             </span>
           </div>
-          <div class="flex-1">
-            <h2 class="text-2xl font-bold truncate text-(--tui-text-primary)">
+          <div class="flex-1 min-w-0">
+            <h2 class="text-2xl font-bold leading-tight line-clamp-2 text-(--tui-text-primary)">
               {{ memberDetail()!.name }}
             </h2>
             <p class="text-sm text-(--tui-text-secondary)">

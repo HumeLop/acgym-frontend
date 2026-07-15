@@ -93,7 +93,7 @@ export class MemberService {
     const status = this.statusFilter()
     return {
       page: this.page(),
-      pageSize: this.pageSize(),
+      page_size: this.pageSize(),
       ...(search ? { search } : {}),
       ...(status !== null ? { is_active: status } : {}),
     }
@@ -113,7 +113,7 @@ export class MemberService {
     const search = this.inactiveRemoteSearchTerm()
     return {
       page: this.inactivePage(),
-      pageSize: this.pageSize(),
+      page_size: this.pageSize(),
       is_active: false,
       ...(search ? { search } : {}),
     }
