@@ -1,166 +1,147 @@
-<tui-pull-to-refresh (pulled)="onPull()">
-  <div class="min-h-screen pb-24 bg-(--tui-background-base)">
-    <!-- STICKY HEADER with elastic effect -->
-    <header
-      tuiElasticSticky
-      (tuiElasticSticky)="onElastic($event)"
-      class="sticky top-0 z-40 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-transparent dark:border-(--acgym-header-border)/50 px-3 sm:px-6"
-    >
-      <div
-        class="h-1 bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"
-      ></div>
+<div class="min-h-screen pb-24 bg-(--tui-background-base)">
+  <!-- STICKY HEADER -->
+  <header
+    class="sticky top-0 z-40 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-transparent dark:border-(--acgym-header-border)/50 px-3 sm:px-6"
+  >
+    <div class="h-1 bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"></div>
 
-      <div class="pt-4 pb-3">
+    <div class="pt-4 pb-3">
+      <div class="flex items-center gap-4">
         <div
-          class="flex items-center gap-4"
-          [style.transform]="'scale(' + headerScale() + ')'"
-          [style.transform-origin]="'left center'"
+          class="flex items-center justify-center w-10 h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
         >
-          <div
-            class="flex items-center justify-center w-10 h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
-          >
-            <tui-icon icon="@tui.clock-alert" class="text-xl text-white" />
-          </div>
-          <div class="flex-1">
-            <h1
-              class="text-xl font-bold tracking-tight text-(--acgym-header-text) sm:text-2xl"
-            >
-              Membresías por vencer
-            </h1>
-            <p class="mt-0.5 text-sm font-medium text-(--acgym-header-text-secondary)">
-              {{ members().length }} miembros con vencimiento próximo
-            </p>
-          </div>
+          <tui-icon icon="@tui.clock-alert" class="text-xl text-white" />
+        </div>
+        <div class="flex-1">
+          <h1 class="text-xl font-bold tracking-tight text-(--acgym-header-text) sm:text-2xl">
+            Membresías por vencer
+          </h1>
+          <p class="mt-0.5 text-sm font-medium text-(--acgym-header-text-secondary)">
+            {{ members().length }} miembros con vencimiento próximo
+          </p>
         </div>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <!-- BARRA DE BÚSQUEDA -->
+  <!-- BARRA DE BÚSQUEDA -->
+  <div class="px-3 sm:px-6 mt-4">
+    <div appearance="floating" tuiCardLarge="compact" class="border border-(--tui-border-normal)">
+      <div class="p-4 sm:p-5">
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+            <tui-icon icon="@tui.search" class="text-(--tui-text-tertiary)" />
+          </span>
+          <input
+            #searchInput
+            type="text"
+            placeholder="Buscar nombre, email o teléfono..."
+            [value]="searchTerm()"
+            (input)="onSearch(searchInput.value)"
+            class="w-full py-3 pl-12 pr-12 text-sm transition-all duration-200 rounded-xl border outline-none bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) ring-1 ring-(--tui-border-normal) focus:ring-2 focus:ring-(--tui-primary)/40"
+          />
+          @if (searchTerm()) {
+            <button
+              type="button"
+              class="absolute inset-y-0 right-0 flex items-center px-3 text-(--tui-text-tertiary) hover:text-(--tui-text-secondary) dark:hover:text-(--tui-text-primary)"
+              (click)="onClearSearch()"
+            >
+              <tui-icon icon="@tui.x" class="w-4! h-4!" />
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  @if (error()) {
     <div class="px-3 sm:px-6 mt-4">
-      <div
-        appearance="floating"
-        tuiCardLarge="compact"
-        class="border border-(--tui-border-normal)"
-      >
-        <div class="p-4 sm:p-5">
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-              <tui-icon icon="@tui.search" class="text-(--tui-text-tertiary)" />
-            </span>
-            <input
-              #searchInput
-              type="text"
-              placeholder="Buscar nombre, email o teléfono..."
-              [value]="searchTerm()"
-              (input)="onSearch(searchInput.value)"
-              class="w-full py-3 pl-12 pr-12 text-sm transition-all duration-200 rounded-xl border outline-none bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) ring-1 ring-(--tui-border-normal) focus:ring-2 focus:ring-(--tui-primary)/40"
-            />
-            @if (searchTerm()) {
-              <button
-                type="button"
-                class="absolute inset-y-0 right-0 flex items-center px-3 text-(--tui-text-tertiary) hover:text-(--tui-text-secondary) dark:hover:text-(--tui-text-primary)"
-                (click)="onClearSearch()"
-              >
-                <tui-icon icon="@tui.x" class="w-4! h-4!" />
-              </button>
-            }
+      <div tuiNotification appearance="error" size="m">
+        <p class="text-sm font-semibold">Error al cargar</p>
+        <p class="text-xs opacity-80 mt-1">
+          No se pudieron cargar los miembros.
+          {{ error()?.message || 'Intenta recargar la página' }}.
+        </p>
+      </div>
+    </div>
+  }
+
+  <!-- GRID -->
+  @if (hasMembers()) {
+    <div class="px-3 sm:px-6 mt-4 grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
+      @for (member of members(); track member.id; let i = $index) {
+        <app-member-card
+          class="animate-fade-in-up"
+          [style.animation-delay.ms]="i * 50"
+          [member]="member"
+          (edit)="memberService.openEditModal($event)"
+          (delete)="onDeleteMember($event)"
+        />
+      }
+    </div>
+  }
+
+  <!-- SKELETON -->
+  @if (isLoading() && !hasMembers() && !error()) {
+    <div class="px-3 sm:px-6 mt-4 grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
+      @for (item of [1, 2, 3, 4]; track item) {
+        <div
+          [tuiSkeleton]="true"
+          class="overflow-hidden rounded-3xl border border-(--tui-border-normal) bg-(--tui-background-elevated-1)"
+        >
+          <div class="h-1.5 rounded-t-3xl bg-(--tui-background-neutral-2)"></div>
+          <div class="p-5 space-y-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-(--tui-background-neutral-2)"></div>
+              <div class="flex-1 space-y-2">
+                <div class="h-4 w-3/4 rounded bg-(--tui-background-neutral-2)"></div>
+                <div class="h-3 w-1/2 rounded bg-(--tui-background-neutral-2)"></div>
+              </div>
+            </div>
+            <div class="h-24 rounded-xl bg-(--tui-background-neutral-2)"></div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- EMPTY -->
+  @if (!hasMembers() && !isLoading() && !error()) {
+    <div class="px-3 sm:px-6 mt-4">
+      <div appearance="floating" tuiCardLarge="compact" class="border border-(--tui-border-normal)">
+        <div class="p-6 sm:p-8">
+          <div class="flex flex-col items-center gap-4 text-center">
+            <div
+              class="flex items-center justify-center w-20 h-20 rounded-full bg-(--tui-background-neutral-1) sm:w-32 sm:h-32"
+            >
+              <tui-icon
+                icon="@tui.circle-check"
+                class="text-4xl text-(--tui-status-positive) sm:text-6xl"
+              />
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-(--tui-text-primary) sm:text-xl">Todo al día</h3>
+              <p class="mt-2 text-sm text-(--tui-text-secondary)">
+                No hay membresías próximas a vencer
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  }
 
-    <!-- ERROR -->
-    @if (error()) {
-      <div class="px-3 sm:px-6 mt-4">
-        <div tuiNotification appearance="error" size="m">
-          <p class="text-sm font-semibold">Error al cargar</p>
-          <p class="text-xs opacity-80 mt-1">
-            No se pudieron cargar los miembros.
-            {{ error()?.message || 'Intenta recargar la página' }}.
-          </p>
-        </div>
-      </div>
-    }
-
-    <!-- GRID -->
-    @if (hasMembers()) {
-      <div class="px-3 sm:px-6 mt-4 grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
-        @for (member of members(); track member.id; let i = $index) {
-          <app-member-card
-            class="animate-fade-in-up"
-            [style.animation-delay.ms]="i * 50"
-            [member]="member"
-            (edit)="memberService.openEditModal($event)"
-            (delete)="onDeleteMember($event)"
-          />
-        }
-      </div>
-    }
-
-    <!-- SKELETON -->
-    @if (isLoading() && !hasMembers() && !error()) {
-      <div class="px-3 sm:px-6 mt-4 grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
-        @for (item of [1, 2, 3, 4]; track item) {
-          <div
-            [tuiSkeleton]="true"
-            class="overflow-hidden rounded-3xl border border-(--tui-border-normal) bg-(--tui-background-elevated-1)"
-          >
-            <div class="h-1.5 rounded-t-3xl bg-(--tui-background-neutral-2)"></div>
-            <div class="p-5 space-y-4">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-full bg-(--tui-background-neutral-2)"></div>
-                <div class="flex-1 space-y-2">
-                  <div class="h-4 w-3/4 rounded bg-(--tui-background-neutral-2)"></div>
-                  <div class="h-3 w-1/2 rounded bg-(--tui-background-neutral-2)"></div>
-                </div>
-              </div>
-              <div class="h-24 rounded-xl bg-(--tui-background-neutral-2)"></div>
-            </div>
-          </div>
-        }
-      </div>
-    }
-
-    <!-- EMPTY -->
-    @if (!hasMembers() && !isLoading() && !error()) {
-      <div class="px-3 sm:px-6 mt-4">
-        <div
-          appearance="floating"
-          tuiCardLarge="compact"
-          class="border border-(--tui-border-normal)"
-        >
-          <div class="p-6 sm:p-8">
-            <div class="flex flex-col items-center gap-4 text-center">
-              <div
-                class="flex items-center justify-center w-20 h-20 rounded-full bg-(--tui-background-neutral-1) sm:w-32 sm:h-32"
-              >
-                <tui-icon icon="@tui.circle-check" class="text-4xl text-(--tui-status-positive) sm:text-6xl" />
-              </div>
-              <div>
-                <h3 class="text-lg font-bold text-(--tui-text-primary) sm:text-xl">
-                  Todo al día
-                </h3>
-                <p class="mt-2 text-sm text-(--tui-text-secondary)">
-                  No hay membresías próximas a vencer
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    }
-
-    <!-- FAB -->
-    <button
-      tuiRipple
-      class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
-      title="Agregar Miembro"
-      (click)="memberService.openCreateModal()"
-    >
-      <tui-icon icon="@tui.plus" class="text-white text-2xl" />
-    </button>
-  </div>
-</tui-pull-to-refresh>
+  <!-- FAB -->
+  <button
+    tuiRipple
+    class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
+    title="Agregar Miembro"
+    (click)="memberService.openCreateModal()"
+  >
+    <tui-icon icon="@tui.plus" class="text-white text-2xl" />
+  </button>
+</div>
 
 <ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">
   <app-member-form [memberId]="isEditingMember()" (close)="closeModal()" />

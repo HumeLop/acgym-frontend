@@ -1,9 +1,6 @@
-<tui-pull-to-refresh (pulled)="onPull()">
-  <div class="min-h-screen pb-24 bg-(--tui-background-base)">
+<div class="min-h-screen pb-24 bg-(--tui-background-base)">
     <!-- STICKY HEADER with elastic effect -->
     <header
-      tuiElasticSticky
-      (tuiElasticSticky)="onElastic($event)"
       class="sticky top-0 z-40 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-transparent dark:border-(--acgym-header-border)/50"
     >
       <div
@@ -13,7 +10,6 @@
       <div class="px-5 pt-4 pb-3 sm:px-6">
         <div
           class="flex items-center gap-3"
-          [style.transform]="'scale(' + headerScale() + ')'"
           [style.transform-origin]="'left center'"
         >
           <div
@@ -390,4 +386,3 @@
       }
     </div>
   </div>
-</tui-pull-to-refresh>

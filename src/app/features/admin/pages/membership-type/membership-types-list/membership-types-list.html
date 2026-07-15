@@ -1,5 +1,4 @@
-<tui-pull-to-refresh (pulled)="onPull()">
-  <div class="min-h-screen pb-24 bg-(--tui-background-base)">
+<div class="min-h-screen pb-24 bg-(--tui-background-base)">
     <!-- HEADER -->
     <header
       class="sticky top-0 z-40 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-transparent dark:border-(--acgym-header-border)/50 px-3 sm:px-6"
@@ -53,7 +52,10 @@
 
     <!-- LIST -->
     @if (types().length > 0) {
-      <div class="px-3 sm:px-6 mt-4 space-y-4">
+      <div
+        class="px-3 sm:px-6 mt-4 space-y-4"
+        [style.pointer-events]="isModalOpen() ? 'none' : ''"
+      >
         @for (type of types(); track type.id; let i = $index) {
           <app-admin-membership-type-card
             class="animate-fade-in-up"
@@ -143,7 +145,6 @@
   >
     <tui-icon icon="@tui.plus" class="text-white text-2xl" />
   </button>
-</tui-pull-to-refresh>
 
 <!-- MODAL -->
 <ng-template [tuiResponsiveDialogOptions]="{ size: 'm' }" [(tuiResponsiveDialog)]="isModalOpen">

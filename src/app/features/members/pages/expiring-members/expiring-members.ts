@@ -1,24 +1,15 @@
-import { Component, effect, inject, signal } from '@angular/core'
+import { Component, inject } from '@angular/core'
 import { MemberCard } from '@features/members/pages/member-card/member-card'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
-import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
 import { ConfirmService } from '@shared/services/confirm-service'
 import {
-  TUI_ANDROID_LOADER,
-  TUI_PULL_TO_REFRESH_COMPONENT,
-  TUI_PULL_TO_REFRESH_LOADED,
-  TUI_PULL_TO_REFRESH_THRESHOLD,
-  TuiElasticSticky,
-  TuiPullToRefresh,
   TuiResponsiveDialog,
   TuiRipple,
 } from '@taiga-ui/addon-mobile'
-import { tuiClamp } from '@taiga-ui/cdk'
 import { TuiIcon, TuiNotification } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiCardLarge } from '@taiga-ui/layout'
-import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-expiring-members',
@@ -29,39 +20,14 @@ import { Subject } from 'rxjs'
     MemberCard,
     MemberForm,
     TuiResponsiveDialog,
-    TuiPullToRefresh,
     TuiRipple,
-    TuiElasticSticky,
     TuiSkeleton,
-  ],
-  providers: [
-    {
-      provide: TUI_PULL_TO_REFRESH_LOADED,
-      useClass: Subject,
-    },
-    {
-      provide: TUI_PULL_TO_REFRESH_COMPONENT,
-      useValue: TUI_ANDROID_LOADER,
-    },
-    {
-      provide: WA_IS_ANDROID,
-      useValue: true,
-    },
-    {
-      provide: WA_IS_IOS,
-      useValue: true,
-    },
-    {
-      provide: TUI_PULL_TO_REFRESH_THRESHOLD,
-      useValue: 120,
-    },
   ],
   templateUrl: './expiring-members.html',
 })
 export class ExpiringMembers {
   protected memberService = inject(MemberService)
   private readonly confirmSvc = inject(ConfirmService)
-  private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
 
   protected members = this.memberService.expiringMembers
   protected hasMembers = this.memberService.hasExpiringMembers
@@ -79,15 +45,6 @@ export class ExpiringMembers {
 
   protected onClearSearch() {
     this.memberService.search('')
-  }
-
-  constructor() {
-    effect(() => {
-      if (this.isPulling() && !this.memberService.isLoading()) {
-        this.loaded$.next()
-        this.isPulling.set(false)
-      }
-    })
   }
 
   onDeleteMember(id: number) {
@@ -108,23 +65,5 @@ export class ExpiringMembers {
 
   closeModal() {
     this.memberService.closeModal()
-  }
-
-  // Elastic sticky header
-  protected headerScale = signal(1)
-
-  protected onElastic(scale: number): void {
-    this.headerScale.set(tuiClamp(scale, 0.6, 1))
-  }
-
-  private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
-  private readonly isPulling = signal(false)
-
-  protected onPull() {
-    if (window.scrollY > 0) return
-    if (!this.isTouchDevice) return
-
-    this.isPulling.set(true)
-    this.memberService.reloadExpiring()
   }
 }

@@ -4,8 +4,8 @@ import { PaymentCard } from '@features/payments/pages/payment-card/payment-card'
 import { PaymentForm } from '@features/payments/pages/payment-form/payment-form'
 import { PaymentService } from '@features/payments/services/payment-service'
 import { Sentinel } from '@shared/directives/sentinel'
-import { TuiElasticSticky, TuiResponsiveDialog } from '@taiga-ui/addon-mobile'
-import { TuiAutoFocus, tuiClamp } from '@taiga-ui/cdk'
+import { TuiResponsiveDialog } from '@taiga-ui/addon-mobile'
+import { TuiAutoFocus } from '@taiga-ui/cdk'
 import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
 import { TuiSegmented, TuiSkeleton } from '@taiga-ui/kit'
 import { TuiCardLarge } from '@taiga-ui/layout'
@@ -21,7 +21,6 @@ import { TuiCardLarge } from '@taiga-ui/layout'
     TuiAutoFocus,
     PaymentCard,
     PaymentForm,
-    TuiElasticSticky,
     TuiSkeleton,
     TuiCardLarge,
     Sentinel,
@@ -67,12 +66,6 @@ export class PaymentsList {
     const sum = this.payments().reduce((acc, p) => acc + parseFloat(p.amount || '0'), 0)
     return sum.toFixed(2)
   })
-
-  protected headerScale = signal(1)
-
-  protected onElastic(scale: number): void {
-    this.headerScale.set(tuiClamp(scale, 0.6, 1))
-  }
 
   onSearch(value: string) {
     this.paymentService.search(value)

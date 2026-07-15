@@ -1,5 +1,4 @@
-<tui-pull-to-refresh (pulled)="onPull()">
-  <div class="min-h-screen pb-24 bg-(--tui-background-base)">
+<div class="min-h-screen pb-24 bg-(--tui-background-base)">
     <header
       class="sticky top-0 z-30 backdrop-blur-xl bg-(--tui-background-base) border-b border-(--tui-border-normal)"
     >
@@ -211,7 +210,6 @@
       <tui-icon icon="@tui.plus" class="text-white text-2xl" />
     </button>
   </div>
-</tui-pull-to-refresh>
 
 <ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">
   <app-payment-form [paymentId]="isEditingPayment()" (close)="closeModal()" />
