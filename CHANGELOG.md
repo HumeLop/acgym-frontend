@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.1] - 2026-07-15
+
+### Fixed (v1.1.1)
+
+- Emergency contact, phone, and notes fields hidden when empty on member detail
+- Member name wraps to 2 lines instead of truncating in detail header
+- Backend pagination param name from `pageSize` to `page_size`
+
+### Added (v1.1.1)
+
+- Infinite scroll pagination on inactive members list
+
 ## [1.1.0] - 2026-07-15
 
 ### Added (v1.1.0)

@@ -2,8 +2,8 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { RouterLink } from '@angular/router'
 import { AuthService } from '@features/auth/services/auth-service'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
-import { PaymentRenew } from '@features/payments/pages/payment-renew/payment-renew'
 import { MemberService } from '@features/members/services/member-service'
+import { PaymentRenew } from '@features/payments/pages/payment-renew/payment-renew'
 import { DateUtils } from '@shared/utils/date.utils'
 import { hapticMedium } from '@shared/utils/haptic'
 import { TuiResponsiveDialog } from '@taiga-ui/addon-mobile'
@@ -67,17 +67,11 @@ export class MemberDetails {
       { icon: '@tui.mail', label: 'Email', value: m.email ?? 'Sin registrar' },
       { icon: '@tui.cake', label: 'Fecha de Nacimiento', value: m.dateOfBirth ?? 'Sin registrar' },
       { icon: '@tui.users', label: 'Edad', value: `${m.age} años` },
-      {
-        icon: '@tui.phone-forwarded',
-        label: 'Contacto de Emergencia',
-        value: m.emergencyContact ?? 'Sin registrar',
-      },
-      {
-        icon: '@tui.stethoscope',
-        label: 'Tel. Emergencia',
-        value: m.emergencyPhone ?? 'Sin registrar',
-      },
-      { icon: '@tui.file-text', label: 'Notas', value: m.notes ?? 'Sin notas' },
+      ...(m.emergencyContact
+        ? [{ icon: '@tui.phone-forwarded', label: 'Contacto de Emergencia', value: m.emergencyContact }]
+        : []),
+      ...(m.emergencyPhone ? [{ icon: '@tui.stethoscope', label: 'Tel. Emergencia', value: m.emergencyPhone }] : []),
+      ...(m.notes ? [{ icon: '@tui.file-text', label: 'Notas', value: m.notes }] : []),
       {
         icon: '@tui.bell',
         label: 'Notificaciones',
