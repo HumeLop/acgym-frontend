@@ -1,0 +1,147 @@
+<div class="w-full max-w-4xl px-3 py-4 pb-28 sm:px-6 sm:pb-4 safe-area-bottom">
+  <!-- HEADER -->
+  <div
+    tuiSurface="elevated"
+    class="p-4 mb-3 rounded-2xl border border-(--tui-border-normal) sm:p-5 sm:mb-4"
+  >
+    <div class="flex items-center gap-3 sm:gap-4">
+      <div
+        class="flex items-center justify-center shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-linear-to-br from-(--acgym-section-green) to-(--acgym-section-green-hover) shadow-lg shadow-(--acgym-section-green)/25"
+      >
+        <tui-icon icon="@tui.refresh-cw" class="text-2xl! sm:text-3xl! text-white" />
+      </div>
+      <div class="flex-1">
+        <h1 class="text-xl font-bold tracking-tight text-(--tui-text-primary) sm:text-2xl">
+          Renovar Membresía
+        </h1>
+        <span class="block mt-0.5 text-sm font-medium text-(--tui-text-secondary)">
+          @if (memberName()) {
+            {{ memberName() }}
+          } @else {
+            Miembro #{{ memberId() }}
+          }
+        </span>
+      </div>
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="flex items-center justify-center w-10 h-10 rounded-xl transition-colors text-(--tui-text-tertiary) hover:bg-(--tui-background-neutral-1-hover)"
+      >
+        <tui-icon icon="@tui.x" class="text-xl!" />
+      </button>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <form class="space-y-3 sm:space-y-4">
+    <div
+      tuiSurface="elevated"
+      class="p-4 mb-3 rounded-2xl border border-(--tui-border-normal) sm:p-5 sm:mb-4"
+    >
+      <!-- DETALLES DE RENOVACIÓN -->
+      <div class="mb-5 sm:mb-8">
+        <div class="flex items-center gap-2.5 mb-3 sm:mb-4">
+          <div
+            class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
+          >
+            <tui-icon icon="@tui.credit-card" class="text-lg! sm:text-xl! text-white" />
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-(--tui-text-primary)">
+            Detalles de Renovación
+          </h3>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2">
+          <!-- Tipo de Membresía -->
+          <div>
+            <tui-textfield tuiChevron [stringify]="membershipTypeStringify">
+              <label tuiLabel>Tipo de Membresía *</label>
+              <input
+                tuiSelect
+                placeholder="Selecciona tipo"
+                [formControl]="membershipTypeControl"
+              />
+              <tui-data-list *tuiDropdown emptyContent="No se encontraron tipos de membresía">
+                @for (mt of membershipTypes(); track mt.id) {
+                  <button tuiOption type="button" [value]="mt.id">
+                    {{ mt.name }} — ${{ mt.amount }}
+                  </button>
+                }
+              </tui-data-list>
+            </tui-textfield>
+            @if (renewForm.membership_type().touched() && renewForm.membership_type().invalid()) {
+              <p
+                class="flex items-center gap-1 mt-2 text-xs font-medium text-(--tui-status-negative)"
+              >
+                <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
+                {{ renewForm.membership_type().errors()[0].message }}
+              </p>
+            }
+          </div>
+
+          <!-- Método de Pago -->
+          <div>
+            <tui-textfield tuiChevron>
+              <label tuiLabel>Método de Pago *</label>
+              <input
+                tuiSelect
+                placeholder="Selecciona método"
+                [formControl]="paymentMethodControl"
+              />
+              <tui-data-list *tuiDropdown>
+                @for (method of paymentMethods; track method) {
+                  <button tuiOption type="button" [value]="method">{{ method }}</button>
+                }
+              </tui-data-list>
+            </tui-textfield>
+            @if (renewForm.payment_method().touched() && renewForm.payment_method().invalid()) {
+              <p
+                class="flex items-center gap-1 mt-2 text-xs font-medium text-(--tui-status-negative)"
+              >
+                <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
+                {{ renewForm.payment_method().errors()[0].message }}
+              </p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div class="mt-5 sm:mt-6">
+        <div tuiNotification appearance="info" size="m">
+          Se renovará la membresía del miembro usando el tipo y método de pago seleccionados.
+        </div>
+      </div>
+    </div>
+
+    <!-- ERRORES DEL SERVIDOR -->
+    @if (generalError()) {
+      <div class="mb-3 sm:mb-4">
+        <div tuiNotification appearance="error" size="m">
+          <p class="text-sm font-semibold">{{ generalError() }}</p>
+        </div>
+      </div>
+    }
+
+    <!-- BOTONES -->
+    <div tuiSurface="elevated" class="p-4 rounded-2xl border border-(--tui-border-normal) sm:p-5">
+      <div class="flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end sm:gap-3">
+        <button
+          tuiButton
+          appearance="primary"
+          type="button"
+          iconStart="@tui.refresh-cw"
+          [loading]="isRenewing()"
+          [disabled]="renewForm().invalid() || isRenewing()"
+          (click)="onRenew()"
+        >
+          Renovar Membresía
+        </button>
+
+        <button appearance="secondary" size="m" tuiButton type="button" (click)="onCancel()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

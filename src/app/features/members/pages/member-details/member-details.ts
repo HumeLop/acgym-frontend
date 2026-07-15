@@ -1,7 +1,8 @@
-import { Component, computed, effect, inject, input } from '@angular/core'
+import { Component, computed, effect, inject, input, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService } from '@features/auth/services/auth-service'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
+import { PaymentRenew } from '@features/payments/pages/payment-renew/payment-renew'
 import { MemberService } from '@features/members/services/member-service'
 import { DateUtils } from '@shared/utils/date.utils'
 import { hapticMedium } from '@shared/utils/haptic'
@@ -12,7 +13,17 @@ import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-member-details',
-  imports: [RouterLink, TuiResponsiveDialog, TuiIcon, TuiSurface, TuiSkeleton, TuiButton, TuiBlockStatus, MemberForm],
+  imports: [
+    RouterLink,
+    TuiResponsiveDialog,
+    TuiIcon,
+    TuiSurface,
+    TuiSkeleton,
+    TuiButton,
+    TuiBlockStatus,
+    MemberForm,
+    PaymentRenew,
+  ],
   templateUrl: './member-details.html',
 })
 export class MemberDetails {
@@ -22,6 +33,8 @@ export class MemberDetails {
   protected isAdmin = this.authService.isAdmin
   protected isModalOpen = this.memberService.isModalOpen
   protected editingMemberId = this.memberService.editingMemberId
+
+  protected isRenewOpen = signal(false)
 
   id = input.required<string>({ alias: 'id' })
 
@@ -99,6 +112,15 @@ export class MemberDetails {
   protected onEdit() {
     hapticMedium()
     this.memberService.openEditModal(Number(this.id()))
+  }
+
+  protected onRenew() {
+    hapticMedium()
+    this.isRenewOpen.set(true)
+  }
+
+  protected closeRenewModal() {
+    this.isRenewOpen.set(false)
   }
 
   protected closeModal() {

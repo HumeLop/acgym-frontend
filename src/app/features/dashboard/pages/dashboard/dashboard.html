@@ -77,7 +77,8 @@
           bgColorClass="bg-(--tui-background-neutral-1)"
           iconColorClass="text-(--tui-text-tertiary)"
           accentColor="gray"
-          [isClickable]="false"
+          [isClickable]="true"
+          (cardClick)="goToInactiveMembers()"
         />
         <app-stat-card
           icon="hourglass"
@@ -158,9 +159,9 @@
                 size="m"
                 tuiButton
                 (click)="searchInactive()"
-                [disabled]="inactiveSearchLoading()"
+                [disabled]="inactiveDaysSearchLoading()"
               >
-                @if (inactiveSearchLoading()) {
+                @if (inactiveDaysSearchLoading()) {
                   <span
                     class="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"
                   ></span>
@@ -171,7 +172,7 @@
               </button>
             </div>
 
-            @if (inactiveSearchError(); as error) {
+            @if (inactiveDaysSearchError(); as error) {
               <div class="mt-4">
                 <div tuiNotification appearance="error" size="m">
                   <p class="text-sm font-semibold">{{ error?.message || 'Error al buscar' }}</p>
@@ -179,9 +180,9 @@
               </div>
             }
 
-            @if (!inactiveSearchError() && showInactiveResults()) {
+            @if (!inactiveDaysSearchError() && showInactiveResults()) {
               <div class="mt-4">
-                @if (inactiveSearchLoading()) {
+                @if (inactiveDaysSearchLoading()) {
                   <div class="flex items-center justify-center gap-2 py-4">
                     <div
                       class="w-5 h-5 border-t-2 border-b-2 border-(--tui-primary) rounded-full animate-spin"

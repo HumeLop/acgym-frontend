@@ -28,7 +28,7 @@
     >
       <div
         tuiSurface="elevated"
-        class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+        class="shrink-0 w-[45vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
       >
         <div
           class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale) mb-2"
@@ -50,7 +50,7 @@
 
       <div
         tuiSurface="elevated"
-        class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+        class="shrink-0 w-[45vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
       >
         <div
           class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-warning-pale) mb-2"
@@ -109,7 +109,27 @@
           class="text-(--tui-text-tertiary) group-hover:text-(--tui-primary) transition-colors shrink-0"
         />
       </a>
-
+      <a
+        routerLink="/members/inactive-members-list"
+        tuiSurface="elevated"
+        class="group flex items-center gap-4 p-4 rounded-2xl border border-(--tui-border-normal) transition-all duration-200 hover:border-(--tui-primary) hover:shadow-md"
+      >
+        <div
+          class="shrink-0 w-11 h-11 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25 flex items-center justify-center group-hover:scale-105 transition-transform duration-200"
+        >
+          <tui-icon icon="@tui.user-x" class="text-white text-lg" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-sm font-bold text-(--tui-text-primary)">Lista de Miembros Inactivos</h3>
+          <p class="text-xs text-(--tui-text-secondary) mt-0.5">
+            Busca, filtra y administra todos los miembros inactivos.
+          </p>
+        </div>
+        <tui-icon
+          icon="@tui.chevron-right"
+          class="text-(--tui-text-tertiary) group-hover:text-(--tui-primary) transition-colors shrink-0"
+        />
+      </a>
       <a
         routerLink="/members/expiring-memberships"
         tuiSurface="elevated"
@@ -134,16 +154,16 @@
     </div>
   </div>
 
-<div class="fixed z-50 bottom-20 right-6 lg:bottom-6">
-  <button
-    tuiRipple
-    class="w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
-    title="Agregar Miembro"
-    (click)="memberService.openCreateModal()"
-  >
-    <tui-icon icon="@tui.plus" class="text-white text-2xl" />
-  </button>
-</div>
+  <div class="fixed z-50 bottom-20 right-6 lg:bottom-6">
+    <button
+      tuiRipple
+      class="w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
+      title="Agregar Miembro"
+      (click)="memberService.openCreateModal()"
+    >
+      <tui-icon icon="@tui.plus" class="text-white text-2xl" />
+    </button>
+  </div>
 </div>
 
 <ng-template

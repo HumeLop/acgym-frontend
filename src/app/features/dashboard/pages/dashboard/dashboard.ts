@@ -57,9 +57,9 @@ export class Dashboard {
 
   protected searchModel = signal({ days: 30 })
   protected searchForm = form(this.searchModel)
-  protected inactiveMembers = this.memberService.inactiveMembers
-  protected inactiveSearchLoading = this.memberService.inactiveSearchLoading
-  protected inactiveSearchError = this.memberService.inactiveSearchError
+  protected inactiveMembers = this.memberService.inactiveDaysMembers
+  protected inactiveDaysSearchLoading = this.memberService.inactiveDaysSearchLoading
+  protected inactiveDaysSearchError = this.memberService.inactiveDaysSearchError
   protected showInactiveResults = this.memberService.showInactiveResults
 
   // Ring chart (payment methods)
@@ -122,6 +122,10 @@ export class Dashboard {
 
   protected goToPayments() {
     this.router.navigate(['/payments', 'payments-list'])
+  }
+
+  protected goToInactiveMembers() {
+    this.router.navigate(['/members', 'inactive-members-list'])
   }
 
   protected reloadAll() {
