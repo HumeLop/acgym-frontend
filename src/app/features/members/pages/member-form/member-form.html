@@ -1,4 +1,4 @@
-<div class="w-full max-w-4xl px-3 py-4 pb-28 sm:px-6 sm:pb-4">
+<div class="w-full max-w-4xl px-3 py-4 pb-28 sm:px-6 sm:pb-4 safe-area-bottom">
   <!-- HEADER -->
   <div
     tuiSurface="elevated"
@@ -61,6 +61,7 @@
               <input
                 [formField]="memberForm.name"
                 type="text"
+                autocapitalize="words"
                 placeholder="Nombre completo del miembro"
                 class="w-full py-3 pl-10 pr-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
                 [class.border-(--tui-status-negative)!]="
@@ -89,6 +90,7 @@
               <input
                 [formField]="memberForm.phone"
                 type="tel"
+                inputmode="tel"
                 placeholder="10 dígitos (ej. 2595084892)"
                 class="w-full py-3 pl-10 pr-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
                 [class.border-(--tui-status-negative)!]="
@@ -119,6 +121,7 @@
               <input
                 [formField]="memberForm.email"
                 type="email"
+                autocapitalize="off"
                 placeholder="correo@ejemplo.com"
                 class="w-full py-3 pl-10 pr-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
                 [class.border-(--tui-status-negative)!]="
@@ -167,7 +170,7 @@
                     (dayClick)="onDateChange($event)"
                   />
                 </div>
-                <div class="fixed inset-0 z-40" (click)="calendarOpen.set(false)"></div>
+                <div class="fixed inset-0 z-40 bg-transparent cursor-pointer" (click)="calendarOpen.set(false)"></div>
               }
             </div>
             @if (memberForm.dateOfBirth().touched() && memberForm.dateOfBirth().invalid()) {
@@ -224,6 +227,7 @@
               <input
                 [formField]="memberForm.emergencyPhone"
                 type="tel"
+                inputmode="tel"
                 placeholder="10 dígitos"
                 class="w-full py-3 pl-10 pr-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
               />

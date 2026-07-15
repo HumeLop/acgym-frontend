@@ -102,7 +102,18 @@
   border-radius: 16px 16px 0 0;
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4);
   padding-bottom: env(safe-area-inset-bottom);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  overflow: visible;
   --tui-active-color: var(--acgym-active-accent);
+}
+
+:host .tab-bar-mobile [tuiTabBarItem] {
+  overflow: visible;
+}
+
+:host .tab-bar-mobile [tuiTabBarItem] tui-icon {
+  flex-shrink: 0;
 }
 
 /* ── Responsive ── */

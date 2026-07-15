@@ -1,4 +1,4 @@
-<div class="min-h-screen pb-24 bg-(--tui-background-base)">
+<div class="min-h-dvh pb-24 bg-(--tui-background-base)">
   <!-- STICKY HEADER with elastic effect -->
   <header
     class="sticky top-0 z-40 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-transparent dark:border-(--acgym-header-border)/50 px-3 sm:px-6"
@@ -6,10 +6,7 @@
     <div class="h-1 bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"></div>
 
     <div class="pt-4 pb-3">
-      <div
-        class="flex items-center gap-4"
-        [style.transform-origin]="'left center'"
-      >
+      <div class="flex items-center gap-4" [style.transform-origin]="'left center'">
         <div
           class="flex items-center justify-center w-10 h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
         >
@@ -202,14 +199,16 @@
 </div>
 
 <!-- BOTÓN FLOTANTE -->
-<button
-  tuiRipple
-  class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
-  title="Agregar Miembro"
-  (click)="openCreateModal()"
->
-  <tui-icon icon="@tui.plus" class="text-white text-2xl" />
-</button>
+<div class="fixed z-50 bottom-20 right-6 lg:bottom-6">
+  <button
+    tuiRipple
+    class="w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
+    title="Agregar Miembro"
+    (click)="openCreateModal()"
+  >
+    <tui-icon icon="@tui.plus" class="text-white text-2xl" />
+  </button>
+</div>
 
 <!-- MODAL FORMULARIO -->
 <ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">

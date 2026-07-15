@@ -3,9 +3,7 @@ import { RouterLink } from '@angular/router'
 import { AdminUserForm } from '@app/features/admin/pages/users/user-form/user-form'
 import { UserService } from '@features/admin/services/user-service'
 import { hapticMedium } from '@shared/utils/haptic'
-import {
-  TuiResponsiveDialog,
-} from '@taiga-ui/addon-mobile'
+import { TuiResponsiveDialog } from '@taiga-ui/addon-mobile'
 import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'

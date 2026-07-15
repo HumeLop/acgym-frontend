@@ -1,21 +1,20 @@
-<div class="p-4 pb-28 space-y-5">
+<div class="p-4 pb-28 space-y-5 safe-area-bottom">
   <!-- HEADER -->
   <div tuiSurface="elevated" class="p-4 rounded-2xl border border-(--tui-border-normal)">
     <div class="flex items-center gap-3">
       <div
         class="flex items-center justify-center w-12 h-12 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
       >
-        <tui-icon
-          [icon]="editMode() ? '@tui.pencil' : '@tui.plus'"
-          class="text-xl! text-white"
-        />
+        <tui-icon [icon]="editMode() ? '@tui.pencil' : '@tui.plus'" class="text-xl! text-white" />
       </div>
       <div class="flex-1">
         <h2 class="text-lg font-bold text-(--tui-text-primary)">
           {{ editMode() ? 'Editar Usuario' : 'Nuevo Usuario' }}
         </h2>
         <p class="text-sm text-(--tui-text-secondary)">
-          {{ editMode() ? 'Modifica los datos del usuario' : 'Ingresa los datos del nuevo usuario' }}
+          {{
+            editMode() ? 'Modifica los datos del usuario' : 'Ingresa los datos del nuevo usuario'
+          }}
         </p>
       </div>
       <button
@@ -39,6 +38,8 @@
           <input
             [formField]="userForm.username"
             type="text"
+            autocorrect="off"
+            autocapitalize="off"
             placeholder="Ej. jdoe"
             class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
             [class.border-(--tui-status-negative)!]="
@@ -46,7 +47,9 @@
             "
           />
           @if (userForm.username().touched() && userForm.username().invalid()) {
-            <p class="flex items-center gap-1 mt-2 text-xs font-medium text-(--tui-status-negative)">
+            <p
+              class="flex items-center gap-1 mt-2 text-xs font-medium text-(--tui-status-negative)"
+            >
               <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
               {{ userForm.username().errors()[0].message }}
             </p>
@@ -61,6 +64,8 @@
             <input
               [formField]="userForm.firstName"
               type="text"
+              autocorrect="off"
+              autocapitalize="words"
               placeholder="Ej. Juan"
               class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
             />
@@ -72,6 +77,8 @@
             <input
               [formField]="userForm.lastName"
               type="text"
+              autocorrect="off"
+              autocapitalize="words"
               placeholder="Ej. Pérez"
               class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
             />
@@ -85,6 +92,7 @@
           <input
             [formField]="userForm.email"
             type="email"
+            autocapitalize="off"
             placeholder="Ej. juan@example.com"
             class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
           />
@@ -95,11 +103,7 @@
             Rol <span class="text-(--tui-status-negative)">*</span>
           </label>
           <tui-textfield tuiChevron [stringify]="roleStringify">
-            <input
-              tuiSelect
-              placeholder="Selecciona un rol"
-              [formControl]="roleControl"
-            />
+            <input tuiSelect placeholder="Selecciona un rol" [formControl]="roleControl" />
             <tui-data-list *tuiDropdown>
               @for (role of roles; track role) {
                 <button tuiOption type="button" [value]="role">
@@ -109,7 +113,9 @@
             </tui-data-list>
           </tui-textfield>
           @if (userForm.role().touched() && userForm.role().invalid()) {
-            <p class="flex items-center gap-1 mt-2 text-xs font-medium text-(--tui-status-negative)">
+            <p
+              class="flex items-center gap-1 mt-2 text-xs font-medium text-(--tui-status-negative)"
+            >
               <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
               {{ userForm.role().errors()[0].message }}
             </p>

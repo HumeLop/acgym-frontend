@@ -4,26 +4,14 @@ import { RouterLink } from '@angular/router'
 import { AuthService } from '@features/auth/services/auth-service'
 import { PaymentForm } from '@features/payments/pages/payment-form/payment-form'
 import { PaymentService } from '@features/payments/services/payment-service'
-import {
-  TuiResponsiveDialog,
-  TuiRipple,
-} from '@taiga-ui/addon-mobile'
+import { TuiResponsiveDialog, TuiRipple } from '@taiga-ui/addon-mobile'
 import { TuiIcon } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-payment-dashboard',
-  imports: [
-    RouterLink,
-    TuiResponsiveDialog,
-    TuiIcon,
-    TuiSurface,
-    TuiSkeleton,
-    KeyValuePipe,
-    PaymentForm,
-    TuiRipple,
-  ],
+  imports: [RouterLink, TuiResponsiveDialog, TuiIcon, TuiSurface, TuiSkeleton, KeyValuePipe, PaymentForm, TuiRipple],
   templateUrl: './payment-dashboard.html',
 })
 export class PaymentDashboard {

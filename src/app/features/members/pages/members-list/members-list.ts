@@ -6,10 +6,7 @@ import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
 import { Sentinel } from '@shared/directives/sentinel'
 import { ConfirmService } from '@shared/services/confirm-service'
-import {
-  TuiResponsiveDialog,
-  TuiRipple,
-} from '@taiga-ui/addon-mobile'
+import { TuiResponsiveDialog, TuiRipple } from '@taiga-ui/addon-mobile'
 import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
 import { TuiSegmented, TuiSkeleton } from '@taiga-ui/kit'
 import { TuiCardLarge } from '@taiga-ui/layout'

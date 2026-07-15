@@ -3,10 +3,7 @@ import { AdminUserCard } from '@app/features/admin/pages/users/user-card/user-ca
 import { AdminUserForm } from '@app/features/admin/pages/users/user-form/user-form'
 import { UserService } from '@features/admin/services/user-service'
 import { ConfirmService } from '@shared/services/confirm-service'
-import {
-  TuiResponsiveDialog,
-  TuiRipple,
-} from '@taiga-ui/addon-mobile'
+import { TuiResponsiveDialog, TuiRipple } from '@taiga-ui/addon-mobile'
 import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 

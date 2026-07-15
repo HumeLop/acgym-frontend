@@ -9,15 +9,7 @@ import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
 
 @Component({
   selector: 'app-payment-details',
-  imports: [
-    RouterLink,
-    TuiIcon,
-    TuiLink,
-    TuiSurface,
-    TuiSkeleton,
-    TuiBlockStatus,
-    TuiButton,
-  ],
+  imports: [RouterLink, TuiIcon, TuiLink, TuiSurface, TuiSkeleton, TuiBlockStatus, TuiButton],
   templateUrl: './payment-details.html',
 })
 export class PaymentDetails {

@@ -4,9 +4,7 @@ import { AdminMembershipTypeForm } from '@app/features/admin/pages/membership-ty
 import { MembershipTypeService } from '@features/admin/services/membership-type-service'
 import { DateUtils } from '@shared/utils/date.utils'
 import { hapticMedium } from '@shared/utils/haptic'
-import {
-  TuiResponsiveDialog,
-} from '@taiga-ui/addon-mobile'
+import { TuiResponsiveDialog } from '@taiga-ui/addon-mobile'
 import { TuiButton, TuiIcon } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
