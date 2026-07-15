@@ -1,0 +1,427 @@
+<div class="p-3 sm:p-4 max-w-4xl mx-auto space-y-3 sm:space-y-4">
+    <!-- LOADING SKELETON -->
+    @if (isLoading()) {
+      <div class="pb-8 space-y-4">
+        <div class="h-5 w-48 rounded bg-(--tui-skeleton-color)" [tuiSkeleton]="true"></div>
+        <div [tuiSkeleton]="true" class="p-5 rounded-2xl border border-(--tui-border-normal)">
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-full bg-(--tui-skeleton-color) shrink-0"></div>
+            <div class="flex-1 space-y-2">
+              <div class="h-7 w-32 rounded bg-(--tui-skeleton-color)"></div>
+              <div class="h-4 w-48 rounded bg-(--tui-skeleton-color)"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-4 overflow-hidden">
+          @for (item of [1, 2, 3, 4]; track item) {
+            <div
+              [tuiSkeleton]="true"
+              class="shrink-0 w-[42vw] p-4 rounded-2xl border border-(--tui-border-normal)"
+            >
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-12 h-12 rounded-full bg-(--tui-skeleton-color)"></div>
+                <div class="h-3 w-16 rounded bg-(--tui-skeleton-color)"></div>
+                <div class="h-5 w-20 rounded bg-(--tui-skeleton-color)"></div>
+              </div>
+            </div>
+          }
+        </div>
+        <div
+          [tuiSkeleton]="true"
+          class="p-5 rounded-2xl border border-(--tui-border-normal) space-y-4"
+        >
+          @for (item of [1, 2]; track item) {
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-(--tui-skeleton-color) shrink-0"></div>
+              <div class="flex-1 space-y-1">
+                <div class="h-3 w-24 rounded bg-(--tui-skeleton-color)"></div>
+                <div class="h-4 w-40 rounded bg-(--tui-skeleton-color)"></div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ERROR -->
+    @else if (error() || !paymentDetail()) {
+      <div class="flex items-center justify-center min-h-[80vh]">
+        <div tuiBlockStatus>
+          <tui-icon icon="@tui.receipt" class="text-6xl text-(--tui-status-negative)" />
+          <h2 class="mt-4 text-xl font-bold text-(--tui-status-negative)">Pago no encontrado</h2>
+          <p class="mt-2 text-sm text-(--tui-text-secondary)">
+            No se pudo encontrar la información del pago solicitado
+          </p>
+          <button
+            tuiButton
+            appearance="primary"
+            size="m"
+            routerLink="/payments/payments-list"
+            class="mt-4"
+          >
+            <tui-icon icon="@tui.arrow-left" /> Volver a pagos
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- CONTENT -->
+    @else {
+      <div class="pb-8">
+        <!-- STICKY HEADER -->
+        <div
+          class="sticky top-0 z-30 -mx-3 sm:-mx-4 px-3 sm:px-4 pt-2 pb-3 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-(--tui-border-normal) mb-4"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <button
+                tuiButton
+                appearance="icon"
+                iconStart="@tui.chevron-left"
+                routerLink="/payments/payments-list"
+                class="text-(--tui-text-primary)"
+              ></button>
+              <h1 class="text-lg font-extrabold tracking-tight text-(--tui-text-primary) truncate">
+                Pago #{{ paymentDetail()!.id }}
+              </h1>
+            </div>
+          </div>
+        </div>
+
+        <!-- HEADER CARD -->
+        <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
+          <div class="flex items-start gap-4">
+            <div
+              class="flex items-center justify-center w-16 h-16 rounded-full shrink-0 shadow-lg"
+              [class.bg-linear-to-br]="paymentDetail()!.isActive"
+              [class.from-(--tui-primary)]="paymentDetail()!.isActive"
+              [class.to-(--tui-primary-hover)]="paymentDetail()!.isActive"
+              [class.shadow-(--tui-primary)/25]="paymentDetail()!.isActive"
+              [class.bg-(--tui-text-tertiary)]="!paymentDetail()!.isActive"
+            >
+              <tui-icon icon="@tui.receipt" class="text-3xl text-white!" />
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-3">
+                <h2 class="text-2xl font-bold text-(--tui-text-primary)">
+                  ${{ paymentDetail()!.amount }}
+                </h2>
+                <span
+                  class="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-semibold rounded-full"
+                  [class.bg-(--tui-status-positive-pale)]="paymentDetail()!.isActive"
+                  [class.text-(--tui-status-positive)]="paymentDetail()!.isActive"
+                  [class.bg-(--tui-background-neutral-1)]="!paymentDetail()!.isActive"
+                  [class.text-(--tui-text-tertiary)]="!paymentDetail()!.isActive"
+                >
+                  <tui-icon
+                    [icon]="paymentDetail()!.isActive ? '@tui.check-circle' : '@tui.x-circle'"
+                    class="text-sm!"
+                    [class.text-(--tui-status-positive)!]="paymentDetail()!.isActive"
+                    [class.text-(--tui-text-tertiary)!]="!paymentDetail()!.isActive"
+                  />
+                  {{ statusLabel() }}
+                </span>
+              </div>
+              <p class="text-sm text-(--tui-text-secondary) mt-1">
+                {{ paymentDetail()!.memberName }} &middot;
+                {{ displayDate(paymentDetail()!.paymentDate) }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATS HORIZONTAL SCROLL -->
+        <div
+          class="flex gap-3 overflow-x-auto snap-x snap-mandatory sm:grid sm:grid-cols-4 sm:overflow-visible mb-4 -mx-3 sm:mx-0 px-3 sm:px-0"
+        >
+          <div
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+          >
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-info-pale) mb-2"
+            >
+              <tui-icon icon="@tui.dollar-sign" class="text-(--tui-status-info) text-lg" />
+            </div>
+            <p class="text-xl font-extrabold text-(--tui-text-primary)">
+              ${{ paymentDetail()!.amount }}
+            </p>
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Monto</span
+            >
+          </div>
+          <div
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+          >
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-positive-pale) mb-2"
+            >
+              <tui-icon icon="@tui.credit-card" class="text-(--tui-status-positive) text-lg" />
+            </div>
+            <p class="text-lg font-extrabold text-(--tui-text-primary) truncate">
+              {{ paymentDetail()!.paymentMethod }}
+            </p>
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Método</span
+            >
+          </div>
+          <div
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+          >
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-warning-pale) mb-2"
+            >
+              <tui-icon icon="@tui.hourglass" class="text-(--tui-status-warning) text-lg" />
+            </div>
+            <p
+              class="text-xl font-extrabold"
+              [class.text-(--tui-status-positive)]="(daysRemaining() ?? 0) > 7"
+              [class.text-(--tui-status-warning)]="
+                (daysRemaining() ?? 0) > 0 && (daysRemaining() ?? 0) <= 7
+              "
+              [class.text-(--tui-status-negative)]="(daysRemaining() ?? 0) <= 0"
+            >
+              {{ daysRemaining() ?? '—' }}
+            </p>
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Días Restantes</span
+            >
+          </div>
+          <div
+            tuiSurface="elevated"
+            class="shrink-0 w-[42vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-2xl border border-(--tui-border-normal)"
+          >
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--tui-status-neutral-pale) mb-2"
+            >
+              <tui-icon icon="@tui.calendar-cog" class="text-(--tui-text-tertiary) text-lg" />
+            </div>
+            <p class="text-xl font-extrabold text-(--tui-text-primary)">
+              {{ paymentDetail()!.membershipTypeDuration }} días
+            </p>
+            <span
+              class="text-[11px] font-semibold text-(--tui-text-tertiary) mt-1 uppercase tracking-wide"
+              >Duración</span
+            >
+          </div>
+        </div>
+
+        <!-- DETALLES DEL PAGO -->
+        <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
+          <div class="flex items-center gap-3 mb-5">
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
+            >
+              <tui-icon icon="@tui.receipt-text" class="text-(--tui-link)" />
+            </div>
+            <h2 class="text-lg font-bold text-(--tui-text-primary)">Detalles del Pago</h2>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.calendar" class="text-(--tui-link)" />
+              </div>
+              <div>
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Fecha de Pago</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary)">
+                  {{ displayDate(paymentDetail()!.paymentDate) }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.credit-card" class="text-(--tui-link)" />
+              </div>
+              <div>
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Método de Pago</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary)">
+                  {{ paymentDetail()!.paymentMethod }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.play" class="text-(--tui-link)" />
+              </div>
+              <div>
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Inicio</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary)">
+                  {{ displayDate(paymentDetail()!.startDate) }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.square-check" class="text-(--tui-link)" />
+              </div>
+              <div>
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Fin</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary)">
+                  {{ displayDate(paymentDetail()!.endDate) }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.tags" class="text-(--tui-link)" />
+              </div>
+              <div>
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Tipo de Membresía</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary)">
+                  {{ paymentDetail()!.membershipTypeName }}
+                </p>
+              </div>
+            </div>
+            @if (paymentDetail()!.notes) {
+              <div
+                class="flex items-start gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1) sm:col-span-2"
+              >
+                <div
+                  class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm shrink-0"
+                >
+                  <tui-icon icon="@tui.file-text" class="text-(--tui-link)" />
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-(--tui-text-secondary)">Notas</p>
+                  <p class="text-sm font-semibold text-(--tui-text-primary)">
+                    {{ paymentDetail()!.notes }}
+                  </p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- MIEMBRO -->
+        <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
+          <div class="flex items-center gap-3 mb-5">
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
+            >
+              <tui-icon icon="@tui.user" class="text-(--tui-link)" />
+            </div>
+            <h2 class="text-lg font-bold text-(--tui-text-primary)">Miembro</h2>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <div
+              class="flex items-center justify-center w-10 h-10 font-bold text-white rounded-full bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shrink-0"
+            >
+              {{ paymentDetail()!.memberName.charAt(0).toUpperCase() }}
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-(--tui-text-primary)">
+                {{ paymentDetail()!.memberName }}
+              </p>
+              <a
+                [routerLink]="['/members', paymentDetail()!.member]"
+                tuiLink
+                class="inline-flex items-center gap-1 text-xs"
+              >
+                <tui-icon icon="@tui.external-link" class="text-xs!" /> Ver miembro
+              </a>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.mail" class="text-(--tui-link)" />
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Email</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary) truncate">
+                  {{ paymentDetail()!.memberEmail }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.phone" class="text-(--tui-link)" />
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Teléfono</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary)">
+                  {{ paymentDetail()!.memberPhone || 'Sin registrar' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INFORMACIÓN DE REGISTRO -->
+        @if (isAdmin()) {
+          <div tuiSurface="elevated" class="p-5 mb-4 rounded-2xl border border-(--tui-border-normal)">
+            <div class="flex items-center gap-3 mb-5">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-xl bg-(--acgym-section-orange-pale)"
+              >
+                <tui-icon icon="@tui.clipboard-list" class="text-(--tui-link)" />
+              </div>
+              <h2 class="text-lg font-bold text-(--tui-text-primary)">Información de Registro</h2>
+            </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.user-check" class="text-(--tui-link)" />
+              </div>
+              <div>
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Registrado por</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary)">
+                  {{ paymentDetail()!.registeredByUsername || '—' }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1)">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.clock" class="text-(--tui-link)" />
+              </div>
+              <div>
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Creado</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary)">
+                  {{ displayDate(paymentDetail()!.createdAt) }}
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-3 p-3 rounded-xl bg-(--tui-background-neutral-1) sm:col-span-2"
+            >
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-(--tui-background-elevated-1) shadow-sm"
+              >
+                <tui-icon icon="@tui.rotate-cw" class="text-(--tui-link)" />
+              </div>
+              <div>
+                <p class="text-xs font-medium text-(--tui-text-secondary)">Última Actualización</p>
+                <p class="text-sm font-semibold text-(--tui-text-primary)">
+                  {{ displayDate(paymentDetail()!.updatedAt) }}
+                </p>
+              </div>
+            </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>

@@ -1,0 +1,155 @@
+<div class="p-4 pb-28 space-y-5">
+  <!-- HEADER -->
+  <div tuiSurface="elevated" class="p-4 rounded-2xl border border-(--tui-border-normal)">
+    <div class="flex items-center gap-3">
+      <div
+        class="flex items-center justify-center w-12 h-12 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
+      >
+        <tui-icon
+          [icon]="editMode() ? '@tui.pencil' : '@tui.plus'"
+          class="text-xl! text-white"
+        />
+      </div>
+      <div class="flex-1">
+        <h2 class="text-lg font-bold text-(--tui-text-primary)">
+          {{ editMode() ? 'Editar Usuario' : 'Nuevo Usuario' }}
+        </h2>
+        <p class="text-sm text-(--tui-text-secondary)">
+          {{ editMode() ? 'Modifica los datos del usuario' : 'Ingresa los datos del nuevo usuario' }}
+        </p>
+      </div>
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="flex items-center justify-center w-10 h-10 rounded-xl transition-colors text-(--tui-text-tertiary) hover:bg-(--tui-background-neutral-1-hover)"
+      >
+        <tui-icon icon="@tui.x" class="text-xl!" />
+      </button>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <form class="space-y-4">
+    <div tuiSurface="elevated" class="p-4 rounded-2xl border border-(--tui-border-normal)">
+      <div class="space-y-4">
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-(--tui-text-primary)">
+            Usuario <span class="text-(--tui-status-negative)">*</span>
+          </label>
+          <input
+            [formField]="userForm.username"
+            type="text"
+            placeholder="Ej. jdoe"
+            class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
+            [class.border-(--tui-status-negative)!]="
+              userForm.username().touched() && userForm.username().invalid()
+            "
+          />
+          @if (userForm.username().touched() && userForm.username().invalid()) {
+            <p class="flex items-center gap-1 mt-2 text-xs font-medium text-(--tui-status-negative)">
+              <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
+              {{ userForm.username().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block mb-2 text-sm font-semibold text-(--tui-text-primary)">
+              Nombre(s)
+            </label>
+            <input
+              [formField]="userForm.firstName"
+              type="text"
+              placeholder="Ej. Juan"
+              class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label class="block mb-2 text-sm font-semibold text-(--tui-text-primary)">
+              Apellidos
+            </label>
+            <input
+              [formField]="userForm.lastName"
+              type="text"
+              placeholder="Ej. Pérez"
+              class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-(--tui-text-primary)">
+            Correo Electrónico
+          </label>
+          <input
+            [formField]="userForm.email"
+            type="email"
+            placeholder="Ej. juan@example.com"
+            class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
+          />
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-(--tui-text-primary)">
+            Rol <span class="text-(--tui-status-negative)">*</span>
+          </label>
+          <tui-textfield tuiChevron [stringify]="roleStringify">
+            <input
+              tuiSelect
+              placeholder="Selecciona un rol"
+              [formControl]="roleControl"
+            />
+            <tui-data-list *tuiDropdown>
+              @for (role of roles; track role) {
+                <button tuiOption type="button" [value]="role">
+                  {{ role === 'admin' ? 'Administrador' : 'Recepcionista' }}
+                </button>
+              }
+            </tui-data-list>
+          </tui-textfield>
+          @if (userForm.role().touched() && userForm.role().invalid()) {
+            <p class="flex items-center gap-1 mt-2 text-xs font-medium text-(--tui-status-negative)">
+              <tui-icon icon="@tui.alert-circle" class="w-4! h-4! text-xs!" />
+              {{ userForm.role().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        @if (!editMode()) {
+          <div>
+            <label class="block mb-2 text-sm font-semibold text-(--tui-text-primary)">
+              Contraseña
+            </label>
+            <input
+              [formField]="userForm.password"
+              type="password"
+              placeholder="Dejar en blanco para generar automática"
+              class="w-full py-3 px-4 rounded-xl border transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) border-(--tui-border-normal) focus:outline-none focus:ring-2 focus:ring-(--tui-primary) focus:border-transparent"
+            />
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- BOTONES -->
+    <div tuiSurface="elevated" class="p-4 rounded-2xl border border-(--tui-border-normal)">
+      <div class="flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end sm:gap-3">
+        <button appearance="secondary" size="m" tuiButton type="button" (click)="onCancel()">
+          Cancelar
+        </button>
+        <button
+          tuiButton
+          appearance="primary"
+          type="button"
+          [iconStart]="editMode() ? '@tui.check' : '@tui.plus'"
+          [loading]="isCreating() || isEditing()"
+          [disabled]="userForm().invalid() || isCreating() || isEditing()"
+          (click)="onSave()"
+        >
+          {{ editMode() ? 'Guardar Cambios' : 'Crear Usuario' }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

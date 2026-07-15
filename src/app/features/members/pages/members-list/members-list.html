@@ -1,0 +1,217 @@
+<div class="min-h-screen pb-24 bg-(--tui-background-base)">
+  <!-- STICKY HEADER with elastic effect -->
+  <header
+    class="sticky top-0 z-40 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-transparent dark:border-(--acgym-header-border)/50 px-3 sm:px-6"
+  >
+    <div class="h-1 bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"></div>
+
+    <div class="pt-4 pb-3">
+      <div
+        class="flex items-center gap-4"
+        [style.transform-origin]="'left center'"
+      >
+        <div
+          class="flex items-center justify-center w-10 h-10 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-lg shadow-(--tui-primary)/25"
+        >
+          <tui-icon icon="@tui.users" class="text-xl text-white" />
+        </div>
+        <div class="flex-1">
+          <h1 class="text-xl font-bold tracking-tight text-(--acgym-header-text) sm:text-2xl">
+            Gestión de Miembros
+          </h1>
+          <p class="mt-0.5 text-sm font-medium text-(--acgym-header-text-secondary)">
+            {{ totalMembers() }} miembros registrados
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE BÚSQUEDA + TABS -->
+  <div class="px-3 sm:px-6 mt-4">
+    <div
+      class="mb-4 overflow-hidden rounded-2xl border shadow-sm bg-(--tui-background-elevated-1) border-(--tui-border-normal)"
+    >
+      <div class="px-4 pt-4 pb-2">
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+            <tui-icon icon="@tui.search" class="text-(--tui-text-tertiary) text-lg!" />
+          </span>
+          <input
+            #searchInput
+            type="text"
+            placeholder="Buscar nombre, email o teléfono..."
+            [value]="searchTerm()"
+            (input)="onSearch(searchInput.value)"
+            class="w-full py-2.5 pl-11 pr-10 text-sm font-medium rounded-xl outline-none transition-all duration-200 bg-(--tui-background-neutral-1) text-(--tui-text-primary) placeholder:text-(--tui-text-tertiary) ring-1 ring-(--tui-border-normal) focus:ring-2 focus:ring-(--tui-primary)/40"
+          />
+
+          @if (searchTerm()) {
+            <button
+              type="button"
+              class="absolute inset-y-0 right-0 flex items-center pr-3 text-(--tui-text-tertiary) hover:text-(--tui-text-secondary) dark:hover:text-(--tui-text-primary)"
+              (click)="onClearSearch()"
+            >
+              <tui-icon icon="@tui.x" class="w-4! h-4!" />
+            </button>
+          }
+        </div>
+
+        @if (searchTerm()) {
+          <div class="flex items-center gap-1.5 mt-2">
+            <span
+              class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-lg bg-(--acgym-badge-bg) text-(--acgym-badge-text)"
+            >
+              "{{ searchTerm() }}"
+              <button
+                (click)="onClearSearch()"
+                class="ml-0.5 hover:text-(--acgym-badge-hover-text)"
+              >
+                <tui-icon icon="@tui.x" class="w-3! h-3!" />
+              </button>
+            </span>
+          </div>
+        }
+      </div>
+
+      <tui-segmented
+        class="px-4 pb-2"
+        [activeItemIndex]="activeTabIndex()"
+        (activeItemIndexChange)="onTabChange($event)"
+      >
+        <button tuiSegmented type="button">Todos</button>
+        <button tuiSegmented type="button">Activos</button>
+        <button tuiSegmented type="button">Inactivos</button>
+      </tui-segmented>
+    </div>
+  </div>
+
+  <!-- ALERTA DE ERROR -->
+  @if (error()) {
+    <div class="px-3 sm:px-6 mt-4">
+      <div tuiNotification appearance="error" size="m">
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2 min-w-0">
+            <tui-icon icon="@tui.alert-triangle" class="shrink-0 text-base" />
+            <span class="text-sm font-semibold">Error al cargar los miembros</span>
+          </div>
+          <button appearance="flat" size="s" tuiButton (click)="reload()" class="shrink-0">
+            <tui-icon icon="@tui.refresh-ccw" class="mr-1" />
+            Reintentar
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- GRID DE MIEMBROS -->
+  @if (hasMembers()) {
+    <div
+      class="px-3 sm:px-6 mt-4 grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3"
+      [style.pointer-events]="isModalOpen() ? 'none' : ''"
+    >
+      @for (member of members(); track member.id; let i = $index) {
+        <app-member-card
+          class="animate-fade-in-up"
+          [style.animation-delay.ms]="i * 50"
+          [member]="member"
+          [isModalOpen]="isModalOpen()"
+          (edit)="openEditModal($event)"
+          (delete)="onDeleteMember($event)"
+        />
+      }
+    </div>
+    <div
+      appSentinel
+      [appSentinelDisabled]="sentinelDisabled()"
+      (sentinelVisible)="onLoadMore()"
+    ></div>
+  }
+
+  <!-- SKELETON -->
+  @if (isLoading() && !hasMembers() && !error()) {
+    <div class="px-3 sm:px-6 mt-4 grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
+      @for (item of [1, 2, 3, 4]; track item) {
+        <div
+          [tuiSkeleton]="true"
+          class="overflow-hidden rounded-3xl border border-(--tui-border-normal) bg-(--tui-background-elevated-1)"
+        >
+          <div class="h-1.5 rounded-t-3xl bg-(--tui-background-neutral-2)"></div>
+          <div class="p-5 space-y-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-(--tui-background-neutral-2)"></div>
+              <div class="flex-1 space-y-2">
+                <div class="h-4 w-3/4 rounded bg-(--tui-background-neutral-2)"></div>
+                <div class="h-3 w-1/2 rounded bg-(--tui-background-neutral-2)"></div>
+              </div>
+            </div>
+            <div class="h-24 rounded-xl bg-(--tui-background-neutral-2)"></div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ESTADO VACÍO -->
+  @if (!hasMembers() && !isLoading() && !error()) {
+    <div class="px-3 sm:px-6 mt-4">
+      <div appearance="floating" tuiCardLarge="compact" class="border border-(--tui-border-normal)">
+        <div class="p-6 sm:p-8">
+          <div class="flex flex-col items-center gap-4 text-center">
+            <div
+              class="flex items-center justify-center w-20 h-20 rounded-full bg-(--tui-background-neutral-1) sm:w-32 sm:h-32"
+            >
+              <tui-icon
+                icon="@tui.user-round-x"
+                class="text-4xl text-(--tui-text-tertiary) sm:text-6xl"
+              />
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-(--tui-text-primary) sm:text-xl">
+                @if (searchTerm()) {
+                  No se encontraron resultados
+                } @else {
+                  No hay miembros registrados
+                }
+              </h3>
+              <p class="mt-2 text-sm text-(--tui-text-secondary)">
+                @if (searchTerm()) {
+                  Intenta con otro término de búsqueda
+                } @else {
+                  Comienza agregando tu primer miembro al gimnasio
+                }
+              </p>
+            </div>
+            @if (!searchTerm()) {
+              <button
+                appearance="primary"
+                size="m"
+                tuiButton
+                class="mt-3"
+                (click)="openCreateModal()"
+              >
+                <tui-icon icon="@tui.user-plus" />
+                Agregar Miembro
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- BOTÓN FLOTANTE -->
+<button
+  tuiRipple
+  class="fixed z-50 bottom-20 right-6 lg:bottom-6 w-14 h-14 rounded-2xl bg-linear-to-br from-(--tui-primary) to-(--tui-primary-hover) shadow-2xl shadow-(--tui-primary)/30 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
+  title="Agregar Miembro"
+  (click)="openCreateModal()"
+>
+  <tui-icon icon="@tui.plus" class="text-white text-2xl" />
+</button>
+
+<!-- MODAL FORMULARIO -->
+<ng-template [tuiResponsiveDialogOptions]="{ size: 'l' }" [(tuiResponsiveDialog)]="isModalOpen">
+  <app-member-form [memberId]="isEditingMember()" (close)="closeModal()" />
+</ng-template>

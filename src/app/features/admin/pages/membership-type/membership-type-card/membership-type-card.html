@@ -1,0 +1,115 @@
+<div
+  tuiSurface="elevated"
+  tuiTouchable
+  tuiRipple
+  class="relative overflow-hidden group rounded-3xl border transition-all duration-200 hover:-translate-y-1 hover:shadow-xl border-(--tui-border-normal) hover:border-(--tui-border-hover)"
+  tuiSwipe
+  (tuiSwipe)="onSwipe($event)"
+>
+  <div
+    class="h-1.5 rounded-t-3xl bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"
+  ></div>
+
+  <div
+    class="flex transition-transform duration-200 ease-out"
+    [style.transform]="swiped() ? 'translateX(-' + actionsWidth + 'px)' : 'translateX(0)'"
+  >
+    <a
+      class="w-full shrink-0"
+      [routerLink]="['/admin/membership-types', type().id]"
+      (click)="closeSwipe()"
+    >
+      @let t = type();
+      @let isActive = t.isActive;
+
+      <div class="flex-1 p-5">
+        <!-- Header -->
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div class="flex items-center flex-1 min-w-0 gap-3">
+            <div
+              class="flex items-center justify-center shrink-0 text-xl font-bold text-white rounded-xl shadow-md w-14 h-14 bg-(--tui-primary)"
+            >
+              <tui-icon icon="@tui.ticket" class="text-white text-2xl!" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3
+                class="text-base font-bold truncate transition-colors text-(--tui-text-primary) group-hover:text-(--tui-primary)"
+              >
+                {{ t.name }}
+              </h3>
+              <p class="text-sm font-semibold text-(--tui-primary)">
+                {{ formatCurrency(t.amount) }}/mes
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full shrink-0"
+            [class.bg-(--acgym-section-orange-pale)]="isActive"
+            [class.text-(--tui-primary)]="isActive"
+            [class.bg-(--tui-background-neutral-1)]="!isActive"
+            [class.text-(--tui-text-tertiary)]="!isActive"
+          >
+            <span
+              class="w-2 h-2 rounded-full"
+              [class.bg-(--tui-primary)]="isActive"
+              [class.bg-(--tui-text-tertiary)]="!isActive"
+            ></span>
+            {{ isActive ? 'Activo' : 'Inactivo' }}
+          </div>
+        </div>
+
+        <!-- Description -->
+        @if (t.description) {
+          <p class="mb-4 text-sm text-(--tui-text-secondary) leading-relaxed">
+            {{ t.description }}
+          </p>
+        }
+
+        <!-- Details -->
+        <div class="pt-4 space-y-3 border-t border-(--tui-border-normal)">
+          <div class="flex items-center gap-3">
+            <div
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-(--acgym-section-orange-pale)"
+            >
+              <tui-icon icon="@tui.calendar" class="text-(--tui-primary) text-base!" />
+            </div>
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Duración</span>
+            <span class="text-sm font-bold text-(--tui-text-primary)"
+              >{{ t.durationDays }} {{ t.durationDays === 1 ? 'día' : 'días' }}</span
+            >
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-(--acgym-section-orange-pale)"
+            >
+              <tui-icon icon="@tui.credit-card" class="text-(--tui-primary) text-base!" />
+            </div>
+            <span class="flex-1 text-sm font-medium text-(--tui-text-secondary)">Pagos</span>
+            <span class="text-sm font-bold text-(--tui-text-primary)"
+              >{{ t.paymentsCount }} {{ t.paymentsCount === 1 ? 'pago' : 'pagos' }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <div class="flex shrink-0 lg:hidden" [style.width.px]="actionsWidth">
+      <button
+        class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-primary) hover:bg-(--tui-primary-hover) text-white transition-colors"
+        (click)="$event.stopPropagation(); edit.emit(type().id); closeSwipe()"
+      >
+        <tui-icon icon="@tui.pencil" class="text-xl" />
+        <span class="text-xs font-semibold">Editar</span>
+      </button>
+      <button
+        class="flex w-18 flex-col items-center justify-center gap-1 bg-(--tui-status-negative) hover:bg-red-700 text-white transition-colors"
+        (click)="$event.stopPropagation(); delete.emit(type().id); closeSwipe()"
+      >
+        <tui-icon icon="@tui.trash-2" class="text-xl" />
+        <span class="text-xs font-semibold">Eliminar</span>
+      </button>
+    </div>
+  </div>
+</div>

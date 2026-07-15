@@ -42,3 +42,18 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Generated at build time from template
+/public/_headers
+/public/splash-tags.html
+
+# Environment files (contienen información sensible)
+/src/environments/environment.ts
+/src/environments/environment.prod.ts
+/src/environments/*.local.ts
+
+# Agent files
+.claude/
+
+# Backup files
+*.bak
