@@ -229,6 +229,17 @@ src/
 - To add new tests, place `.spec.ts` files alongside the source (e.g., `members-list.spec.ts` next to `members-list.ts`).
 - Test setup: `TestBed.configureTestingModule({ imports: [ComponentUnderTest] })` for standalone components.
 
+## Changelog format (CHANGELOG.md)
+
+Follow [Keep a Changelog](https://keepachangelog.com/en/2.0.0/) v2 standard:
+
+- **User-facing only.** Internal refactors, renames, dependency updates, and implementation details (`min-w-0`, `size="m"`) do NOT go in the changelog. If a user wouldn't notice it, don't list it.
+- Types: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`.
+- Use unique section headings per version to avoid markdown linter warnings — e.g., `### Added (v1.1.0)`, `### Fixed (v1.0.1)`.
+- Reverse chronological order, ISO 8601 dates (`YYYY-MM-DD`).
+- The entry for each version should be directly copyable to a GitHub Release body.
+- Keep an `[Unreleased]` section at the top for changes accumulated between releases.
+
 ## Production budget
 
 - **Initial bundle**: 620 kB warning / 1 MB error (configured in `angular.json`).
