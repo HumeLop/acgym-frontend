@@ -1,29 +1,21 @@
-import { Component, computed, effect, inject, input, signal } from '@angular/core'
+import { Component, computed, effect, inject, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService } from '@features/auth/services/auth-service'
 import { MemberForm } from '@features/members/pages/member-form/member-form'
 import { MemberService } from '@features/members/services/member-service'
-import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
 import { DateUtils } from '@shared/utils/date.utils'
 import { hapticMedium } from '@shared/utils/haptic'
 import {
-  TUI_ANDROID_LOADER,
-  TUI_PULL_TO_REFRESH_COMPONENT,
-  TUI_PULL_TO_REFRESH_LOADED,
-  TUI_PULL_TO_REFRESH_THRESHOLD,
-  TuiPullToRefresh,
   TuiResponsiveDialog,
 } from '@taiga-ui/addon-mobile'
 import { TuiButton, TuiIcon } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
-import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-member-details',
   imports: [
     RouterLink,
-    TuiPullToRefresh,
     TuiResponsiveDialog,
     TuiIcon,
     TuiSurface,
@@ -31,28 +23,6 @@ import { Subject } from 'rxjs'
     TuiButton,
     TuiBlockStatus,
     MemberForm,
-  ],
-  providers: [
-    {
-      provide: TUI_PULL_TO_REFRESH_LOADED,
-      useClass: Subject,
-    },
-    {
-      provide: TUI_PULL_TO_REFRESH_COMPONENT,
-      useValue: TUI_ANDROID_LOADER,
-    },
-    {
-      provide: WA_IS_ANDROID,
-      useValue: true,
-    },
-    {
-      provide: WA_IS_IOS,
-      useValue: true,
-    },
-    {
-      provide: TUI_PULL_TO_REFRESH_THRESHOLD,
-      useValue: 120,
-    },
   ],
   templateUrl: './member-details.html',
 })
@@ -74,13 +44,6 @@ export class MemberDetails {
     effect(() => {
       const id = Number(this.id())
       if (id) this.memberService.loadMemberDetail(id)
-    })
-
-    effect(() => {
-      if (this.isPulling() && !this.isLoading()) {
-        this.loaded$.next()
-        this.isPulling.set(false)
-      }
     })
   }
 
@@ -142,14 +105,6 @@ export class MemberDetails {
     const date = DateUtils.parseDateString(dateStr)
     if (!date) return '—'
     return date.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })
-  }
-
-  private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
-  private readonly isPulling = signal(false)
-
-  protected onPull() {
-    this.memberService.memberDetailResource.reload()
-    this.isPulling.set(true)
   }
 
   protected onEdit() {

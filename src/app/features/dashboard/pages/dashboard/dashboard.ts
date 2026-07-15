@@ -1,26 +1,16 @@
 import { CurrencyPipe } from '@angular/common'
-import { Component, computed, effect, inject, signal } from '@angular/core'
+import { Component, computed, inject, signal } from '@angular/core'
 import { FormField, form } from '@angular/forms/signals'
 import { Router, RouterLink } from '@angular/router'
 import { AuthService } from '@features/auth/services/auth-service'
 import { StatsCard } from '@features/dashboard/pages/stats-card/stats-card'
 import { DashboardService } from '@features/dashboard/services/dashboard-service'
 import { MemberService } from '@features/members/services/member-service'
-import { WA_IS_ANDROID, WA_IS_IOS } from '@ng-web-apis/platform'
 import { TuiAxes, TuiBarChart, TuiChartHint, TuiLegendItem, TuiRingChart } from '@taiga-ui/addon-charts'
-import {
-  TUI_ANDROID_LOADER,
-  TUI_PULL_TO_REFRESH_COMPONENT,
-  TUI_PULL_TO_REFRESH_LOADED,
-  TUI_PULL_TO_REFRESH_THRESHOLD,
-  TuiElasticSticky,
-  TuiPullToRefresh,
-} from '@taiga-ui/addon-mobile'
-import { type TuiContext, TuiHovered, tuiClamp } from '@taiga-ui/cdk'
+import { type TuiContext, TuiHovered } from '@taiga-ui/cdk'
 import { TuiAppearance, TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core'
 import { TuiSkeleton } from '@taiga-ui/kit'
 import { TuiBlockStatus, TuiSurface } from '@taiga-ui/layout'
-import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +22,6 @@ import { Subject } from 'rxjs'
     CurrencyPipe,
     StatsCard,
     FormField,
-    TuiPullToRefresh,
     TuiRingChart,
     TuiLegendItem,
     TuiAxes,
@@ -43,29 +32,6 @@ import { Subject } from 'rxjs'
     TuiBlockStatus,
     TuiSurface,
     TuiAppearance,
-    TuiElasticSticky,
-  ],
-  providers: [
-    {
-      provide: TUI_PULL_TO_REFRESH_LOADED,
-      useClass: Subject,
-    },
-    {
-      provide: TUI_PULL_TO_REFRESH_COMPONENT,
-      useValue: TUI_ANDROID_LOADER,
-    },
-    {
-      provide: WA_IS_ANDROID,
-      useValue: true,
-    },
-    {
-      provide: WA_IS_IOS,
-      useValue: false,
-    },
-    {
-      provide: TUI_PULL_TO_REFRESH_THRESHOLD,
-      useValue: 120,
-    },
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
@@ -127,13 +93,6 @@ export class Dashboard {
   // Skeleton loading
   protected isInitialLoading = computed(() => this.dashboardService.isLoading() && !this.dashboardStats())
 
-  // Elastic sticky header
-  protected headerScale = signal(1)
-
-  protected onElastic(scale: number): void {
-    this.headerScale.set(tuiClamp(scale, 0.6, 1))
-  }
-
   protected onLegendHover(index: number, hovered: boolean): void {
     this.activeRingIndex.set(hovered ? index : NaN)
   }
@@ -163,26 +122,6 @@ export class Dashboard {
 
   protected goToPayments() {
     this.router.navigate(['/payments', 'payments-list'])
-  }
-
-  private readonly loaded$ = inject<Subject<void>>(TUI_PULL_TO_REFRESH_LOADED)
-  private readonly isPulling = signal(false)
-  private readonly isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-
-  constructor() {
-    effect(() => {
-      if (this.isPulling() && !this.dashboardService.isLoading()) {
-        this.loaded$.next()
-        this.isPulling.set(false)
-      }
-    })
-  }
-
-  protected onPull() {
-    if (window.scrollY > 0) return
-    if (!this.isTouchDevice) return
-    this.dashboardService.reload()
-    this.isPulling.set(true)
   }
 
   protected reloadAll() {

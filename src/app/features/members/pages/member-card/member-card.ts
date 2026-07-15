@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output, signal } from '@angular/core'
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService } from '@features/auth/services/auth-service'
 import type { Member } from '@features/members/models'
@@ -17,6 +17,7 @@ import { TuiSurface } from '@taiga-ui/layout'
 })
 export class MemberCard {
   member = input.required<Member>()
+  isModalOpen = input(false)
   private authService = inject(AuthService)
 
   protected isAdmin = this.authService.isAdmin
@@ -25,6 +26,14 @@ export class MemberCard {
   delete = output<number>()
 
   protected swiped = signal(false)
+
+  constructor() {
+    effect(() => {
+      if (this.isModalOpen()) {
+        this.swiped.set(false)
+      }
+    })
+  }
   protected readonly actionsWidth = computed(() => (this.isAdmin() ? 144 : 72))
 
   protected readonly progressValue = computed(() => {

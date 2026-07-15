@@ -1,8 +1,6 @@
 <div class="min-h-screen pb-24 bg-(--tui-background-base)">
   <!-- STICKY HEADER with elastic effect -->
   <header
-    tuiElasticSticky
-    (tuiElasticSticky)="onElastic($event)"
     class="sticky top-0 z-40 backdrop-blur-xl bg-(--tui-background-base)/90 border-b border-transparent dark:border-(--acgym-header-border)/50 px-3 sm:px-6"
   >
     <div class="h-1 bg-linear-to-r from-(--tui-primary) via-(--tui-primary) to-(--tui-link)"></div>
@@ -11,7 +9,6 @@
       <!-- Title row -->
       <div
         class="flex items-center gap-4"
-        [style.transform]="'scale(' + headerScale() + ')'"
         [style.transform-origin]="'left center'"
       >
         <div

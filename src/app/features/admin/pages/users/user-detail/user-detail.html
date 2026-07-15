@@ -1,5 +1,4 @@
-<tui-pull-to-refresh (pulled)="onPull()">
-  <div class="p-3 sm:p-4 max-w-4xl mx-auto space-y-3 sm:space-y-4">
+<div class="p-3 sm:p-4 max-w-4xl mx-auto space-y-3 sm:space-y-4">
     <!-- LOADING SKELETON -->
     @if (isLoadingDetail()) {
       <div class="pb-8 space-y-4">
@@ -191,7 +190,6 @@
       </div>
     }
   </div>
-</tui-pull-to-refresh>
 
 <ng-template
   [tuiResponsiveDialogOptions]="{ size: 'l' }"

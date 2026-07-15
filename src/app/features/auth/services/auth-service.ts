@@ -1,6 +1,5 @@
 import { HttpClient, httpResource } from '@angular/common/http'
 import { computed, effect, inject, Service, signal } from '@angular/core'
-import { Router } from '@angular/router'
 import { environment } from '@environments/environment'
 import { toUserInfo } from '@features/auth/adapters/login.adapter'
 import type { LoginRequestDto, TokenEntity, TokenRefreshRequestDto } from '@features/auth/models'
@@ -16,7 +15,6 @@ const STORAGE_KEY_REFRESH = 'acgym_refresh_token'
 export class AuthService {
   private http = inject(HttpClient)
   private alerts = inject(TuiNotificationService)
-  private router = inject(Router)
   private apiURL = `${environment.apiURL}/token`
 
   private _accessToken = signal<string | null>(null)
